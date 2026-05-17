@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MusicVideoCreator | donut sheep activity</title>
+  <meta name="description" content="MusicVideoCreatorは曲フォルダからMV/Shorts用の制作計画を作り、歌詞同期とRemotionプレビュー/レンダーへつなぐローカル制作ツールです。">
+  <link rel="stylesheet" href="assets/mvc-promo.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">donut sheep activity</a>
+    <nav aria-label="pages">
+      <a href="index.html#music">Activity report</a>
+      <a href="#motivation">Motivation</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#screens">Screens</a>
+      <a href="#release">Release readiness</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">MusicVideoCreator</p>
+        <h1><span>曲フォルダを、</span><span>MV制作</span><span>パイプラインに</span><span>変える。</span></h1>
+        <p class="lead">音源・歌詞・画像素材を検出し、<code>mv_plan*.json</code> に整理して、歌詞タイミング、Shorts候補、Remotionプレビュー/レンダーまでつなぐローカル制作ツールです。</p>
+        <div class="hero-actions">
+          <a href="#demo">作例を見る</a>
+          <a href="#motivation">制作動機</a>
+          <a href="#workflow">制作フロー</a>
+          <a href="index.html#git">活動報告へ戻る</a>
+        </div>
+      </div>
+      <figure class="hero-shot">
+        <img src="assets/PromoMaterials/MusicVideoCreator/full-preview.png" alt="MusicVideoCreator full preview editor screenshot">
+        <figcaption>Full Preview Editor / 歌詞カード・タイムライン・Inspectorを同じ画面で確認</figcaption>
+      </figure>
+    </section>
+
+    <section class="summary-strip" aria-label="summary">
+      <article><span>主用途</span><strong>MV / Shorts制作</strong><p>完成動画の自動生成ではなく、制作計画・同期・確認・出力を支援。</p></article>
+      <article><span>中心契約</span><strong>mv_plan JSON</strong><p>素材検出とレンダーを分け、Remotion-firstで扱う。</p></article>
+      <article><span>出力</span><strong>Full / Shorts / Playlist</strong><p>同じ制作資産から複数フォーマットを確認。</p></article>
+    </section>
+
+    <section id="motivation" class="motivation-band">
+      <div class="section-title">
+        <p class="eyebrow">Motivation</p>
+        <h2>歌詞を、ちゃんと見せたい。</h2>
+      </div>
+      <div class="motivation-card">
+        <img src="assets/characters/headphones.png" alt="headphones channel character">
+        <div>
+          <blockquote>「歌詞にこだわっているのに、音楽のリリースページだと歌詞が見れない……」という悩みがあったので、歌詞動画だけでも手軽に作れるようにしたかった</blockquote>
+          <p>MusicVideoCreatorの出発点は、完成動画を一発生成することではなく、曲ごとの歌詞・タイミング・見せ方を、公開しやすい形に整えることです。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" class="demo-band">
+      <div class="section-title">
+        <p class="eyebrow">Example output</p>
+        <h2><span>コミット量トップ、</span><span>その作例。</span></h2>
+        <p>MusicVideoCreatorはこの活動レポート内でも最もコミット量が多い制作プロジェクトです。</p>
+      </div>
+      <div class="demo-grid">
+        <div class="embed-card">
+          <iframe src="https://www.youtube.com/embed/VnF2XbWpwSQ" title="MusicVideoCreator example video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <a class="video-link" href="https://www.youtube.com/watch?v=VnF2XbWpwSQ" target="_blank" rel="noreferrer">YouTubeで開く</a>
+        </div>
+        <div class="demo-note">
+          <img src="assets/characters/dj.png" alt="DJ channel character">
+          <p>曲の見せ方を、歌詞・構図・Shorts候補・背景演出までまとめて調整するための道具です。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow" class="workflow-band">
+      <div class="section-title">
+        <p class="eyebrow">Workflow</p>
+        <h2>素材準備からMP4出力まで。</h2>
+        <p>UIとCLIの両方から、曲素材をplan化して確認・出力します。</p>
+      </div>
+      <div class="workflow-layout">
+        <img src="assets/PromoMaterials/MusicVideoCreator/workflow.png" alt="MusicVideoCreator workflow diagram">
+        <ol>
+          <li><span>曲フォルダに音源・歌詞・画像素材を置く</span></li>
+          <li><span>UIまたはCLIで <code>mv_plan*.json</code> を作成</span></li>
+          <li><span>stable-tsで歌詞タイミングを生成、必要なら部分retry</span></li>
+          <li><span>Lyrics Timing画面で確認してaccepted timingへ反映</span></li>
+          <li><span>Shorts / Full / Playlist planへ適用</span></li>
+          <li><span>Remotion Previewで見た目・タイミング・背景・キャラを調整</span></li>
+          <li><span>MP4としてレンダー</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="screens" class="screens-band">
+      <div class="section-title">
+        <p class="eyebrow">Screens</p>
+        <h2>実制作で触る画面。</h2>
+      </div>
+      <div class="screen-grid">
+        <article>
+          <img src="assets/PromoMaterials/MusicVideoCreator/home.png" alt="Production Home screenshot">
+          <h3>Production Home</h3>
+          <p>曲一覧、推奨曲、JSON変換導線をまとめた制作入口。</p>
+        </article>
+        <article>
+          <img src="assets/PromoMaterials/MusicVideoCreator/lyrics-timing.png" alt="Lyrics Timing screenshot">
+          <h3>Lyrics Timing</h3>
+          <p>英日歌詞、confidence、stable-ts導線、採用済みtimingを確認。</p>
+        </article>
+        <article>
+          <img src="assets/PromoMaterials/MusicVideoCreator/short-preview.png" alt="Shorts Preview screenshot">
+          <h3>Shorts Preview</h3>
+          <p>縦動画レイアウト、タイムライン、InspectorでShorts候補を調整。</p>
+        </article>
+      </div>
+      <div class="preview-video">
+        <div>
+          <p class="eyebrow">Local preview demo</p>
+          <h3>操作デモはクリック再生。</h3>
+          <p>公開ページでは自動再生せず、必要な人だけ再生できるようにしています。</p>
+        </div>
+        <video controls preload="metadata" poster="assets/PromoMaterials/MusicVideoCreator/short-preview.png">
+          <source src="assets/PromoMaterials/MusicVideoCreator/short-preview-video.mp4" type="video/mp4">
+        </video>
+      </div>
+    </section>
+
+    <section class="features-band">
+      <div class="section-title">
+        <p class="eyebrow">What it handles</p>
+        <h2>できることを、誇張せずに並べる。</h2>
+      </div>
+      <div class="feature-grid">
+        <article><h3>Plan generation</h3><p>曲フォルダから音源・歌詞・代表画像を自動検出し、制作とレンダーの中心契約にします。</p></article>
+        <article><h3>Lyrics timing</h3><p>stable-ts結果、retry、accepted、二言語歌詞を段階管理します。</p></article>
+        <article><h3>Remotion preview</h3><p>Web技術でPreview Editorとrenderをつなぎ、横長/縦長/playlistを確認します。</p></article>
+        <article><h3>Visual layers</h3><p>ミニキャラ、前面画像/動画、背景テーマ、流れる図形、軽量audio visualizerを扱います。</p></article>
+      </div>
+    </section>
+
+    <section id="release" class="release-band">
+      <div class="section-title">
+        <p class="eyebrow">Release readiness</p>
+        <h2>公開準備は、まだ正直に棚卸し中。</h2>
+        <p>GitHub公開前の監査では、コードの方向性よりもライセンス、同梱資産、配布整合性が主なブロッカーでした。</p>
+      </div>
+      <div class="risk-list">
+        <article><strong>P0</strong><span>ライセンス未設定、同梱素材の権利整理、Remotion別ライセンス条件、typecheck、wheel UI bundle。</span></article>
+        <article><strong>P1</strong><span>npm audit、FUNDING文言、ローカルUI安全境界、第三者ライセンス表。</span></article>
+        <article><strong>P2</strong><span>重い資産、個人環境前提のscripts/docs、CI、community health files。</span></article>
+      </div>
+      <a class="audit-link" href="assets/PromoMaterials/MusicVideoCreator/github-release-audit-2026-05-15.html">監査HTMLを開く</a>
+      <div class="honest-note">
+        <img src="assets/characters/deadpan.png" alt="deadpan channel character">
+        <p>“完成品質のMV自動生成ツール”ではなく、実制作のための計画・同期・プレビュー・レンダー支援ツールとして紹介するのが正確です。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="index.html">Activity report</a> / MusicVideoCreator promo page</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GitHub公開・ドネート導入前リスク棚卸し - MusicVideoCreator</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --ink: #16202a;
+      --muted: #5d6977;
+      --line: #d7dde5;
+      --soft: #edf1f5;
+      --p0: #b42318;
+      --p0-bg: #fff1ef;
+      --p1: #b54708;
+      --p1-bg: #fff6e6;
+      --p2: #175cd3;
+      --p2-bg: #edf4ff;
+      --p3: #475467;
+      --p3-bg: #f2f4f7;
+      --ok: #067647;
+      --ok-bg: #ecfdf3;
+      --warn: #b54708;
+      font-family: "Yu Gothic", "Meiryo", "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    main {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 36px 0 56px;
+    }
+
+    header {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(26px, 3vw, 38px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 34px 0 14px;
+      font-size: 22px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 17px;
+      line-height: 1.4;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    a {
+      color: #0b5cab;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    code {
+      font-family: "Cascadia Mono", Consolas, monospace;
+      background: #eef2f6;
+      padding: 0.12em 0.34em;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+
+    pre {
+      background: #101828;
+      color: #f2f4f7;
+      padding: 14px 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      color: inherit;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #eef2f6;
+      font-size: 13px;
+      color: #344054;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    ul,
+    ol {
+      margin: 8px 0 14px 22px;
+      padding: 0;
+    }
+
+    li {
+      margin: 4px 0;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 920px;
+      font-size: 16px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      border-radius: 999px;
+      padding: 5px 10px;
+      color: #344054;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      margin: 18px 0;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      padding: 14px;
+      min-height: 112px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .callout {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--p1);
+      background: #fffaf0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 16px 0;
+    }
+
+    .callout.p0 {
+      border-left-color: var(--p0);
+      background: var(--p0-bg);
+    }
+
+    .callout.ok {
+      border-left-color: var(--ok);
+      background: var(--ok-bg);
+    }
+
+    .badge {
+      display: inline-block;
+      min-width: 44px;
+      text-align: center;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .p0-badge {
+      color: var(--p0);
+      background: var(--p0-bg);
+      border: 1px solid #f7b7b2;
+    }
+
+    .p1-badge {
+      color: var(--p1);
+      background: var(--p1-bg);
+      border: 1px solid #ffd08a;
+    }
+
+    .p2-badge {
+      color: var(--p2);
+      background: var(--p2-bg);
+      border: 1px solid #bfd7ff;
+    }
+
+    .p3-badge {
+      color: var(--p3);
+      background: var(--p3-bg);
+      border: 1px solid #d0d5dd;
+    }
+
+    .status-ok {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .status-ng {
+      color: var(--p0);
+      font-weight: 700;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .finding-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfcfe;
+    }
+
+    .option strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    @media (max-width: 860px) {
+      main {
+        width: min(100% - 24px, 1180px);
+        padding-top: 20px;
+      }
+
+      header,
+      .section {
+        padding: 18px;
+      }
+
+      .summary,
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>GitHub公開・ドネート導入前リスク棚卸し</h1>
+    <p class="lead">
+      MusicVideoCreator を GitHub で配布し、「もし役に立ったらコーヒーを一杯」型の任意支援を受ける前提で、公開前に問題になりそうな点を優先度順に整理した資料です。
+      結論だけ先に言うと、寄付導線そのものは大きな問題ではありません。現時点の主な公開ブロッカーは、ライセンス未設定、同梱資産の権利・出所の未整理、Remotion の別ライセンス条件、TypeScript 検証失敗、wheel 配布時の UI 欠落です。
+    </p>
+    <div class="meta">
+      <span class="chip">対象: <code>G:\Projects\Codex\MusicVideoCreator</code></span>
+      <span class="chip">調査日: 2026-05-15</span>
+      <span class="chip">想定: public GitHub repository + 任意ドネート</span>
+      <span class="chip">法務・税務助言ではなく公開リスク棚卸し</span>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2>短い結論</h2>
+    <div class="callout p0">
+      <p>
+        <strong>このまま public にするのは勧めません。</strong>
+        コードの方向性ではなく、公開時の説明責任と配布物の整合性が足りません。
+        最低限、P0 を潰してから公開するのが妥当です。
+      </p>
+    </div>
+    <p>
+      一番安全な初回公開案は、コードと小さな自動生成デモだけを公開し、キャラクター画像・APNG・参照 GIF はいったん同梱しない構成です。
+      資産も配るなら、各素材の出所、生成手段、利用許諾、再配布可否を manifest と README に明記してからにした方がいいです。
+    </p>
+    <div class="summary">
+      <div class="metric">
+        <strong>5</strong>
+        <span>P0: 公開前に必ず処理したい項目</span>
+      </div>
+      <div class="metric">
+        <strong>5</strong>
+        <span>P1: 初回公開前に強く推奨</span>
+      </div>
+      <div class="metric">
+        <strong>208.53MB</strong>
+        <span><code>public/assets</code>、<code>reference</code>、<code>examples</code> の資産量</span>
+      </div>
+      <div class="metric">
+        <strong>NG</strong>
+        <span><code>npm run typecheck</code> は現状失敗</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>優先度の定義</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>優先度</th>
+        <th>意味</th>
+        <th>今回の判断基準</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><span class="badge p0-badge">P0</span></td>
+        <td>公開前に必ず処理</td>
+        <td>公開後に取り返しがつきにくい、利用者に誤解を与える、または「動く配布物」として破綻する問題。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p1-badge">P1</span></td>
+        <td>初回公開前に強く推奨</td>
+        <td>即炎上・即停止ではないが、公開後すぐに信用や安全性を削る問題。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p2-badge">P2</span></td>
+        <td>公開直後でも可</td>
+        <td>品質、保守性、導線の問題。公開後のロードマップとして扱えるもの。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p3-badge">P3</span></td>
+        <td>余裕があれば</td>
+        <td>印象や運用の改善。初回公開を止めるほどではないもの。</td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>調査で確認した事実</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>項目</th>
+        <th>結果</th>
+        <th>見方</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Python tests</td>
+        <td><span class="status-ok">OK</span>: <code>python -m unittest discover -s tests -t .</code> は 83 tests 成功</td>
+        <td>Python 側の単体テストは公開判断のプラス材料。</td>
+      </tr>
+      <tr>
+        <td>TypeScript</td>
+        <td><span class="status-ng">FAIL</span>: <code>ui_preview/App.tsx(810,80)</code> と <code>(811,61)</code> で <code>selection.id</code> の型エラー</td>
+        <td>この状態で「ビルド可能」とは言いにくい。</td>
+      </tr>
+      <tr>
+        <td>npm audit</td>
+        <td><span class="status-ng">FAIL</span>: production 依存に high 1件、moderate 4件</td>
+        <td><code>fast-uri</code> high と Remotion/PostCSS 系 moderate。Remotion <code>4.0.461</code> への非メジャー更新で解消可能と audit が示した。</td>
+      </tr>
+      <tr>
+        <td>LICENSE / FUNDING / SECURITY</td>
+        <td><span class="status-ng">なし</span>: root の <code>LICENSE</code>、<code>.github/FUNDING.yml</code>、<code>SECURITY.md</code> は未検出</td>
+        <td>公開・寄付・脆弱性報告の最低限の入口が未整備。</td>
+      </tr>
+      <tr>
+        <td>配布 wheel</td>
+        <td><span class="status-ng">不完全</span>: wheel には <code>ui_static/*.html</code> は入るが <code>ui_static/generated/.../app.js</code> は入らない</td>
+        <td><code>pyproject.toml</code> の <code>package-data</code> が <code>ui_static/*</code> のみなので、pip 配布時に UI が壊れる可能性が高い。</td>
+      </tr>
+      <tr>
+        <td>資産量</td>
+        <td>228 files / 208.53MB。内訳は PNG 151.45MB、APNG 45.78MB、GIF 11.08MB</td>
+        <td>1ファイル 25MB 超は見つからないが、通常 Git に同梱するには重め。</td>
+      </tr>
+      <tr>
+        <td>未コミット変更</td>
+        <td>11 files modified</td>
+        <td>公開前は clean working tree で検証し直すべき。</td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>P0: 公開前に必ず潰す</h2>
+    <table>
+      <thead>
+      <tr>
+        <th style="width: 92px;">優先度</th>
+        <th>問題</th>
+        <th>根拠</th>
+        <th>リスク</th>
+        <th>推奨対応</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><span class="badge p0-badge">P0-1</span></td>
+        <td>
+          <div class="finding-title">プロジェクト本体のライセンスが未設定</div>
+          <p>GitHub で public にするだけでは、他人が自由に利用・改変・再配布できる状態にはなりません。</p>
+        </td>
+        <td>
+          <code>LICENSE</code> なし。<code>pyproject.toml</code> に <code>license</code> なし。<code>package.json</code> に <code>license</code> なし、かつ <code>"private": true</code>。
+        </td>
+        <td>
+          利用者が合法的に使ってよい範囲を判断できない。寄付を受ける場合、「公開しているが使ってよいのか分からない」状態は信用を落とす。
+        </td>
+        <td>
+          コード用のライセンスを決めて root に <code>LICENSE</code> を追加する。資産は別ライセンスにするなら <code>LICENSE-CODE</code>、<code>LICENSE-ASSETS</code>、<code>THIRD_PARTY_NOTICES.md</code> に分ける。
+        </td>
+      </tr>
+      <tr>
+        <td><span class="badge p0-badge">P0-2</span></td>
+        <td>
+          <div class="finding-title">同梱画像・GIF・APNG の権利と出所が未整理</div>
+          <p>このリポジトリはコードだけではなく、キャラクター素材・生成画像・参照 GIF を大量に含みます。</p>
+        </td>
+        <td>
+          <code>public/assets</code>、<code>reference</code>、<code>examples</code> 合計 208.53MB。
+          <code>gptimage</code> 名の source 画像が多数。
+          <code>reference/teto-kasane-teto.gif</code> と <code>reference/black-swan-evernight-dance.gif</code> も tracked。
+          既存メモにも「素材、フォント、音楽、AI 生成画像は license/provenance tracking が必要」とある。
+        </td>
+        <td>
+          再配布権が曖昧な素材を public repo に置くと、削除依頼、DMCA、信用低下の原因になる。ドネート導線を置くと、営利色が増して見える。
+        </td>
+        <td>
+          初回公開は「コード + 自動生成デモ素材」に絞るのが安全。資産を残すなら <code>assets-provenance.json</code> などで、出所、作者、生成サービス、生成日、許諾、再配布可否、商用可否、元プロンプトまたは制作メモを記録する。第三者 IP 由来・出所不明の参照 GIF は除外する。
+        </td>
+      </tr>
+      <tr>
+        <td><span class="badge p0-badge">P0-3</span></td>
+        <td>
+          <div class="finding-title">Remotion の別ライセンス条件を利用者へ明記していない</div>
+          <p>このプロジェクト自体を MIT 等にしても、Remotion の利用条件は別に残ります。</p>
+        </td>
+        <td>
+          <code>package.json</code> は Remotion <code>4.0.451</code> 系に依存。
+          <code>package-lock.json</code> には <code>Remotion License</code>、<code>SEE LICENSE IN LICENSE.md</code>、<code>UNLICENSED</code> の Remotion 関連 package がある。
+          生成済み UI bundle には Remotion の license warning 文言も含まれる。
+        </td>
+        <td>
+          4人以上の営利組織などが、プロジェクトの LICENSE だけを見て Remotion も同条件だと誤認する可能性がある。これは利用者側にも作者側にも良くない。
+        </td>
+        <td>
+          README と <code>THIRD_PARTY_NOTICES.md</code> に「Remotion は別ライセンス。利用者は Remotion の条件を確認すること」と明記する。
+          Remotion の warning を隠す場合も、条件を理解した上で <code>acknowledgeRemotionLicense</code> を扱う。
+        </td>
+      </tr>
+      <tr>
+        <td><span class="badge p0-badge">P0-4</span></td>
+        <td>
+          <div class="finding-title">TypeScript 検証が失敗している</div>
+          <p>公開前の最低限の品質ゲートとして、<code>npm run typecheck</code> は通したいです。</p>
+        </td>
+        <td>
+          <code>ui_preview/App.tsx(810,80)</code>、<code>ui_preview/App.tsx(811,61)</code>:
+          <code>Property 'id' does not exist on type '{ kind: "lyrics"; } | { kind: "image"; id: string; }'</code>
+        </td>
+        <td>
+          「clone して検証したら即失敗」になる。寄付を置く以前に、利用者の信頼を削る。
+        </td>
+        <td>
+          <code>selection.kind</code> の narrowing を修正し、<code>npm run typecheck</code>、<code>npm run build:ui</code>、必要なら Remotion smoke を通す。
+        </td>
+      </tr>
+      <tr>
+        <td><span class="badge p0-badge">P0-5</span></td>
+        <td>
+          <div class="finding-title">pip / wheel 配布時に UI bundle が欠落する</div>
+          <p>GitHub 配布でも <code>pip install git+...</code> を案内するなら実害があります。</p>
+        </td>
+        <td>
+          実際に wheel を作ると、<code>music_video_creator/ui_static/full-preview.html</code> 等は含まれる一方、<code>music_video_creator/ui_static/generated/ui-preview/app.js</code> 等は含まれなかった。
+          <code>pyproject.toml</code> の指定は <code>music_video_creator = ["ui_static/*"]</code>。
+        </td>
+        <td>
+          <code>mvc ui</code> 起動後、React bundle が 404 になり、Full Preview / Lyrics Timing / Shorts Preview が壊れる。
+        </td>
+        <td>
+          package-data を再帰指定にする。例: <code>ui_static/*.html</code>、<code>ui_static/generated/**/*.js</code> を含める。修正後に wheel を作り直して <code>python -m zipfile -l</code> で確認する。
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>P1: 初回公開前に強く推奨</h2>
+    <table>
+      <thead>
+      <tr>
+        <th style="width: 92px;">優先度</th>
+        <th>問題</th>
+        <th>根拠</th>
+        <th>推奨対応</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><span class="badge p1-badge">P1-1</span></td>
+        <td>production 依存に npm audit 脆弱性がある</td>
+        <td><code>npm audit --omit=dev --json</code> で high 1件、moderate 4件。<code>fast-uri</code> の path traversal / host confusion と Remotion/PostCSS 系。</td>
+        <td>Remotion を audit が示す修正版へ上げ、lockfile を更新。更新後に typecheck、UI build、Remotion smoke を再実行。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p1-badge">P1-2</span></td>
+        <td>ドネート導線のファイルと文言が未整備</td>
+        <td><code>.github/FUNDING.yml</code> がない。GitHub は Buy Me a Coffee を <code>buy_me_a_coffee</code> キーで扱える。</td>
+        <td><code>.github/FUNDING.yml</code> を追加し、README には「任意支援であり、機能追加・優先対応・第三者ライセンス付与を約束しない」と明記する。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p1-badge">P1-3</span></td>
+        <td>ローカル UI の安全境界を README に明記していない</td>
+        <td>UI は既定 <code>127.0.0.1</code> だが、<code>--host</code> を受け取り、ローカルファイルパス、ffmpeg、Remotion render、PowerShell の file picker を扱う。</td>
+        <td>「この UI はローカル制作用。LAN やインターネットに公開しない」と明記。必要なら loopback 以外は <code>--unsafe-host</code> 的な明示フラグを要求する。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p1-badge">P1-4</span></td>
+        <td>第三者ライセンス表が不足している</td>
+        <td>Node 依存は MIT 181件以外に MPL-2.0、CC-BY-4.0、Remotion License、SEE LICENSE、UNLICENSED が混在。Python optional 依存は stable-ts MIT、openai-whisper MIT、torch BSD-3-Clause、torchaudio は pip metadata 上 license 空欄。</td>
+        <td><code>THIRD_PARTY_NOTICES.md</code> を作り、Node / Python / FFmpeg / Remotion / AI生成素材を分けて記載する。FFmpeg は利用者の build option 依存で LGPL/GPL/nonfree の差があるため、同梱しないなら「ユーザー環境の ffmpeg を使う」と明記。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p1-badge">P1-5</span></td>
+        <td>公開直前の working tree が clean ではない</td>
+        <td>調査時点で <code>remotion/src/components/presets/FullLandscapeSong.tsx</code>、<code>ui_preview/App.tsx</code>、<code>src/music_video_creator/ui.py</code> など 11 files modified。</td>
+        <td>公開用ブランチを切り、不要な差分を除外し、検証コマンドを通した状態で tag / release を作る。</td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>P2: 公開後でもよいが早めに直す</h2>
+    <table>
+      <thead>
+      <tr>
+        <th style="width: 92px;">優先度</th>
+        <th>問題</th>
+        <th>見解</th>
+        <th>推奨対応</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><span class="badge p2-badge">P2-1</span></td>
+        <td>リポジトリが資産で重い</td>
+        <td>GitHub の通常 Git は 50MiB 超で警告、100MiB 超でブロックだが、今回は単体 25MiB 超は見つからない。ただし合計 208MB は clone 体験として重い。</td>
+        <td>コード repo と asset pack を分離。大きな素材は GitHub Releases、LFS、または外部ストレージへ。公開 repo には最小デモだけ置く。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p2-badge">P2-2</span></td>
+        <td>実曲・手元環境前提の npm scripts が多い</td>
+        <td><code>musics/RISE_RISE</code>、<code>Electric Sheep Little Girl</code> 前提の scripts は、新規利用者には失敗する。</td>
+        <td>public README の Quick Start は <code>demo:assets</code> から通る導線を主にし、実曲 scripts は <code>local:</code> prefix や docs の private workflow に寄せる。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p2-badge">P2-3</span></td>
+        <td>CI が見当たらない</td>
+        <td><code>.github</code> ディレクトリがなく、public repo で最低限見たい自動検証がない。</td>
+        <td>GitHub Actions で Python tests、npm typecheck、UI build、wheel contents check、npm audit の少なくとも一部を回す。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p2-badge">P2-4</span></td>
+        <td>履歴資料に個人環境パスが残っている</td>
+        <td><code>G:\Projects\...</code>、<code>C:\Users\owner\...</code> などが docs / examples に残る。秘密情報ではないが、公開資料としては粗い。</td>
+        <td>現行 docs からは個人パスを消し、履歴資料は <code>docs/archive</code> に寄せるか、公開対象から外す。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p2-badge">P2-5</span></td>
+        <td>community health files がない</td>
+        <td>小規模個人プロジェクトなら必須ではないが、Issue / PR を受けるなら必要になる。</td>
+        <td><code>SECURITY.md</code>、<code>CONTRIBUTING.md</code>、<code>CODE_OF_CONDUCT.md</code>、Issue templates を最小で用意する。</td>
+      </tr>
+      <tr>
+        <td><span class="badge p2-badge">P2-6</span></td>
+        <td>npm package metadata が private 前提</td>
+        <td>GitHub 配布だけなら <code>"private": true</code> は致命的ではないが、npm publish や package metadata としては未整備。</td>
+        <td>npm 公開しないなら README に明記。将来 npm に出すなら <code>license</code>、<code>repository</code>、<code>bugs</code>、<code>homepage</code>、<code>funding</code> を追加し、<code>private</code> を外す。</td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>推奨公開パターン</h2>
+    <div class="grid-two">
+      <div class="option">
+        <strong>A. コード中心で先に公開</strong>
+        <p>最も現実的。資産は最小デモだけにし、キャラクター素材や参照 GIF は外す。P0 を処理すれば、比較的短時間で public にできる。</p>
+        <p class="small">推奨度: 高</p>
+      </div>
+      <div class="option">
+        <strong>B. 資産込みで公開</strong>
+        <p>見栄えは良いが、素材ごとの出所・許諾・再配布可否が必要。今の状態では一番事故りやすい。</p>
+        <p class="small">推奨度: 低。やるなら asset manifest が先。</p>
+      </div>
+      <div class="option">
+        <strong>C. Private beta / 招待制</strong>
+        <p>人に触ってもらう目的なら妥当。公開前に UI や配布導線の不具合を見つけやすい。</p>
+        <p class="small">推奨度: 中。公開前テストとして有効。</p>
+      </div>
+      <div class="option">
+        <strong>D. GitHub Releases で asset pack 配布</strong>
+        <p>コード repo を軽く保ち、サンプル素材は release asset として分ける。素材ライセンスも release notes に書ける。</p>
+        <p class="small">推奨度: 中から高。資産を配るならこの形が無難。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>ドネート導線の扱い</h2>
+    <p>
+      「もしよかったらコーヒーを一杯」は、プロジェクトへの任意支援としてなら自然です。
+      問題になるのは、支援が機能提供、サポート契約、商用利用許諾、Remotion のライセンス代替のように見えることです。
+      ここは文言で切り分けるべきです。
+    </p>
+    <h3>README に置くならこのくらいが安全</h3>
+    <pre><code>このプロジェクトが役に立った場合は、任意で支援できます。
+支援は開発継続の助けとして受け取りますが、機能追加、優先対応、個別サポート、第三者ライセンスの付与を約束するものではありません。</code></pre>
+    <h3><code>.github/FUNDING.yml</code> の例</h3>
+    <pre><code>buy_me_a_coffee: your_username</code></pre>
+    <p class="small">
+      Buy Me a Coffee の username は実アカウントに置き換えてください。税務・会計処理は受け取り主体の国・形態で変わるので、そこは別途確認が必要です。
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>公開前チェックリスト</h2>
+    <ol>
+      <li>コードのライセンスを決め、root <code>LICENSE</code>、<code>pyproject.toml</code>、<code>package.json</code> に反映する。</li>
+      <li>資産を「公開する」「外す」「release asset に分ける」に分類し、公開するものだけ provenance と license を書く。</li>
+      <li>Remotion の別ライセンス条件を README と <code>THIRD_PARTY_NOTICES.md</code> に明記する。</li>
+      <li><code>npm run typecheck</code> の失敗を直す。</li>
+      <li>Remotion / npm 依存を更新し、<code>npm audit --omit=dev</code> の high を潰す。</li>
+      <li>wheel に <code>ui_static/generated/**/*.js</code> が入るよう <code>pyproject.toml</code> を直し、wheel contents を確認する。</li>
+      <li>README の Quick Start を、手元の実曲なしで通る demo-first 導線にする。</li>
+      <li>ローカル UI の安全注意を README に書く。</li>
+      <li><code>.github/FUNDING.yml</code> を追加し、任意支援の文言を明確にする。</li>
+      <li>clean working tree で <code>python -m unittest discover -s tests -t .</code>、<code>npm run typecheck</code>、<code>npm run build:ui</code>、必要なら <code>npm run smoke:remotion</code> を通す。</li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <h2>参照した公式情報</h2>
+    <ul>
+      <li><a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository">GitHub Docs: Licensing a repository</a></li>
+      <li><a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository">GitHub Docs: Displaying a sponsor button in your repository</a></li>
+      <li><a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github">GitHub Docs: About large files on GitHub</a></li>
+      <li><a href="https://www.remotion.pro/license">Remotion Pro: Licensing</a></li>
+    </ul>
+    <p class="small">
+      公式情報は 2026-05-15 時点で確認。ライセンス、税務、寄付プラットフォーム規約は変わる可能性があるため、公開直前に再確認してください。
+    </p>
+  </section>
+</main>
+</body>
+</html>
