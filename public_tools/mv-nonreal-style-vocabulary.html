@@ -1,0 +1,1358 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MV Nonreal Style Vocabulary Reference</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f2;
+      --paper: #ffffff;
+      --ink: #1f252b;
+      --muted: #66717f;
+      --line: #d8ddd0;
+      --line-strong: #aeb8a1;
+      --teal: #0d7468;
+      --blue: #315a9f;
+      --coral: #aa4838;
+      --amber: #946216;
+      --green: #496f36;
+      --violet: #68549c;
+      --shadow: 0 10px 28px rgba(31, 37, 43, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Yu Gothic", "Meiryo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.72;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 278px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow: auto;
+      border-right: 1px solid var(--line);
+      background: #edf1e8;
+      padding: 24px 20px;
+    }
+
+    .sidebar h2 {
+      margin: 0 0 16px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 13px;
+    }
+
+    .nav-list a {
+      display: block;
+      padding: 7px 9px;
+      border-radius: 6px;
+      color: #29323a;
+      text-decoration: none;
+    }
+
+    .nav-list a:hover {
+      background: #ffffff;
+      color: var(--blue);
+    }
+
+    .nav-sublist {
+      display: grid;
+      gap: 2px;
+      margin: 4px 0 0 9px;
+      padding: 0 0 0 10px;
+      border-left: 1px solid var(--line-strong);
+      list-style: none;
+      font-size: 12px;
+    }
+
+    .nav-sublist a {
+      padding: 5px 7px;
+      color: #586372;
+      line-height: 1.35;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      padding: 52px clamp(24px, 5vw, 72px) 34px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+      gap: 34px;
+      align-items: end;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      max-width: 930px;
+      margin: 0;
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1.06;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 920px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .notice {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--coral);
+      border-radius: 8px;
+      padding: 16px 18px;
+      background: #fff8f5;
+      color: #53362e;
+      font-size: 14px;
+    }
+
+    .notice strong {
+      color: #2d1d19;
+    }
+
+    .content {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 36px clamp(24px, 5vw, 72px) 72px;
+    }
+
+    section {
+      margin-top: 46px;
+    }
+
+    section:first-child {
+      margin-top: 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 390px);
+      gap: 28px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 36px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .rule-grid,
+    .axis-grid,
+    .family-grid,
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .rule,
+    .axis-card,
+    .family,
+    .source,
+    .mix-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .rule {
+      padding: 14px 15px;
+    }
+
+    .rule b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--teal);
+      font-size: 13px;
+    }
+
+    .rule span,
+    .axis-card p,
+    .family p,
+    .source span,
+    .mix-card p {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .axis-card,
+    .family,
+    .mix-card {
+      padding: 15px;
+    }
+
+    .axis-card b,
+    .family b,
+    .source b {
+      display: block;
+      margin-bottom: 7px;
+      line-height: 1.35;
+    }
+
+    .source {
+      padding: 13px 14px;
+    }
+
+    .source a {
+      color: var(--ink);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border: 1px solid #cbd4c0;
+      border-radius: 999px;
+      padding: 2px 9px;
+      background: #f7faf4;
+      color: #46513d;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f1f4ec;
+      color: #26313a;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td:first-child {
+      width: 210px;
+      font-weight: 700;
+      color: #26313a;
+    }
+
+    .style-table {
+      min-width: 1120px;
+    }
+
+    .style-table td:nth-child(2) {
+      width: 210px;
+      font-weight: 700;
+      color: #26313a;
+    }
+
+    .style-thumb {
+      width: 220px;
+      min-width: 220px;
+      font-weight: 400;
+      color: inherit;
+    }
+
+    .style-thumb img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #f3f4ef;
+      cursor: zoom-in;
+    }
+
+    .style-thumb img:focus-visible {
+      outline: 3px solid rgba(49, 90, 159, 0.58);
+      outline-offset: 3px;
+    }
+
+    .subtle {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    details {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 15px 18px;
+      font-weight: 700;
+      color: #25313a;
+    }
+
+    details[open] summary {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .details-body {
+      padding: 18px;
+    }
+
+    .mix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mix-card b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--amber);
+    }
+
+    .check-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .check-list li {
+      border-left: 4px solid var(--teal);
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      color: #34404a;
+      font-size: 14px;
+    }
+
+    .toc-pill {
+      display: inline-block;
+      margin-top: 14px;
+      border: 1px solid #cbd4c0;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #f7faf4;
+      color: #46513d;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .image-modal {
+      width: min(1480px, calc(100vw - 20px));
+      max-width: none;
+      max-height: calc(100dvh - 20px);
+      margin: auto;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .image-modal::backdrop {
+      background: rgba(10, 15, 24, 0.72);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-shell {
+      position: relative;
+      display: grid;
+      max-height: calc(100dvh - 20px);
+      grid-template-rows: minmax(0, 1fr) auto;
+    }
+
+    .modal-frame {
+      display: grid;
+      place-items: center;
+      min-height: 0;
+      background: #101820;
+    }
+
+    .modal-frame img {
+      width: 100%;
+      max-height: min(84dvh, 960px);
+      object-fit: contain;
+    }
+
+    .modal-copy {
+      padding: 18px 20px 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .modal-copy h2 {
+      margin: 0 48px 7px 0;
+      font-size: 21px;
+      line-height: 1.28;
+    }
+
+    .modal-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.66;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(8, 13, 22, 0.76);
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .modal-close:hover,
+    .modal-close:focus-visible,
+    .modal-nav:hover,
+    .modal-nav:focus-visible {
+      background: rgba(8, 13, 22, 0.92);
+    }
+
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      display: grid;
+      width: 46px;
+      height: 68px;
+      place-items: center;
+      transform: translateY(-50%);
+      border: 0;
+      border-radius: 999px;
+      background: rgba(8, 13, 22, 0.68);
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .modal-nav.prev {
+      left: 14px;
+    }
+
+    .modal-nav.next {
+      right: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .hero-grid,
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+
+      .rule-grid,
+      .axis-grid,
+      .family-grid,
+      .source-grid,
+      .mix-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        padding-top: 36px;
+      }
+
+      .rule-grid,
+      .axis-grid,
+      .family-grid,
+      .source-grid,
+      .mix-grid {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        min-width: 780px;
+      }
+
+      .style-table {
+        min-width: 880px;
+      }
+
+      .style-thumb {
+        width: 168px;
+        min-width: 168px;
+      }
+
+      .modal-frame img {
+        max-height: 72dvh;
+      }
+
+      .modal-copy {
+        padding: 15px 16px 17px;
+      }
+
+      .modal-nav {
+        width: 38px;
+        height: 52px;
+        font-size: 34px;
+      }
+
+      .modal-nav.prev {
+        left: 8px;
+      }
+
+      .modal-nav.next {
+        right: 8px;
+      }
+    }
+
+    @media print {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .content,
+      .hero {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .table-wrap,
+      .rule,
+      .axis-card,
+      .family,
+      .source,
+      .mix-card,
+      .check-list li {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>MV Nonreal Style Vocabulary</h2>
+      <ul class="nav-list">
+        <li>
+          <a href="#atlas">画風・技法一覧</a>
+          <ul class="nav-sublist">
+            <li><a href="#drawing">描画・絵具</a></li>
+            <li><a href="#print">版画・印刷</a></li>
+            <li><a href="#movements">美術史・デザイン</a></li>
+            <li><a href="#comics">漫画・コミック・アニメ</a></li>
+            <li><a href="#animation">アニメーション・時間</a></li>
+            <li><a href="#collage">コラージュ・混成</a></li>
+            <li><a href="#craft">紙・布・工芸</a></li>
+            <li><a href="#folk">民芸・図像体系</a></li>
+            <li><a href="#digital">デジタル・ポストデジタル</a></li>
+          </ul>
+        </li>
+        <li><a href="#families">系統マップ</a></li>
+        <li><a href="#coverage">分類軸</a></li>
+        <li><a href="#sources">参照ソース</a></li>
+        <li><a href="#protocol">活用プロトコル</a></li>
+        <li><a href="#mix">組み合わせテンプレート</a></li>
+        <li><a href="#qa">品質チェック</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <header class="hero">
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">Music Video Art Direction</p>
+            <h1>非写実画風・制作技法 語彙リファレンス</h1>
+            <p class="lead">実写の現実感から離れたMV案を出すための、画風、媒体、制作技法、素材、漫画・アニメ文法、工芸、デジタル表現の一覧。単語を眺める資料ではなく、最終的に「画面の物質ルール」として使うための語彙集です。</p>
+          </div>
+          <div class="notice">
+            <strong>前提:</strong> 画風の完全網羅は不可能です。美術史、工芸、漫画、アニメ、印刷、デジタル表現は分類体系が違うため、ここでは「媒体、痕跡、運動、文化圏、抽象度」の交差で漏れを減らします。作家名、スタジオ名、IP名の模倣ラベルを避け、一般化できる技法語へ分解します。
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="atlas">
+          <div class="section-head">
+            <div>
+              <h2>画風・技法一覧</h2>
+              <p class="note">各項目は「この単語を入れれば完成」ではなく、見た目の痕跡を引き出すための候補です。似た語でも、画面に出る痕跡が違うものは分けています。</p>
+            </div>
+          </div>
+
+          <details id="drawing" open>
+            <summary>描画・絵具</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/01-graphite-pencil.png" alt="鉛筆とグラファイトの薄い階調、下描き線、消し跡、紙の余白を示す抽象的な静物サンプル" loading="lazy"></td><td>鉛筆 / グラファイト<span class="subtle">graphite sketch</span></td><td>薄い階調、消し跡、下描き線、紙の白。</td><td>記憶、未完成、内面メモ、設計図のようなMVに向く。</td><td>単なるラフ絵になる。線の密度と余白の設計が必要。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/02-charcoal.png" alt="木炭の粉っぽい黒、擦れた濃淡、柔らかい影、残された白場を見せる抽象的な描画サンプル" loading="lazy"></td><td>木炭<span class="subtle">charcoal drawing</span></td><td>黒の粉、擦れ、濃淡、柔らかい影。</td><td>身体の影、悪夢、煙、崩れる輪郭に強い。</td><td>暗いだけの画面になりやすい。白場を残す。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/03-ink-line-art.png" alt="インク線画の強い輪郭、筆圧差、にじみ、限定的な黒ベタを示す植物と小物の汎用サンプル" loading="lazy"></td><td>インク線画<span class="subtle">ink line art</span></td><td>強い輪郭、筆圧、にじみ、黒ベタ。</td><td>シンボル、漫画、版画、宗教画寄りの正面性に使える。</td><td>線が均質だと汎用アイコンになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/04-pen-and-wash.png" alt="細いペン線と淡いウォッシュが重なり、紙目やにじみを見せる匿名の室内スケッチ風サンプル" loading="lazy"></td><td>ペン&ウォッシュ<span class="subtle">pen and wash</span></td><td>細線と淡い水彩/墨の面が共存。</td><td>旅、建築、記憶、図解、夢の日記に合う。</td><td>水彩風フィルターで済ませると弱い。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/05-watercolor.png" alt="紙目の上に透明な色が重なり、にじみと粒状感が見える水彩の抽象サンプル" loading="lazy"></td><td>水彩<span class="subtle">transparent watercolor</span></td><td>透明感、にじみ、ウォッシュ、紙目。</td><td>感情の滲み、流体、回想、淡い非現実に使う。</td><td>安い「優しい絵」になる。輪郭の制御が必要。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/06-gouache.png" alt="マットな不透明色の面に筆ムラと塗り重ねの段差が残るガッシュの抽象サンプル" loading="lazy"></td><td>ガッシュ<span class="subtle">opaque gouache</span></td><td>マットな不透明色、ポスター的な塗り、筆ムラ。</td><td>絵本、レトロ広告、平面背景、セル背景に向く。</td><td>デジタルフラットと区別できないと意味が薄い。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/07-pastel.png" alt="粗い紙の上で粉状の色面がこすられ、ぼかしと暗部が残るパステルの抽象サンプル" loading="lazy"></td><td>パステル<span class="subtle">soft pastel</span></td><td>粉っぽい色面、ぼかし、指で擦った境界。</td><td>夢、眠気、霞、柔らかい身体表現。</td><td>甘いだけになる。ザラつきと暗部を残す。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/08-crayon-colored-pencil.png" alt="紙の白を残しながらクレヨンと色鉛筆の粒、筆圧、塗り残しが見える抽象サンプル" loading="lazy"></td><td>クレヨン / 色鉛筆<span class="subtle">crayon, colored pencil</span></td><td>幼さ、塗り残し、芯の粒、強い手癖。</td><td>子供の視点、呪いの落書き、親密な記録。</td><td>かわいい記号だけになる。意図的な歪みを使う。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/09-impasto-oil.png" alt="厚く盛られた油絵具の筆跡と光沢が見える抽象的なインパスト表現" loading="lazy"></td><td>油彩インパスト<span class="subtle">impasto oil paint</span></td><td>厚塗り、光る凸部、筆跡、絵具の重さ。</td><td>顔や空間が物質化するMV。感情を表面に押し出す。</td><td>名画風の雑な豪華さになりやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/10-acrylic-poster-paint.png" alt="不透明でマットな色面と乾いた筆ムラを持つアクリル／ポスターカラー風の抽象画" loading="lazy"></td><td>アクリル / ポスターカラー<span class="subtle">flat acrylic, poster paint</span></td><td>強いベタ色、乾いた筆跡、広告的な平面。</td><td>セット、衣装、背景を大胆な形に単純化する。</td><td>配色だけで勝負すると一発芸になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/11-airbrush.png" alt="滑らかなグラデーションと人工的な艶を見せるエアブラシ風の抽象的な球体表現" loading="lazy"></td><td>エアブラシ<span class="subtle">airbrush</span></td><td>滑らかなグラデーション、80s感、人工的な艶。</td><td>車、金属、夢の広告、レトロSF、肌の非現実化。</td><td>懐古ネタとして消費されやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/12-stippling.png" alt="点の密度だけで陰影と形を作るスティップリング表現の抽象サンプル" loading="lazy"></td><td>点描 / スティップリング<span class="subtle">stippling</span></td><td>点の密度で階調を作る。</td><td>粒子、肌、星、病理図、虫眼鏡的な世界。</td><td>細部に寄りすぎると映像のリズムが死ぬ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/13-hatching-crosshatching.png" alt="ハッチングとクロスハッチングの線密度だけで静物の陰影を表したモノクロインク画" loading="lazy"></td><td>ハッチング / クロスハッチング<span class="subtle">hatching, crosshatching</span></td><td>線の方向と密度で陰影を作る。</td><td>銅版画、漫画、科学図版、悪夢の影に使う。</td><td>全画面に入れると可読性が落ちる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/14-scratchboard.png" alt="黒地を削った白い線で骨と植物の硬い光を描いたスクラッチボード風のサンプル" loading="lazy"></td><td>スクラッチボード<span class="subtle">scratchboard</span></td><td>黒地を削った白線、硬い光、毛羽立った線。</td><td>夜、骨、植物、動物的テクスチャ、怪異。</td><td>白黒の装飾だけになる。光源ルールが要る。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/15-sumi-e.png" alt="墨の濃淡、滲み、余白で葦と石と遠い山影を表した水墨画風のサンプル" loading="lazy"></td><td>水墨 / 墨絵<span class="subtle">ink wash, sumi-e</span></td><td>濃淡、余白、筆の速度、滲み。</td><td>余白、呼吸、消える身体、霧、抽象的な感情に強い。</td><td>雑な和風化。対象と筆法の根拠を持つ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/16-nihonga-mineral-pigment.png" alt="岩絵具の粒状感と静かな発色で植物と水面を平面的に構成した日本画風のサンプル" loading="lazy"></td><td>日本画 / 岩絵具<span class="subtle">nihonga, mineral pigment</span></td><td>粒状の顔料、金銀、平面性、静かな発色。</td><td>儀式的な静止画、屏風、植物、神話的な背景。</td><td>和柄の貼り付けで終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/17-calligraphy-brush-lettering.png" alt="紙の上に、読めない抽象的な筆文字のような黒い線が勢いよく配置されたカリグラフィ表現" loading="lazy"></td><td>カリグラフィ / ブラッシュレター<span class="subtle">calligraphic brush lettering</span></td><td>文字が線、身体、速度になる。</td><td>歌詞、声、叫び、祈りを画面内の物質にする。</td><td>読めない飾り文字を重ねるだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/18-picture-book-illustration.png" alt="紙の質感が残る柔らかな絵本風の庭と木々の挿絵。少し不思議な空気がある" loading="lazy"></td><td>絵本挿絵<span class="subtle">picture book illustration</span></td><td>柔らかい形、余白、物語性、紙の手触り。</td><td>童話化、寓話化、孤独な小さな世界。</td><td>安全なかわいさへ逃げる。怖さや異物を混ぜる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/19-scientific-illustration.png" alt="架空の植物標本を精密な線と淡い彩色で描いた、博物図のような図版" loading="lazy"></td><td>科学図版 / 博物図<span class="subtle">scientific illustration</span></td><td>断面、番号、精密線、余白、分類表。</td><td>歌詞の比喩を「観察対象」にする。身体、植物、機械に合う。</td><td>説明的すぎて感情が消える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/drawing/20-naive-painting.png" alt="遠近感がずれた家や広場を、手作り感のある筆致で描いた素朴画風の風景" loading="lazy"></td><td>素朴画 / ナイーブ<span class="subtle">naive painting</span></td><td>遠近のズレ、正面性、硬い人物、民画的な構成。</td><td>記憶、夢、共同体、家庭内神話に向く。</td><td>下手風を装うだけだと失礼で弱い。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details id="print">
+            <summary>版画・印刷</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/01-woodcut.png" alt="木版画（woodcut）の非写実技法サンプル画像" loading="lazy"></td><td>木版画<span class="subtle">woodcut</span></td><td>彫り跡、黒ベタ、硬い輪郭、木目。</td><td>強い象徴、民話、悪夢、反復する身体。</td><td>単なる白黒ポスター化。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/02-wood-engraving.png" alt="木口木版（wood engraving）の非写実技法サンプル画像" loading="lazy"></td><td>木口木版<span class="subtle">wood engraving</span></td><td>細密な白線、硬質な陰影、古い挿絵感。</td><td>百科事典、古書、儀式、異世界の図鑑。</td><td>細かすぎて動画で潰れる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/03-linocut.png" alt="リノカット（linocut）の非写実技法サンプル画像" loading="lazy"></td><td>リノカット<span class="subtle">linocut</span></td><td>太い彫り跡、粗い白黒対比、手刷り感。</td><td>DIY、怒り、民謡、パンク寄りのMV。</td><td>雑な粗さだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/04-etching.png" alt="エッチング（etching）の非写実技法サンプル画像" loading="lazy"></td><td>エッチング<span class="subtle">etching</span></td><td>銅版の細線、酸の噛み、湿った黒。</td><td>不安、都市、顔、記憶の細い傷。</td><td>暗い線画に見えるだけ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/05-drypoint.png" alt="ドライポイント（drypoint）の非写実技法サンプル画像" loading="lazy"></td><td>ドライポイント<span class="subtle">drypoint</span></td><td>引っかき傷、にじむような線の毛羽。</td><td>神経質な輪郭、痛み、壊れた肖像。</td><td>ノイズが多いと汚く見える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/06-aquatint.png" alt="アクアチント（aquatint）の非写実技法サンプル画像" loading="lazy"></td><td>アクアチント<span class="subtle">aquatint</span></td><td>粒状トーン、霧のような階調。</td><td>夜、夢、古い挿絵、影の層。</td><td>水彩やグレインとの区別が曖昧。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/07-mezzotint.png" alt="メゾチント（mezzotint）の非写実技法サンプル画像" loading="lazy"></td><td>メゾチント<span class="subtle">mezzotint</span></td><td>深い黒から光を削り出す階調。</td><td>暗闇から浮かぶ顔、聖像、劇場的な光。</td><td>重すぎて曲のテンポを殺す。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/08-lithograph.png" alt="リトグラフ（lithograph）の非写実技法サンプル画像" loading="lazy"></td><td>リトグラフ<span class="subtle">lithograph</span></td><td>クレヨン粒、平面色、ポスター感。</td><td>古い広告、劇場ポスター、手描きの都市。</td><td>ただのレトロポスターになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/09-screenprint-serigraph.png" alt="スクリーンプリント（screenprint, serigraph）の非写実技法サンプル画像" loading="lazy"></td><td>スクリーンプリント<span class="subtle">screenprint, serigraph</span></td><td>ベタ面、特色、重ね刷り、版ズレ。</td><td>強い色数制限、商品記号、ポップな連続。</td><td>色が派手なだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/10-risograph.png" alt="リソグラフ（risograph）の非写実技法サンプル画像" loading="lazy"></td><td>リソグラフ<span class="subtle">risograph</span></td><td>特色インク、粗い粒子、紙、ズレ、ZINE感。</td><td>自主制作、青春、複製、部屋の印刷物を世界化する。</td><td>流行のRISO風で止まる。色数制限を設計する。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/11-letterpress.png" alt="活版 / レタープレス（letterpress）の非写実技法サンプル画像" loading="lazy"></td><td>活版 / レタープレス<span class="subtle">letterpress</span></td><td>紙への凹み、インクのかすれ、文字の重さ。</td><td>歌詞、宣告、古い通知、祈祷文。</td><td>フォント選びだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/12-halftone.png" alt="ハーフトーン（halftone）の非写実技法サンプル画像" loading="lazy"></td><td>ハーフトーン<span class="subtle">halftone</span></td><td>網点で階調を作る印刷感。</td><td>漫画、新聞、広告、顔の距離感を作る。</td><td>点を重ねるだけで読みにくい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/13-comic-print-dots.png" alt="Ben-Day dots（comic print dots）の非写実技法サンプル画像" loading="lazy"></td><td>Ben-Day dots<span class="subtle">comic print dots</span></td><td>均一ドット、ポップアート、古いコミック。</td><td>消費物、人工感、明るい皮肉。</td><td>有名作品の模倣に寄りやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/14-offset-misregistration.png" alt="オフセットCMYK（offset misregistration）の非写実技法サンプル画像" loading="lazy"></td><td>オフセットCMYK<span class="subtle">offset misregistration</span></td><td>CMYK分版、色ズレ、新聞紙の粗さ。</td><td>情報過多、報道、偽広告、記憶の複製。</td><td>汚しエフェクトで終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/15-xerox-art.png" alt="コピーアート（xerox art）の非写実技法サンプル画像" loading="lazy"></td><td>コピーアート<span class="subtle">xerox art</span></td><td>潰れた黒、白飛び、紙端、反復劣化。</td><td>秘密文書、地下文化、分身、ノイズの増殖。</td><td>読めないノイズになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/16-mimeograph.png" alt="ミメオグラフ / 謄写版（mimeograph）の非写実技法サンプル画像" loading="lazy"></td><td>ミメオグラフ / 謄写版<span class="subtle">mimeograph</span></td><td>青紫のインク、学校配布物、古い複写。</td><td>懐かしさ、告知、手作りの儀式。</td><td>時代設定が曖昧だと伝わらない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/17-stencil-print.png" alt="ステンシル / Pochoir（stencil print）の非写実技法サンプル画像" loading="lazy"></td><td>ステンシル / Pochoir<span class="subtle">stencil print</span></td><td>切り抜きの硬い輪郭、手彩色、反復。</td><td>街頭、衣装柄、アールデコ本、抗議ポスター。</td><td>グラフィティ風に雑化しやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/18-monotype.png" alt="モノタイプ（monotype）の非写実技法サンプル画像" loading="lazy"></td><td>モノタイプ<span class="subtle">monotype</span></td><td>一点物の転写、拭き取り、ぼやけた残像。</td><td>一度しか現れない記憶、幽霊、夢。</td><td>画面が眠くなる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/19-collagraph.png" alt="コラグラフ（collagraph）の非写実技法サンプル画像" loading="lazy"></td><td>コラグラフ<span class="subtle">collagraph</span></td><td>紙、紐、布などを貼った版の凹凸。</td><td>素材の地図、身体の地層、部屋の記憶。</td><td>質感が多すぎて焦点が消える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/20-ukiyo-e-nishiki-e.png" alt="浮世絵 / 錦絵（ukiyo-e, nishiki-e）の非写実技法サンプル画像" loading="lazy"></td><td>浮世絵 / 錦絵<span class="subtle">ukiyo-e, nishiki-e</span></td><td>輪郭線、平面色、ぼかし、見当、紙の余白。</td><td>舞台、都市、雨、波、幽霊、歌舞伎的ポーズ。</td><td>有名絵柄の表面コピーになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/print/21-shin-hanga-sosaku-hanga.png" alt="新版画 / 創作版画（shin-hanga, sosaku-hanga）の非写実技法サンプル画像" loading="lazy"></td><td>新版画 / 創作版画<span class="subtle">shin-hanga, sosaku-hanga</span></td><td>近代的な光、版画の平面性、手仕事の刷り。</td><td>夜景、雨、静けさ、個人の内面。</td><td>観光ポスター化しやすい。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details id="movements">
+            <summary>美術史・デザイン運動</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/01-art-nouveau.png" alt="アール・ヌーヴォー（Art Nouveau）の非写実技法サンプル画像" loading="lazy"></td><td>アール・ヌーヴォー<span class="subtle">Art Nouveau</span></td><td>植物的曲線、装飾、流れる髪や輪郭。</td><td>声、蔓、髪、文字が絡む世界。</td><td>飾り罫だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/02-art-deco.png" alt="アール・デコ（Art Deco）の非写実技法サンプル画像" loading="lazy"></td><td>アール・デコ<span class="subtle">Art Deco</span></td><td>幾何、左右対称、金属感、流線。</td><td>都会、劇場、機械的な豪華さ、儀式的な光。</td><td>豪華なだけで曲の感情が薄い。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/03-arts-and-crafts.png" alt="アーツ&amp;クラフツ（Arts and Crafts）の非写実技法サンプル画像" loading="lazy"></td><td>アーツ&クラフツ<span class="subtle">Arts and Crafts</span></td><td>植物文様、手仕事、装丁、布・壁紙。</td><td>部屋そのものを歌詞の森にする。</td><td>上品な壁紙で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/04-symbolism.png" alt="象徴主義（Symbolism）の非写実技法サンプル画像" loading="lazy"></td><td>象徴主義<span class="subtle">Symbolism</span></td><td>夢、神話、反復する物、寓意。</td><td>歌詞の直接説明を避け、反復モチーフで意味を変える。</td><td>意味ありげな物を並べるだけ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/05-expressionism.png" alt="表現主義（Expressionism）の非写実技法サンプル画像" loading="lazy"></td><td>表現主義<span class="subtle">Expressionism</span></td><td>歪んだ形、強い影、内面の外在化。</td><td>部屋、顔、街を感情で歪ませる。</td><td>暗く大げさな演劇に寄る。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/06-fauvism.png" alt="フォーヴィスム（Fauvism）の非写実技法サンプル画像" loading="lazy"></td><td>フォーヴィスム<span class="subtle">Fauvism</span></td><td>非自然な強色、粗い筆致、色優先。</td><td>肌、空、部屋の色を感情に合わせてずらす。</td><td>ただ派手な配色になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/07-cubism.png" alt="キュビスム（Cubism）の非写実技法サンプル画像" loading="lazy"></td><td>キュビスム<span class="subtle">Cubism</span></td><td>複数視点、分解、面の再構成。</td><td>時間差、会話の断片、身体の分裂。</td><td>顔を割るだけの記号になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/08-futurism.png" alt="未来派（Futurism）の非写実技法サンプル画像" loading="lazy"></td><td>未来派<span class="subtle">Futurism</span></td><td>速度、反復、機械、都市の力線。</td><td>疾走、衝突、過密な情報流。</td><td>スピード線だけで終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/09-dada.png" alt="ダダ（Dada）の非写実技法サンプル画像" loading="lazy"></td><td>ダダ<span class="subtle">Dada</span></td><td>ナンセンス、偶然、反理性、切り貼り。</td><td>意味が壊れる歌詞、風刺、混線。</td><td>ランダムな散らかしになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/10-surrealism.png" alt="シュルレアリスム（Surrealism）の非写実技法サンプル画像" loading="lazy"></td><td>シュルレアリスム<span class="subtle">Surrealism</span></td><td>夢、不可能な並置、無意識、変形。</td><td>現実外MVの中核。論理より連想で世界を繋ぐ。</td><td>理由のない変な絵になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/11-automatism.png" alt="オートマティスム（automatism）の非写実技法サンプル画像" loading="lazy"></td><td>オートマティスム<span class="subtle">automatism</span></td><td>無意識的線、偶然、流れる形。</td><td>声や感情を自動筆記のように画面化する。</td><td>制御のない落書きになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/12-constructivism.png" alt="構成主義（Constructivism）の非写実技法サンプル画像" loading="lazy"></td><td>構成主義<span class="subtle">Constructivism</span></td><td>斜線、工業感、赤黒、タイポ、幾何。</td><td>命令、機械、制度、群衆、リズムの構造。</td><td>政治ポスター風に寄りすぎる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/13-suprematism.png" alt="シュプレマティスム（Suprematism）の非写実技法サンプル画像" loading="lazy"></td><td>シュプレマティスム<span class="subtle">Suprematism</span></td><td>四角、円、十字、浮遊する幾何。</td><td>音の配置、無重力、精神的な余白。</td><td>ただの幾何背景になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/14-de-stijl.png" alt="デ・ステイル（De Stijl）の非写実技法サンプル画像" loading="lazy"></td><td>デ・ステイル<span class="subtle">De Stijl</span></td><td>水平垂直、原色、白黒、グリッド。</td><td>部屋や字幕を構造化する。</td><td>家具・建築引用だけで終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/15-bauhaus.png" alt="バウハウス（Bauhaus）の非写実技法サンプル画像" loading="lazy"></td><td>バウハウス<span class="subtle">Bauhaus</span></td><td>幾何、機能、実験的タイポ、色面。</td><td>音を形の授業のように分解する。</td><td>おしゃれな幾何ロゴに落ちる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/16-international-typographic-style.png" alt="スイス・スタイル（International Typographic Style）の非写実技法サンプル画像" loading="lazy"></td><td>スイス・スタイル<span class="subtle">International Typographic Style</span></td><td>グリッド、サンセリフ、余白、情報設計。</td><td>歌詞やデータを冷静に整理するMV。</td><td>企業資料っぽくなる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/17-minimalism.png" alt="ミニマリズム（Minimalism）の非写実技法サンプル画像" loading="lazy"></td><td>ミニマリズム<span class="subtle">Minimalism</span></td><td>少数要素、反復、無駄の削減。</td><td>小さな差分を曲の展開に合わせる。</td><td>空っぽを洗練と誤認する。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/18-color-field.png" alt="カラーフィールド（Color Field）の非写実技法サンプル画像" loading="lazy"></td><td>カラーフィールド<span class="subtle">Color Field</span></td><td>大きな色面、染み、空間化した色。</td><td>感情を背景ではなく「場」にする。</td><td>きれいな壁紙になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/19-abstract-expressionism.png" alt="抽象表現主義 / アクションペインティング（Abstract Expressionism）の非写実技法サンプル画像" loading="lazy"></td><td>抽象表現主義 / アクションペインティング<span class="subtle">Abstract Expressionism</span></td><td>身体的な筆致、滴り、飛沫、巨大感。</td><td>叫び、衝動、崩壊、パーカッションに同期。</td><td>ただ飛び散らせるだけ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/20-op-art.png" alt="オプ・アート（Op Art）の非写実技法サンプル画像" loading="lazy"></td><td>オプ・アート<span class="subtle">Op Art</span></td><td>錯視、反復、振動、視覚的な揺れ。</td><td>ビート、めまい、視線誘導、催眠。</td><td>目が痛いだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/21-pop-art.png" alt="ポップアート（Pop Art）の非写実技法サンプル画像" loading="lazy"></td><td>ポップアート<span class="subtle">Pop Art</span></td><td>商品、広告、漫画、量産、強い色。</td><td>消費、自己演出、人工的な明るさ。</td><td>皮肉が感情を食う。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/22-psychedelic-poster-art.png" alt="サイケデリック（psychedelic poster art）の非写実技法サンプル画像" loading="lazy"></td><td>サイケデリック<span class="subtle">psychedelic poster art</span></td><td>渦、歪み、高彩度、読みにくい文字。</td><td>幻覚、陶酔、音の波、液体的変形。</td><td>派手色の万華鏡で止まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/23-brutalist-industrial-graphic.png" alt="ブルータリズム / 産業グラフィック（brutalist, industrial graphic）の非写実技法サンプル画像" loading="lazy"></td><td>ブルータリズム / 産業グラフィック<span class="subtle">brutalist, industrial graphic</span></td><td>粗い構造、コンクリート、グリッド、制度感。</td><td>圧迫、機械、都市、重い低音。</td><td>冷たい建築が曲から浮く。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/24-memphis-postmodern-design.png" alt="メンフィス / ポストモダン（Memphis, postmodern design）の非写実技法サンプル画像" loading="lazy"></td><td>メンフィス / ポストモダン<span class="subtle">Memphis, postmodern design</span></td><td>派手な幾何、柄、遊び、80s的軽さ。</td><td>おもちゃ感、人工的な部屋、軽薄さの演出。</td><td>雑なレトロポップになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/25-lowbrow-pop-surrealism.png" alt="ローブロー / ポップシュルレアリスム（Lowbrow, Pop Surrealism）の非写実技法サンプル画像" loading="lazy"></td><td>ローブロー / ポップシュルレアリスム<span class="subtle">Lowbrow, Pop Surrealism</span></td><td>漫画、タトゥー、キッチュ、怪奇、皮肉。</td><td>かわいさと不気味さを同居させる。</td><td>安い悪趣味で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/movements/26-afrofuturism.png" alt="アフロフューチャリズム（Afrofuturism）の非写実技法サンプル画像" loading="lazy"></td><td>アフロフューチャリズム<span class="subtle">Afrofuturism</span></td><td>未来、歴史、宇宙、神話、黒人文化の再想像。</td><td>SFと歴史記憶を接続する強い軸。</td><td>文脈なしの装飾利用は避ける。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details id="comics">
+            <summary>漫画・コミック・アニメ系</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/01-manga-screentone.png" alt="スクリーントーン漫画（manga screentone）の非写実技法サンプル画像" loading="lazy"></td><td>スクリーントーン漫画<span class="subtle">manga screentone</span></td><td>点、線、柄トーン、グレーのパターン。</td><td>影、感情背景、頬、空、速度を印刷物にする。</td><td>トーンを貼るだけの漫画風。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/02-gekiga.png" alt="劇画（gekiga）の非写実技法サンプル画像" loading="lazy"></td><td>劇画<span class="subtle">gekiga</span></td><td>重い線、暗い陰影、大人向けの硬さ。</td><td>低音、都市、心理圧、犯罪的な空気。</td><td>古臭い暗さだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/03-shojo-manga-ornament.png" alt="少女漫画装飾（shojo manga ornament）の非写実技法サンプル画像" loading="lazy"></td><td>少女漫画装飾<span class="subtle">shojo manga ornament</span></td><td>花、星、白抜き、繊細線、感情背景。</td><td>心象風景を背景として直接出す。</td><td>キラキラのステレオタイプに落ちる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/04-speed-lines-impact-frames.png" alt="少年漫画アクション線（speed lines, impact frames）の非写実技法サンプル画像" loading="lazy"></td><td>少年漫画アクション線<span class="subtle">speed lines, impact frames</span></td><td>集中線、効果線、衝撃、強い擬音。</td><td>ドラム、切り返し、感情の爆発。</td><td>勢いだけで画面設計がない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/05-chibi-super-deformed.png" alt="チビ / SD（chibi, super deformed）の非写実技法サンプル画像" loading="lazy"></td><td>チビ / SD<span class="subtle">chibi, super deformed</span></td><td>大きな頭、小さな体、極端なデフォルメ。</td><td>自己卑小化、かわいさ、メタ演出。</td><td>無条件にかわいい方向へ逃げる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/06-yonkoma.png" alt="四コマ漫画（yonkoma）の非写実技法サンプル画像" loading="lazy"></td><td>四コマ漫画<span class="subtle">yonkoma</span></td><td>縦の定型コマ、反復、落ち。</td><td>歌詞の反復、毎日の変化、同じ部屋の差分。</td><td>説明的なギャグになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/07-emaki-scroll-logic.png" alt="絵巻的時間（emaki scroll logic）の非写実技法サンプル画像" loading="lazy"></td><td>絵巻的時間<span class="subtle">emaki scroll logic</span></td><td>1枚の横長画面に時間が流れる。</td><td>カメラの横移動で複数場面を繋ぐ。</td><td>長い背景画で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/08-vertical-scroll-comic.png" alt="Webtoon縦スクロール（vertical scroll comic）の非写実技法サンプル画像" loading="lazy"></td><td>Webtoon縦スクロール<span class="subtle">vertical scroll comic</span></td><td>縦長、余白、落下、スマホ画面の時間。</td><td>上昇/下降、チャット、孤独なスクロール感。</td><td>単なるスマホUIになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/09-ligne-claire.png" alt="ラインクレール（ligne claire）の非写実技法サンプル画像" loading="lazy"></td><td>ラインクレール<span class="subtle">ligne claire</span></td><td>均一線、フラットカラー、少ない陰影。</td><td>冒険、街、説明的な明快さ、図解性。</td><td>無味なベクター絵になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/10-newspaper-comic-strip.png" alt="新聞漫画（newspaper comic strip）の非写実技法サンプル画像" loading="lazy"></td><td>新聞漫画<span class="subtle">newspaper comic strip</span></td><td>太い線、限られた色、紙、コマの反復。</td><td>日常、皮肉、古い連載、反復する生活。</td><td>懐古だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/11-underground-comix.png" alt="アンダーグラウンドコミックス（underground comix）の非写実技法サンプル画像" loading="lazy"></td><td>アンダーグラウンドコミックス<span class="subtle">underground comix</span></td><td>荒い線、過剰、風刺、低俗美。</td><td>怒り、グロテスク、反商業、混線。</td><td>ショック表現だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/12-comic-book-halftone.png" alt="コミックブック・ハーフトーン（comic book halftone）の非写実技法サンプル画像" loading="lazy"></td><td>コミックブック・ハーフトーン<span class="subtle">comic book halftone</span></td><td>網点、太線、吹き出し、印刷ズレ。</td><td>広告と内面を同じ紙面に置く。</td><td>ポップアートの表面模倣。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/13-panel-breaking.png" alt="コマ割り破壊（panel breaking）の非写実技法サンプル画像" loading="lazy"></td><td>コマ割り破壊<span class="subtle">panel breaking</span></td><td>人物や物がコマ境界を壊す。</td><td>サビや転調で世界の枠が壊れる演出。</td><td>一度だけのギミックになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/14-visual-sound-effects.png" alt="擬音・描き文字（visual sound effects）の非写実技法サンプル画像" loading="lazy"></td><td>擬音・描き文字<span class="subtle">visual sound effects</span></td><td>音が文字として空間に出る。</td><td>歌、ノイズ、心音を画面内の物体にする。</td><td>読めない装飾文字になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/15-cel-animation-look.png" alt="セル画調（cel animation look）の非写実技法サンプル画像" loading="lazy"></td><td>セル画調<span class="subtle">cel animation look</span></td><td>硬い影、フラット色、撮影の階層感。</td><td>キャラクター、背景、前景を明確に分ける。</td><td>「アニメ風」で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/16-painted-anime-background.png" alt="アニメ背景美術（painted anime background）の非写実技法サンプル画像" loading="lazy"></td><td>アニメ背景美術<span class="subtle">painted anime background</span></td><td>手描き背景、空気遠近、細い生活感。</td><td>部屋や街だけで感情を語る。</td><td>特定スタジオ模倣に寄せない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/17-mecha-diagram-hud-overlay.png" alt="メカ図解 / HUD漫画（mecha diagram, HUD overlay）の非写実技法サンプル画像" loading="lazy"></td><td>メカ図解 / HUD漫画<span class="subtle">mecha diagram, HUD overlay</span></td><td>注釈、断面、機械、速度計、線。</td><td>身体や感情を機械的に解析する。</td><td>読めないUI過多。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/18-kawaii-simplification.png" alt="かわいい簡略キャラ（kawaii simplification）の非写実技法サンプル画像" loading="lazy"></td><td>かわいい簡略キャラ<span class="subtle">kawaii simplification</span></td><td>丸さ、最小表情、低いディテール。</td><td>重い曲に軽い外形をぶつける。</td><td>キャラ商品っぽくなる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/comics/19-flat-contemporary-pop.png" alt="Superflat（flat contemporary pop）の非写実技法サンプル画像" loading="lazy"></td><td>Superflat<span class="subtle">flat contemporary pop</span></td><td>平面性、サブカル、消費、装飾の過密。</td><td>広告、キャラ、商品棚を内面化する。</td><td>特定作家の模倣ではなく、平面性と消費性へ分解する。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details id="animation">
+            <summary>アニメーション・時間表現</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/01-cel-animation.png" alt="セル / 手描きアニメ（cel animation）の非写実技法サンプル画像" loading="lazy"></td><td>セル / 手描きアニメ<span class="subtle">cel animation</span></td><td>フレームごとの絵、階層、撮影感。</td><td>キャラクターと背景を明確な面で分ける。</td><td>アニメ風という粗い指定で止まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/02-limited-animation.png" alt="リミテッドアニメ（limited animation）の非写実技法サンプル画像" loading="lazy"></td><td>リミテッドアニメ<span class="subtle">limited animation</span></td><td>止め絵、部分動作、省略、間。</td><td>少ない動きで視線や編集を強くする。</td><td>手抜きに見える危険がある。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/03-rubber-hose-animation.png" alt="ラバーホース（rubber hose animation）の非写実技法サンプル画像" loading="lazy"></td><td>ラバーホース<span class="subtle">rubber hose animation</span></td><td>管のような腕脚、弾む身体、古典カートゥーン。</td><td>明るい不気味さ、無邪気な暴力、夢。</td><td>ノスタルジーの記号だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/04-upa-like-flat-cartoon.png" alt="ミッドセンチュリー平面アニメ（UPA-like flat cartoon）の非写実技法サンプル画像" loading="lazy"></td><td>ミッドセンチュリー平面アニメ<span class="subtle">UPA-like flat cartoon</span></td><td>幾何的キャラ、少ない色、平面背景。</td><td>ジャズ、広告、都会、軽い皮肉。</td><td>おしゃれな懐古に留まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/05-rotoscope.png" alt="ロトスコープ（rotoscope）の非写実技法サンプル画像" loading="lazy"></td><td>ロトスコープ<span class="subtle">rotoscope</span></td><td>実写の動きと絵の揺れが混ざる。</td><td>現実と夢の境界、身体の違和感。</td><td>トレース感だけで絵が弱くなる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/06-stop-motion.png" alt="ストップモーション（stop motion）の非写実技法サンプル画像" loading="lazy"></td><td>ストップモーション<span class="subtle">stop motion</span></td><td>低FPS、手触り、物体の意思。</td><td>物や部屋が生き始めるMV。</td><td>動くこと自体が目的になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/07-object-animation.png" alt="オブジェクト・アニメーション（object animation）の非写実技法サンプル画像" loading="lazy"></td><td>オブジェクト・アニメーション<span class="subtle">object animation</span></td><td>日用品が少しずつ動く。</td><td>生活物を歌詞の主体にする。</td><td>小ネタ集で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/08-puppet-animation.png" alt="パペット・アニメ（puppet animation）の非写実技法サンプル画像" loading="lazy"></td><td>パペット・アニメ<span class="subtle">puppet animation</span></td><td>人形、関節、ミニチュアセット、影。</td><td>童話、儀式、演劇的な孤独。</td><td>かわいい工作に寄りすぎる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/09-clay-animation.png" alt="クレイアニメ（clay animation）の非写実技法サンプル画像" loading="lazy"></td><td>クレイアニメ<span class="subtle">clay animation</span></td><td>粘土の柔らかさ、指跡、変形。</td><td>身体変形、食べ物、溶ける顔、感情の可塑性。</td><td>Claymationは商標由来なので一般名はクレイアニメ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/10-clay-painting.png" alt="クレイ・ペインティング（clay painting）の非写実技法サンプル画像" loading="lazy"></td><td>クレイ・ペインティング<span class="subtle">clay painting</span></td><td>平面上の粘土が絵具のように動く。</td><td>抽象、海、肌、腐敗、変身。</td><td>質感が強く、場面転換設計が要る。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/11-replacement-animation.png" alt="リプレイスメント・アニメ（replacement animation）の非写実技法サンプル画像" loading="lazy"></td><td>リプレイスメント・アニメ<span class="subtle">replacement animation</span></td><td>顔や部品を交換して演技する。</td><td>表情変化、仮面、分身、口の歌唱。</td><td>技術説明が先に立つ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/12-pixilation.png" alt="ピクシレーション（pixilation）の非写実技法サンプル画像" loading="lazy"></td><td>ピクシレーション<span class="subtle">pixilation</span></td><td>生身の人間がコマ撮りで人形化する。</td><td>人間が機械や家具のように振る舞う。</td><td>ただカクカクした実写になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/13-cutout-animation.png" alt="カットアウト・アニメ（cutout animation）の非写実技法サンプル画像" loading="lazy"></td><td>カットアウト・アニメ<span class="subtle">cutout animation</span></td><td>紙、写真、布の切り抜きと関節。</td><td>コラージュ、影絵、新聞、寓話。</td><td>ムードボードの寄せ集め。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/14-silhouette-animation.png" alt="シルエット・アニメ（silhouette animation）の非写実技法サンプル画像" loading="lazy"></td><td>シルエット・アニメ<span class="subtle">silhouette animation</span></td><td>黒い切り絵、逆光、影芝居。</td><td>童話、神話、身体の記号化。</td><td>単調な横移動になりやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/15-sand-animation.png" alt="サンド・アニメ（sand animation）の非写実技法サンプル画像" loading="lazy"></td><td>サンド・アニメ<span class="subtle">sand animation</span></td><td>砂の儚い輪郭、描き替え、手の痕跡。</td><td>消える記憶、波、砂時計、神話。</td><td>美談っぽくなりやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/16-paint-on-glass-animation.png" alt="ペイント・オン・グラス（paint-on-glass animation）の非写実技法サンプル画像" loading="lazy"></td><td>ペイント・オン・グラス<span class="subtle">paint-on-glass animation</span></td><td>絵画が溶け続けるような連続変形。</td><td>夢、回想、顔の崩壊、空の変化。</td><td>輪郭が曖昧で弱い画になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/17-pinscreen-animation.png" alt="ピンスクリーン（pinscreen animation）の非写実技法サンプル画像" loading="lazy"></td><td>ピンスクリーン<span class="subtle">pinscreen animation</span></td><td>ピンの影で階調を作る版画/木炭風。</td><td>悪夢、霧、記憶、古い写真のような動き。</td><td>黒白の質感に頼りすぎる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/18-direct-on-film-scratch-film.png" alt="ダイレクト・オン・フィルム（direct-on-film, scratch film）の非写実技法サンプル画像" loading="lazy"></td><td>ダイレクト・オン・フィルム<span class="subtle">direct-on-film, scratch film</span></td><td>フィルムに描く、削る、傷つける。</td><td>音楽同期、抽象、ノイズ、火花。</td><td>ランダムなエフェクトに見える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/19-model-animation.png" alt="モデル・アニメーション（model animation）の非写実技法サンプル画像" loading="lazy"></td><td>モデル・アニメーション<span class="subtle">model animation</span></td><td>模型を実写合成、古典特撮の質感。</td><td>怪獣、神話生物、巨大化、ミニチュア都市。</td><td>特撮パロディで止まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/20-miniature-tokusatsu.png" alt="ミニチュア特撮（miniature tokusatsu）の非写実技法サンプル画像" loading="lazy"></td><td>ミニチュア特撮<span class="subtle">miniature tokusatsu</span></td><td>小型セット、火薬、水、煙、スケール差。</td><td>現実外だが物理撮影の説得力を出す。</td><td>懐かしネタ化しやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/21-suitmation.png" alt="スーツメーション（suitmation）の非写実技法サンプル画像" loading="lazy"></td><td>スーツメーション<span class="subtle">suitmation</span></td><td>着ぐるみとミニチュアのズレ。</td><td>巨大身体、怪物、儀式的な歩行。</td><td>コメディに寄りすぎる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/22-animatronics.png" alt="アニマトロニクス（animatronics）の非写実技法サンプル画像" loading="lazy"></td><td>アニマトロニクス<span class="subtle">animatronics</span></td><td>機械仕掛けの実体パペット。</td><td>生物と機械の中間、顔の不気味さ。</td><td>技術デモになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/23-animated-on-twos.png" alt="On twos / 低FPS様式（animated on twos）の非写実技法サンプル画像" loading="lazy"></td><td>On twos / 低FPS様式<span class="subtle">animated on twos</span></td><td>1枚を2フレーム保持する硬さ。</td><td>手描き感、緊張、リズムの段差。</td><td>単にカクついた映像になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/24-smear-frames.png" alt="スミアフレーム（smear frames）の非写実技法サンプル画像" loading="lazy"></td><td>スミアフレーム<span class="subtle">smear frames</span></td><td>高速動作の中間コマが伸びる。</td><td>衝撃、打撃、コミカルな速度。</td><td>静止画で見せると破綻に見える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/25-line-boil.png" alt="ラインボイル（line boil）の非写実技法サンプル画像" loading="lazy"></td><td>ラインボイル<span class="subtle">line boil</span></td><td>静止中も線が微妙に揺れる。</td><td>手作業感、不安、生命感、眠れない感じ。</td><td>品質の低い線ブレに見える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/26-squash-and-stretch.png" alt="スカッシュ&amp;ストレッチ（squash and stretch）の非写実技法サンプル画像" loading="lazy"></td><td>スカッシュ&ストレッチ<span class="subtle">squash and stretch</span></td><td>潰れと伸びで重量と弾性を誇張。</td><td>声、身体、心拍、跳ねる文字。</td><td>全てがゴムのようになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/27-2-5d-parallax.png" alt="2.5Dパララックス（2.5D parallax）の非写実技法サンプル画像" loading="lazy"></td><td>2.5Dパララックス<span class="subtle">2.5D parallax</span></td><td>平面レイヤーが奥行きを持つ。</td><td>版画、写真、絵巻、コラージュの奥行き化。</td><td>よくあるMV背景スクロールになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/28-kinetic-typography.png" alt="キネティック・タイポグラフィ（kinetic typography）の非写実技法サンプル画像" loading="lazy"></td><td>キネティック・タイポグラフィ<span class="subtle">kinetic typography</span></td><td>文字が動き、伸び、物理化する。</td><td>歌詞、息継ぎ、声量、韻を画面化する。</td><td>カラオケ字幕になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/animation/29-audio-reactive-generative-motion.png" alt="音響反応 / 生成モーション（audio reactive, generative motion）の非写実技法サンプル画像" loading="lazy"></td><td>音響反応 / 生成モーション<span class="subtle">audio reactive, generative motion</span></td><td>波形、粒子、図形が音に同期。</td><td>曲の構造を映像の法則にする。</td><td>スクリーンセーバーになる。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details id="collage">
+            <summary>コラージュ・混成</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/01-collage-papier-colle.png" alt="コラージュ / パピエ・コレ（collage, papier colle）の非写実技法サンプル画像" loading="lazy"></td><td>コラージュ / パピエ・コレ<span class="subtle">collage, papier colle</span></td><td>紙片、切断面、貼り跡、異素材。</td><td>記憶や歌詞断片を物理的に重ねる。</td><td>ムードボードの寄せ集め。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/02-photomontage.png" alt="フォトモンタージュ（photomontage）の非写実技法サンプル画像" loading="lazy"></td><td>フォトモンタージュ<span class="subtle">photomontage</span></td><td>写真断片の不自然な組み合わせ。</td><td>現実の顔や場所を夢の構造にする。</td><td>雑な切り貼り感だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/03-dada-collage.png" alt="ダダ・コラージュ（Dada collage）の非写実技法サンプル画像" loading="lazy"></td><td>ダダ・コラージュ<span class="subtle">Dada collage</span></td><td>新聞、機械、文字、ナンセンス。</td><td>社会的ノイズ、混線、反語。</td><td>ランダム配置で意味を失う。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/04-assemblage.png" alt="アサンブラージュ（assemblage）の非写実技法サンプル画像" loading="lazy"></td><td>アサンブラージュ<span class="subtle">assemblage</span></td><td>3Dの寄せ集め、発見物、箱、部品。</td><td>部屋や祭壇を記憶の立体コラージュにする。</td><td>小物が多いだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/05-readymade-found-object.png" alt="レディメイド / ファウンドオブジェクト（readymade, found object）の非写実技法サンプル画像" loading="lazy"></td><td>レディメイド / ファウンドオブジェクト<span class="subtle">readymade, found object</span></td><td>既製品が文脈で異物化する。</td><td>歌詞の象徴物を飾らず置く。</td><td>意味ありげな物選びに逃げる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/06-found-footage-archive.png" alt="発見映像 / アーカイブ（found footage, archive）の非写実技法サンプル画像" loading="lazy"></td><td>発見映像 / アーカイブ<span class="subtle">found footage, archive</span></td><td>既存映像、記録、劣化、日付。</td><td>記憶、社会、過去の声を再文脈化する。</td><td>権利確認が必須。懐古の寄せ集めになりやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/07-scrapbook.png" alt="スクラップブック（scrapbook）の非写実技法サンプル画像" loading="lazy"></td><td>スクラップブック<span class="subtle">scrapbook</span></td><td>写真、メモ、押し花、紙端、テープ。</td><td>私的記憶を画面全体の構造にする。</td><td>かわいい手帳風で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/08-zine-aesthetic.png" alt="ZINE / DIY出版（zine aesthetic）の非写実技法サンプル画像" loading="lazy"></td><td>ZINE / DIY出版<span class="subtle">zine aesthetic</span></td><td>コピー、手書き、ホチキス、RISO、粗いレイアウト。</td><td>自主制作感、部屋、仲間内の記録。</td><td>流行のZINE風で止まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/09-contact-sheet.png" alt="コンタクトシート（contact sheet）の非写実技法サンプル画像" loading="lazy"></td><td>コンタクトシート<span class="subtle">contact sheet</span></td><td>連続写真、選択印、フレーム番号。</td><td>同じ動作の差分、記憶の検査。</td><td>写真資料っぽく退屈になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/10-decollage.png" alt="デコラージュ（decollage）の非写実技法サンプル画像" loading="lazy"></td><td>デコラージュ<span class="subtle">decollage</span></td><td>剥がれたポスター、破れ、下層の露出。</td><td>時間、都市、嘘の剥離、感情の下層。</td><td>汚しテクスチャで済ませる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/11-shadow-box.png" alt="シャドーボックス（shadow box）の非写実技法サンプル画像" loading="lazy"></td><td>シャドーボックス<span class="subtle">shadow box</span></td><td>箱の中の小世界、奥行き、収集物。</td><td>記憶を展示物にする。祭壇にも近い。</td><td>小物展示で動きが弱い。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/12-pop-up-book.png" alt="ポップアップブック（pop-up book）の非写実技法サンプル画像" loading="lazy"></td><td>ポップアップブック<span class="subtle">pop-up book</span></td><td>紙が立ち上がる、折り目、立体絵本。</td><td>歌詞の場面転換を紙の開閉にする。</td><td>ギミック先行になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/13-paper-theater-toy-theater.png" alt="ペーパーシアター（paper theater, toy theater）の非写実技法サンプル画像" loading="lazy"></td><td>ペーパーシアター<span class="subtle">paper theater, toy theater</span></td><td>書き割り、紙の舞台、横移動。</td><td>小さな演劇、夢、儀式、童話。</td><td>幼い工作で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/14-diorama.png" alt="ジオラマ（diorama）の非写実技法サンプル画像" loading="lazy"></td><td>ジオラマ<span class="subtle">diorama</span></td><td>縮尺、模型、箱庭、固定視点。</td><td>曲の世界を閉じた実験装置にする。</td><td>かわいいミニチュアに留まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/15-shadow-play.png" alt="影絵 / シャドープレイ（shadow play）の非写実技法サンプル画像" loading="lazy"></td><td>影絵 / シャドープレイ<span class="subtle">shadow play</span></td><td>影、幕、透過、平面人形。</td><td>身体を匿名化し、神話や寓話に寄せる。</td><td>単調なシルエット劇。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/collage/16-mask-ritual-object.png" alt="仮面・祭具的オブジェクト（mask, ritual object）の非写実技法サンプル画像" loading="lazy"></td><td>仮面・祭具的オブジェクト<span class="subtle">mask, ritual object</span></td><td>顔の置換、反復、手作りの威圧感。</td><td>個人ではなく役割や声を映す。</td><td>文化文脈なしの借用は危険。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details id="craft">
+            <summary>紙・布・工芸</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/01-chigiri-e.png" alt="ちぎり絵（chigiri-e）の非写実技法サンプル画像" loading="lazy"></td><td>ちぎり絵<span class="subtle">chigiri-e</span></td><td>和紙の毛羽、柔らかい輪郭、貼り重ね。</td><td>雲、肌、記憶、壊れた写真。</td><td>和紙風テクスチャだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/02-kirie.png" alt="切り絵（kirie）の非写実技法サンプル画像" loading="lazy"></td><td>切り絵<span class="subtle">kirie</span></td><td>切断面、黒白、細い橋、影。</td><td>歌詞を影絵、装飾、舞台背景にする。</td><td>細部が動画で潰れる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/03-kirigami-origami.png" alt="切り紙 / 折り紙（kirigami, origami）の非写実技法サンプル画像" loading="lazy"></td><td>切り紙 / 折り紙<span class="subtle">kirigami, origami</span></td><td>折り目、紙の立ち上がり、幾何。</td><td>場面転換、変身、手の動き。</td><td>折り紙モチーフの安易な和風化。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/04-paper-quilling.png" alt="ペーパークイリング（paper quilling）の非写実技法サンプル画像" loading="lazy"></td><td>ペーパークイリング<span class="subtle">paper quilling</span></td><td>巻いた紙の渦、細い立体線。</td><td>声、髪、植物、波形を紙で作る。</td><td>装飾過多になりやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/05-suminagashi.png" alt="墨流し（suminagashi）の非写実技法サンプル画像" loading="lazy"></td><td>墨流し<span class="subtle">suminagashi</span></td><td>水面に浮く墨の輪、偶然の流れ。</td><td>水、声の波紋、境界の溶解。</td><td>背景素材で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/06-marbled-paper.png" alt="マーブリング / Ebru（marbled paper）の非写実技法サンプル画像" loading="lazy"></td><td>マーブリング / Ebru<span class="subtle">marbled paper</span></td><td>櫛目、渦、雲状模様、色の浮遊。</td><td>夢、液体、空、衣装や肌の変化。</td><td>きれいな模様に留まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/07-orizome.png" alt="折染め（orizome）の非写実技法サンプル画像" loading="lazy"></td><td>折染め<span class="subtle">orizome</span></td><td>折りによる対称模様、染み。</td><td>反復、サビの展開、パターンの生成。</td><td>万華鏡風で止まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/08-embroidery.png" alt="刺繍（embroidery）の非写実技法サンプル画像" loading="lazy"></td><td>刺繍<span class="subtle">embroidery</span></td><td>糸、ステッチ、盛り上がり、布目。</td><td>歌詞や傷を布に縫う。身体と衣装に強い。</td><td>かわいい手芸で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/09-sashiko.png" alt="刺し子（sashiko）の非写実技法サンプル画像" loading="lazy"></td><td>刺し子<span class="subtle">sashiko</span></td><td>白糸、藍、反復する運針、補修。</td><td>傷、リズム、補強、反復するビート。</td><td>柄だけを借りると浅い。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/10-kogin-zashi.png" alt="こぎん刺し（kogin-zashi）の非写実技法サンプル画像" loading="lazy"></td><td>こぎん刺し<span class="subtle">kogin-zashi</span></td><td>密な幾何刺繍、数え刺し、白い反復。</td><td>波形や字幕を縫い目として組む。</td><td>背景パターン化で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/11-mended-indigo-textile.png" alt="Boro（mended indigo textile）の非写実技法サンプル画像" loading="lazy"></td><td>Boro<span class="subtle">mended indigo textile</span></td><td>継ぎ接ぎ、擦れ、補修、時間の層。</td><td>壊れた関係、修復、生活の記憶。</td><td>貧しさの記号化には注意。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/12-shibori.png" alt="絞り（shibori）の非写実技法サンプル画像" loading="lazy"></td><td>絞り<span class="subtle">shibori</span></td><td>防染、にじみ、有機的な反復。</td><td>衣装、背景、液体、身体の模様。</td><td>青白の模様だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/13-katazome-bingata.png" alt="型染め / 紅型（katazome, bingata）の非写実技法サンプル画像" loading="lazy"></td><td>型染め / 紅型<span class="subtle">katazome, bingata</span></td><td>型紙、糊防染、多色、装飾文様。</td><td>場面や衣装を文様の規則で統一する。</td><td>観光土産風になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/14-kasuri-ikat.png" alt="絣 / Ikat（kasuri, ikat）の非写実技法サンプル画像" loading="lazy"></td><td>絣 / Ikat<span class="subtle">kasuri, ikat</span></td><td>糸段階の防染による輪郭の揺れ。</td><td>キャラクターの輪郭や字幕を滲ませる。</td><td>布柄だけ貼ると弱い。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/15-resist-dye-block-print-textile.png" alt="Batik / Ajrakh（resist dye, block print textile）の非写実技法サンプル画像" loading="lazy"></td><td>Batik / Ajrakh<span class="subtle">resist dye, block print textile</span></td><td>蝋防染、木版、幾何、ひび割れ線。</td><td>衣装や背景に染めの制作順を持たせる。</td><td>文化文脈を調べずに使わない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/16-reverse-applique.png" alt="Mola / 逆アップリケ（reverse applique）の非写実技法サンプル画像" loading="lazy"></td><td>Mola / 逆アップリケ<span class="subtle">reverse applique</span></td><td>重ね布、切り抜き、鮮烈な色面。</td><td>身体や風景を布層で解剖する。</td><td>地域固有文化の表層借用に注意。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/17-quilt-patchwork.png" alt="キルト / パッチワーク（quilt, patchwork）の非写実技法サンプル画像" loading="lazy"></td><td>キルト / パッチワーク<span class="subtle">quilt, patchwork</span></td><td>布片、縫い目、厚み、家の記憶。</td><td>複数視点や記憶を布の地図にする。</td><td>温かい家庭感だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/18-tapestry.png" alt="タペストリー（tapestry）の非写実技法サンプル画像" loading="lazy"></td><td>タペストリー<span class="subtle">tapestry</span></td><td>織りで作る絵、色面、糸の方向。</td><td>壮大な物語、壁画、歌詞の絵巻。</td><td>中世風の装飾に寄りすぎる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/19-bobbin-lace.png" alt="レース（bobbin lace）の非写実技法サンプル画像" loading="lazy"></td><td>レース<span class="subtle">bobbin lace</span></td><td>透かし、糸の交差、空白の模様。</td><td>影、肌、記憶の穴、繊細な檻。</td><td>上品な飾りに留まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/20-needle-felt.png" alt="ニードルフェルト（needle felt）の非写実技法サンプル画像" loading="lazy"></td><td>ニードルフェルト<span class="subtle">needle felt</span></td><td>羊毛の毛羽、柔らかい塊、低解像度。</td><td>かわいいが不安な人形、雲、身体。</td><td>マスコット化しやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/21-ceramic-glaze.png" alt="陶器釉薬（ceramic glaze）の非写実技法サンプル画像" loading="lazy"></td><td>陶器釉薬<span class="subtle">ceramic glaze</span></td><td>流れる釉、貫入、焼成の偶然。</td><td>顔や空間を焼き物の表面として扱う。</td><td>表面テクスチャだけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/22-kintsugi.png" alt="金継ぎ（kintsugi）の非写実技法サンプル画像" loading="lazy"></td><td>金継ぎ<span class="subtle">kintsugi</span></td><td>割れを金の線として見せる。</td><td>修復、傷、関係の再接続を視覚ルールにする。</td><td>きれいな比喩として消費しがち。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/23-nerikomi-neriage.png" alt="練込 / 練上（nerikomi, neriage）の非写実技法サンプル画像" loading="lazy"></td><td>練込 / 練上<span class="subtle">nerikomi, neriage</span></td><td>色土の層、マーブル、断面模様。</td><td>身体内部、時間の地層、切断面。</td><td>マーブル模様で止まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/24-urushi-maki-e.png" alt="漆 / 蒔絵（urushi, maki-e）の非写実技法サンプル画像" loading="lazy"></td><td>漆 / 蒔絵<span class="subtle">urushi, maki-e</span></td><td>深い黒、朱、光沢、金銀粉。</td><td>夜、祭具、箱、仮面、光る線。</td><td>高級感だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/25-yosegi-zaiku.png" alt="寄木細工（yosegi-zaiku）の非写実技法サンプル画像" loading="lazy"></td><td>寄木細工<span class="subtle">yosegi-zaiku</span></td><td>木色、木目、幾何モザイク。</td><td>箱、床、身体、錯視のパターン。</td><td>和柄として貼るだけ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/craft/26-mosaic-stained-glass.png" alt="モザイク / ステンドグラス（mosaic, stained glass）の非写実技法サンプル画像" loading="lazy"></td><td>モザイク / ステンドグラス<span class="subtle">mosaic, stained glass</span></td><td>小片、鉛線、透過光、破片の色。</td><td>光、聖像、壊れた記憶、合唱的な構成。</td><td>教会風の安易な荘厳さ。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details id="folk">
+            <summary>民芸・伝統図像体系</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/01-folk-craft-mingei.png" alt="民芸 / 民藝（folk craft, mingei）の非写実技法サンプル画像" loading="lazy"></td><td>民芸 / 民藝<span class="subtle">folk craft, mingei</span></td><td>生活具、無名性、素朴な実用品の美。</td><td>部屋、小物、衣装を生活の手触りで統一する。</td><td>古民家風の懐古で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/02-outsider-art-art-brut.png" alt="アウトサイダー / アール・ブリュット（outsider art, art brut）の非写実技法サンプル画像" loading="lazy"></td><td>アウトサイダー / アール・ブリュット<span class="subtle">outsider art, art brut</span></td><td>独自体系、反復、強迫的な線や記号。</td><td>内面世界のルール化、孤立、私的神話。</td><td>病理や周縁性の消費に注意。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/03-otsu-e.png" alt="大津絵（Otsu-e）の非写実技法サンプル画像" loading="lazy"></td><td>大津絵<span class="subtle">Otsu-e</span></td><td>護符、風刺、太い筆線、キャラクター性。</td><td>歌詞を民画的な寓話にする。</td><td>和風キャラ化で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/04-kokeshi-like-wooden-doll-logic.png" alt="こけし的木工人形（kokeshi-like wooden doll logic）の非写実技法サンプル画像" loading="lazy"></td><td>こけし的木工人形<span class="subtle">kokeshi-like wooden doll logic</span></td><td>円筒、簡略顔、胴体文様、木目。</td><td>人形、分身、無表情な合唱。</td><td>土産物記号として使うと浅い。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/05-byzantine-icon.png" alt="聖像 / イコン（Byzantine icon）の非写実技法サンプル画像" loading="lazy"></td><td>聖像 / イコン<span class="subtle">Byzantine icon</span></td><td>正面性、金地、硬い視線、象徴的配置。</td><td>歌い手を個人でなく祈りや役割として置く。</td><td>宗教記号を根拠なく借りない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/06-illuminated-manuscript.png" alt="写本装飾（illuminated manuscript）の非写実技法サンプル画像" loading="lazy"></td><td>写本装飾<span class="subtle">illuminated manuscript</span></td><td>余白装飾、金、文字と絵の一体化。</td><td>歌詞をページ空間として扱う。</td><td>中世ファンタジー風で止まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/07-persian-islamic-miniature.png" alt="ペルシア / イスラム細密画（Persian, Islamic miniature）の非写実技法サンプル画像" loading="lazy"></td><td>ペルシア / イスラム細密画<span class="subtle">Persian, Islamic miniature</span></td><td>細密な庭、建築、平面空間、縁飾り。</td><td>物語、歌詞の場面、複数時間の同居。</td><td>文化圏を混ぜて雑にオリエンタル化しない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/08-indian-miniature.png" alt="インド細密画（Indian miniature）の非写実技法サンプル画像" loading="lazy"></td><td>インド細密画<span class="subtle">Indian miniature</span></td><td>平面色、宮廷、自然、装飾枠、横顔。</td><td>恋歌、神話化、夜、植物、音楽場面。</td><td>宗教/地域の違いを無視しない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/09-thangka-mandala-diagram.png" alt="タンカ / 曼荼羅的構成（thangka, mandala diagram）の非写実技法サンプル画像" loading="lazy"></td><td>タンカ / 曼荼羅的構成<span class="subtle">thangka, mandala diagram</span></td><td>中心軸、対称、階層、儀式的図像。</td><td>曲構造を中心から外へ広げる。</td><td>信仰対象を装飾素材にしない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/10-literati-ink-painting.png" alt="中国文人画（literati ink painting）の非写実技法サンプル画像" loading="lazy"></td><td>中国文人画<span class="subtle">literati ink painting</span></td><td>余白、詩書画、筆致、個人の気配。</td><td>静かな反復、山水、孤独、声の余韻。</td><td>水墨と一括りにしすぎない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/11-yamato-e-narrative-scroll.png" alt="やまと絵 / 絵巻（yamato-e, narrative scroll）の非写実技法サンプル画像" loading="lazy"></td><td>やまと絵 / 絵巻<span class="subtle">yamato-e, narrative scroll</span></td><td>平面色、雲、斜め俯瞰、時間の流れ。</td><td>曲の進行を横長の物語にする。</td><td>和風雲だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/12-rinpa.png" alt="琳派（Rinpa）の非写実技法サンプル画像" loading="lazy"></td><td>琳派<span class="subtle">Rinpa</span></td><td>金地、自然、装飾的な反復、余白。</td><td>花、波、季節、声の反復を装飾的に統一。</td><td>豪華な背景柄に留まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/13-ukiyo-e-composition.png" alt="浮世絵的構図（ukiyo-e composition）の非写実技法サンプル画像" loading="lazy"></td><td>浮世絵的構図<span class="subtle">ukiyo-e composition</span></td><td>大胆な切り取り、雨、橋、役者、都市。</td><td>演者を舞台役者のように配置する。</td><td>有名図像の引用に寄りすぎる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/14-warli-painting.png" alt="Warli（Warli painting）の非写実技法サンプル画像" loading="lazy"></td><td>Warli<span class="subtle">Warli painting</span></td><td>白い幾何人物、村落、円環、図式性。</td><td>群衆、儀式、生活動作を記号化する。</td><td>地域文化を「かわいい模様」にしない。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/15-folk-painting.png" alt="Madhubani / Mithila（folk painting）の非写実技法サンプル画像" loading="lazy"></td><td>Madhubani / Mithila<span class="subtle">folk painting</span></td><td>密な線、縁飾り、神話、自然、平面色。</td><td>画面全体を語りで埋める。</td><td>文様過多で焦点が消える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/16-votive-painting.png" alt="レタブロ / Ex-voto（votive painting）の非写実技法サンプル画像" loading="lazy"></td><td>レタブロ / Ex-voto<span class="subtle">votive painting</span></td><td>祈願、出来事、説明文、奉納画の正面性。</td><td>歌詞を「報告書」や祈りとして提示する。</td><td>宗教的な形式の扱いに注意。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/17-tapa-barkcloth.png" alt="タパ / 樹皮布（tapa, barkcloth）の非写実技法サンプル画像" loading="lazy"></td><td>タパ / 樹皮布<span class="subtle">tapa, barkcloth</span></td><td>繊維、茶黒赤、幾何、叩いた布感。</td><td>舞台幕、衣装、儀式的背景。</td><td>地域差と文脈を調べる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/folk/18-culturally-specific-pattern-systems.png" alt="先住民・地域固有パターン（culturally specific pattern systems）の非写実技法サンプル画像" loading="lazy"></td><td>先住民・地域固有パターン<span class="subtle">culturally specific pattern systems</span></td><td>地域ごとの文様、素材、儀礼的意味。</td><td>必要な場合のみ、具体地域と文脈を特定して使う。</td><td>もっとも雑用リスクが高い。汎用装飾として使わない。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details id="digital">
+            <summary>デジタル・ポストデジタル</summary>
+            <div class="details-body">
+              <div class="table-wrap">
+                <table class="style-table">
+                  <thead><tr><th>参照</th><th>語彙</th><th>使える見た目</th><th>MVでの使い方</th><th>罠</th></tr></thead>
+                  <tbody>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/01-pixel-art.png" alt="ピクセルアート（pixel art）の非写実技法サンプル画像" loading="lazy"></td><td>ピクセルアート<span class="subtle">pixel art</span></td><td>ドット、低解像度、限定パレット。</td><td>ゲーム、記憶、縮小された身体、UI化。</td><td>レトロゲーム記号で止まる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/02-sprite-animation.png" alt="スプライトアニメ（sprite animation）の非写実技法サンプル画像" loading="lazy"></td><td>スプライトアニメ<span class="subtle">sprite animation</span></td><td>小さなループ、歩行、待機、攻撃モーション。</td><td>同じ動作の反復、感情のループ。</td><td>ゲーム画面の再現だけになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/03-voxel-art.png" alt="ボクセル（voxel art）の非写実技法サンプル画像" loading="lazy"></td><td>ボクセル<span class="subtle">voxel art</span></td><td>立方体の3Dドット、積み木的空間。</td><td>街や部屋を低解像度の立体記憶にする。</td><td>かわいい箱庭に寄りやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/04-low-poly-3d.png" alt="ローポリ（low-poly 3D）の非写実技法サンプル画像" loading="lazy"></td><td>ローポリ<span class="subtle">low-poly 3D</span></td><td>少ない面、ファセット、初期3D感。</td><td>仮想世界、夢、低予算SF、遠景。</td><td>粗いCGに見えるだけ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/05-toon-shader.png" alt="トゥーンシェーダー（toon shader）の非写実技法サンプル画像" loading="lazy"></td><td>トゥーンシェーダー<span class="subtle">toon shader</span></td><td>3Dを段階影と輪郭線で平面化。</td><td>実写不能なカメラとアニメ的キャラを両立。</td><td>プラグイン臭が出る。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/06-cel-shaded-3d.png" alt="セルシェーディング3D（cel-shaded 3D）の非写実技法サンプル画像" loading="lazy"></td><td>セルシェーディング3D<span class="subtle">cel-shaded 3D</span></td><td>硬い影、フラット色、3Dの奥行き。</td><td>人物、機械、都市を漫画的に立体化する。</td><td>ゲームトレーラー風に寄る。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/07-vector-art.png" alt="ベクターアート（vector art）の非写実技法サンプル画像" loading="lazy"></td><td>ベクターアート<span class="subtle">vector art</span></td><td>均一線、フラットな形、拡大に強い。</td><td>アイコン、図解、モーションロゴ。</td><td>無味な素材サイト感。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/08-isometric-drawing.png" alt="アイソメトリック（isometric drawing）の非写実技法サンプル画像" loading="lazy"></td><td>アイソメトリック<span class="subtle">isometric drawing</span></td><td>平行投影、箱庭、情報図の3D。</td><td>部屋、街、感情の装置を俯瞰する。</td><td>ダッシュボード風になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/09-textmode-art.png" alt="ASCII / ANSIアート（textmode art）の非写実技法サンプル画像" loading="lazy"></td><td>ASCII / ANSIアート<span class="subtle">textmode art</span></td><td>文字だけで絵を作る、端末感。</td><td>歌詞と映像を同じ素材にする。</td><td>読みにくい懐古演出。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/10-generative-art.png" alt="ジェネラティブアート（generative art）の非写実技法サンプル画像" loading="lazy"></td><td>ジェネラティブアート<span class="subtle">generative art</span></td><td>ルール、コード、偶然性、変化。</td><td>曲の構造をパラメータ化する。</td><td>自動生成に任せて編集判断が消える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/11-fractal-art.png" alt="フラクタル（fractal art）の非写実技法サンプル画像" loading="lazy"></td><td>フラクタル<span class="subtle">fractal art</span></td><td>自己相似、無限ズーム、数学的模様。</td><td>宇宙、心象、反復歌詞、増殖。</td><td>古いCGスクリーンセーバーになる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/12-particle-system.png" alt="粒子システム（particle system）の非写実技法サンプル画像" loading="lazy"></td><td>粒子システム<span class="subtle">particle system</span></td><td>点群、煙、群れ、風、分解。</td><td>声や身体が粒になる。</td><td>きれいなVFX背景で終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/13-data-visualization.png" alt="データ可視化（data visualization）の非写実技法サンプル画像" loading="lazy"></td><td>データ可視化<span class="subtle">data visualization</span></td><td>グラフ、線、地図、信号、数値。</td><td>感情や声を測定不能な計測として出す。</td><td>資料映像になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/14-point-cloud-lidar-scan.png" alt="点群 / LiDAR（point cloud, lidar scan）の非写実技法サンプル画像" loading="lazy"></td><td>点群 / LiDAR<span class="subtle">point cloud, lidar scan</span></td><td>点で構成された空間、欠落、スキャン。</td><td>記憶の穴、幽霊、都市の非物質化。</td><td>技術デモに見える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/15-stylized-photogrammetry.png" alt="フォトグラメトリ崩し（stylized photogrammetry）の非写実技法サンプル画像" loading="lazy"></td><td>フォトグラメトリ崩し<span class="subtle">stylized photogrammetry</span></td><td>実物スキャンの穴、歪み、テクスチャズレ。</td><td>現実の場所を不完全な記憶にする。</td><td>ただのスキャン失敗になる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/16-glitch-art.png" alt="グリッチアート（glitch art）の非写実技法サンプル画像" loading="lazy"></td><td>グリッチアート<span class="subtle">glitch art</span></td><td>データ破損、ピクセル崩れ、色チャンネルずれ。</td><td>感情の破綻、通信、記憶の劣化。</td><td>ノイズで弱い案を隠す。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/17-datamosh.png" alt="データモッシュ（datamosh）の非写実技法サンプル画像" loading="lazy"></td><td>データモッシュ<span class="subtle">datamosh</span></td><td>圧縮の破綻で画が溶ける。</td><td>場面転換、顔の残留、時間の混線。</td><td>見慣れたエフェクトになりやすい。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/18-scanline-tape-degradation.png" alt="CRT / VHS（scanline, tape degradation）の非写実技法サンプル画像" loading="lazy"></td><td>CRT / VHS<span class="subtle">scanline, tape degradation</span></td><td>走査線、にじみ、トラッキング、磁気ノイズ。</td><td>記録、監視、古いテレビ、偽のアーカイブ。</td><td>レトロフィルターで終わる。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/19-network-nostalgia.png" alt="Vaporwave / Y2K / Webcore（network nostalgia）の非写実技法サンプル画像" loading="lazy"></td><td>Vaporwave / Y2K / Webcore<span class="subtle">network nostalgia</span></td><td>古いCG、UI、パステル、圧縮、消費文化。</td><td>ネット記憶、空虚な商業空間、夢のOS。</td><td>流行語の寿命が短い。安定カテゴリと分ける。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/20-interface-visual-language.png" alt="HUD / スクリーンライフ（interface visual language）の非写実技法サンプル画像" loading="lazy"></td><td>HUD / スクリーンライフ<span class="subtle">interface visual language</span></td><td>画面内画面、通知、監視、分割、カーソル。</td><td>視聴者の操作感、孤独、情報過多。</td><td>読めないUIを飾るだけ。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/21-machinima-avatar-performance.png" alt="マシニマ / アバター（machinima, avatar performance）の非写実技法サンプル画像" loading="lazy"></td><td>マシニマ / アバター<span class="subtle">machinima, avatar performance</span></td><td>ゲーム内カメラ、アバター、ゲーム物理。</td><td>仮想身体、代替人格、ステージ性。</td><td>ゲーム実況や技術デモに見える。</td></tr>
+                    <tr><td class="style-thumb"><img src="mv-nonreal-style-vocabulary-assets/digital/22-shader-art.png" alt="シェーダーアート（shader art）の非写実技法サンプル画像" loading="lazy"></td><td>シェーダーアート<span class="subtle">shader art</span></td><td>数式的な光、反復、リアルタイム変形。</td><td>音に反応する世界、液体、場の変形。</td><td>美しいデモ映像で終わる。</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section id="families">
+          <div class="section-head">
+            <div>
+              <h2>系統マップ</h2>
+              <p class="note">MV案を作るときは、ここから離れた系統を最低3つ選ぶ。たとえば「水彩」「アニメ塗り」「セルシェーディング」は近い側に寄りやすいので、版画、布、コマ撮り、図解、データ表現なども意図的に混ぜる。</p>
+            </div>
+          </div>
+
+          <div class="family-grid">
+            <div class="family"><b>描画・絵具</b><p>線、筆致、にじみ、塗り残しで非写実化する。</p><div class="tag-row"><span class="tag">ink</span><span class="tag">watercolor</span><span class="tag">gouache</span></div></div>
+            <div class="family"><b>版画・印刷</b><p>彫り跡、網点、見当ズレ、特色インクで物質感を作る。</p><div class="tag-row"><span class="tag">woodcut</span><span class="tag">risograph</span><span class="tag">halftone</span></div></div>
+            <div class="family"><b>美術史・デザイン</b><p>運動名を「構成ルール」として使う。装飾、抽象、反美術まで含む。</p><div class="tag-row"><span class="tag">surrealism</span><span class="tag">constructivism</span><span class="tag">op art</span></div></div>
+            <div class="family"><b>漫画・コミック</b><p>コマ割り、スピード線、スクリーントーン、吹き出し、擬音を画面ルールにする。</p><div class="tag-row"><span class="tag">screentone</span><span class="tag">ligne claire</span><span class="tag">webtoon</span></div></div>
+            <div class="family"><b>アニメーション</b><p>線が揺れる、低FPSになる、物が意思を持つなど、時間の様式で変える。</p><div class="tag-row"><span class="tag">stop motion</span><span class="tag">rotoscope</span><span class="tag">line boil</span></div></div>
+            <div class="family"><b>コラージュ・混成</b><p>写真、紙片、既存印刷物、発見素材をぶつけて違和感を作る。</p><div class="tag-row"><span class="tag">photomontage</span><span class="tag">assemblage</span><span class="tag">zine</span></div></div>
+            <div class="family"><b>紙・布・工芸</b><p>繊維、縫い目、釉薬、漆、木目などを画面の物理ルールにする。</p><div class="tag-row"><span class="tag">sashiko</span><span class="tag">kintsugi</span><span class="tag">kirigami</span></div></div>
+            <div class="family"><b>民芸・図像体系</b><p>文化固有の構図や信仰記号は、文脈を調べたうえで慎重に使う。</p><div class="tag-row"><span class="tag">icon</span><span class="tag">mingei</span><span class="tag">miniature</span></div></div>
+            <div class="family"><b>デジタル・ポストデジタル</b><p>ピクセル、ボクセル、NPR、グリッチ、データ、UIで非現実化する。</p><div class="tag-row"><span class="tag">pixel art</span><span class="tag">glitch</span><span class="tag">toon shader</span></div></div>
+            <div class="family"><b>光・投影</b><p>影、透過、スクリーン、プロジェクションで現実空間を絵の支持体にする。</p><div class="tag-row"><span class="tag">projection</span><span class="tag">shadow play</span><span class="tag">lightbox</span></div></div>
+            <div class="family"><b>抽象・音響反応</b><p>波形、粒子、図形、色面を曲の構造と同期させる。</p><div class="tag-row"><span class="tag">visual music</span><span class="tag">particles</span><span class="tag">color field</span></div></div>
+            <div class="family"><b>不可能世界</b><p>錯視、夢論理、スケール破綻、絵巻的時間で現実外を設計する。</p><div class="tag-row"><span class="tag">anamorphosis</span><span class="tag">impossible space</span><span class="tag">surreal</span></div></div>
+          </div>
+        </section>
+
+        <section id="coverage">
+          <div class="section-head">
+            <div>
+              <h2>分類軸</h2>
+              <p class="note">「非写実」と「非現実」は別物です。写実的な質感で不可能空間を作ることも、現実の物体をコマ撮りで異化することもある。以下の軸を埋めると、発想の偏りが見えます。</p>
+            </div>
+          </div>
+
+          <div class="axis-grid">
+            <div class="axis-card"><b>再現度</b><p>写実、様式化、抽象、非対象。対象の形をどれだけ残すか。</p></div>
+            <div class="axis-card"><b>媒体</b><p>紙、インク、絵具、木版、布、粘土、光、スクリーン、データ。</p></div>
+            <div class="axis-card"><b>痕跡</b><p>筆致、ハッチング、紙目、粒子、版ズレ、縫い目、低FPS、圧縮ノイズ。</p></div>
+            <div class="axis-card"><b>空間</b><p>平面、絵巻、コマ割り、舞台、ジオラマ、2.5D、仮想空間、不可能空間。</p></div>
+            <div class="axis-card"><b>時間</b><p>静止画、ループ、コマ撮り、ロトスコープ、モーフ、粒子、音響反応。</p></div>
+            <div class="axis-card"><b>主語</b><p>人物、身体、顔、衣装、物、文字、記号、環境、データ、儀式。</p></div>
+            <div class="axis-card"><b>文化/時代</b><p>美術運動、地域様式、民芸、印刷文化、漫画文化、ネット美学。</p></div>
+            <div class="axis-card"><b>制作リスク</b><p>権利、文化文脈、キャラ一貫性、素材再現、生成AI由来の均質さ、工数、可読性。</p></div>
+          </div>
+        </section>
+
+        <section id="sources">
+          <div class="section-head">
+            <div>
+              <h2>参照ソース</h2>
+              <p class="note">調査に使った主要ソース。最新版や厳密な定義が必要なときは各リンクを再確認してください。ネット美学は変化が速いため、安定した美術館・教育資料と分けて扱う。</p>
+            </div>
+          </div>
+
+          <div class="source-grid">
+            <div class="source"><b><a href="https://www.getty.edu/research/tools/vocabularies/index.html">Getty Vocabularies</a></b><span>統制語彙、素材、技法、文化圏の母集団。</span></div>
+            <div class="source"><b><a href="https://www.getty.edu/publications/categories-description-works-art/categories/">Getty CDWA Categories</a></b><span>作品記述の分類軸。</span></div>
+            <div class="source"><b><a href="https://www.moma.org/collection/terms/">MoMA Art Terms</a></b><span>近現代美術、運動、技法の確認。</span></div>
+            <div class="source"><b><a href="https://www.metmuseum.org/perspectives/series/materials-and-techniques">The Met: Materials and Techniques</a></b><span>素材と制作技法の基礎。</span></div>
+            <div class="source"><b><a href="https://www.nga.gov/educational-resources/printmaking-basics">National Gallery of Art: Printmaking Basics</a></b><span>木版、スクリーンプリント、モノプリントなど。</span></div>
+            <div class="source"><b><a href="https://www.britannica.com/explore/art-movements-styles">Britannica: Art Movements and Styles</a></b><span>美術運動とスタイルの横断確認。</span></div>
+            <div class="source"><b><a href="https://www.britannica.com/technology/motion-picture-technology/Animation">Britannica: Animation</a></b><span>セル、ストップモーション、非セル系アニメーション。</span></div>
+            <div class="source"><b><a href="https://publications.gc.ca/collections/collection_2025/onf-nfb/NF4-49-2023-eng.pdf">NFB Animation Glossary</a></b><span>カットアウト、ピンスクリーン、ピクシレーション等。</span></div>
+            <div class="source"><b><a href="https://a.dolimg.com/media/en-US/disneyeducationalproductions/noma/pdf/DE1775_NOMA_TG.pdf">Disney Educational: 12 Principles</a></b><span>スカッシュ&ストレッチ、タイミング等。</span></div>
+            <div class="source"><b><a href="https://www.britishmuseum.org/exhibitions/manga">British Museum: Manga</a></b><span>漫画を視覚ナラティブとして扱う視点。</span></div>
+            <div class="source"><b><a href="https://www.britishmuseum.org/blog/manga-brief-history-12-works">British Museum: Manga History</a></b><span>吹き出し、視覚進行、文字より視覚行動の優位。</span></div>
+            <div class="source"><b><a href="https://www.vam.ac.uk/articles/japanese-woodblock-prints-ukiyo-e">V&amp;A: Japanese Woodblock Prints</a></b><span>浮世絵、木版、テーマとコレクション。</span></div>
+            <div class="source"><b><a href="https://www.metmuseum.org/essays/rinpa-painting-style">The Met: Rinpa Painting Style</a></b><span>琳派、金地、自然、装飾性。</span></div>
+            <div class="source"><b><a href="https://www.metmuseum.org/es/essays/yamato-e-painting">The Met: Yamato-e Painting</a></b><span>やまと絵、絵巻、平面性。</span></div>
+            <div class="source"><b><a href="https://www.metmuseum.org/essays/icons-and-iconoclasm-in-byzantium">The Met: Byzantine Icons</a></b><span>聖像、素材、正面性、宗教図像。</span></div>
+            <div class="source"><b><a href="https://www.britannica.com/art/painting/Manuscript-illumination-and-related-forms">Britannica: Manuscript Illumination</a></b><span>写本装飾、細密画、文字と絵の関係。</span></div>
+            <div class="source"><b><a href="https://www.vam.ac.uk/articles/an-introduction-to-quilting-and-patchwork">V&amp;A: Quilting and Patchwork</a></b><span>キルト、パッチワーク、布片の構成。</span></div>
+            <div class="source"><b><a href="https://www.vam.ac.uk/articles/what-is-tapestry">V&amp;A: What is Tapestry?</a></b><span>タペストリー、織りの構造。</span></div>
+            <div class="source"><b><a href="https://www.metmuseum.org/en/essays/the-materials-and-techniques-of-american-quilts-and-coverlets">The Met: Quilts and Coverlets</a></b><span>アップリケ、布の層、視覚パターン。</span></div>
+            <div class="source"><b><a href="https://www.moma.org/collection/terms/dada/chance-creations-collage-photomontage-and-assemblage">MoMA: Collage, Photomontage, Assemblage</a></b><span>コラージュと混成の系譜。</span></div>
+            <div class="source"><b><a href="https://www.britannica.com/art/assemblage">Britannica: Assemblage</a></b><span>発見物、3D構成、レディメイド。</span></div>
+            <div class="source"><b><a href="https://www.riso.co.jp/english/company/risoart/concept.html">RISO: RISO Art</a></b><span>Risographの技術とアート利用。</span></div>
+            <div class="source"><b><a href="https://americanart.si.edu/art/highlights/folk">Smithsonian: Folk and Self-Taught Art</a></b><span>民芸・自学作家の扱い。</span></div>
+            <div class="source"><b><a href="https://www.britannica.com/art/outsider-art">Britannica: Outsider Art</a></b><span>アウトサイダー、アール・ブリュットの定義上の注意。</span></div>
+            <div class="source"><b><a href="https://www.britannica.com/art/kintsugi-ceramics">Britannica: Kintsugi</a></b><span>金継ぎ、修復痕の美学。</span></div>
+            <div class="source"><b><a href="https://www.vam.ac.uk/collections/digital-art-design">V&amp;A: Digital Art and Design</a></b><span>デジタル表現を美術・デザイン文脈で見る。</span></div>
+            <div class="source"><b><a href="https://stylized.realtimerendering.com/">SIGGRAPH: Stylized Rendering in Games</a></b><span>NPR、ゲーム的な様式化レンダリング。</span></div>
+            <div class="source"><b><a href="https://www.dandad.org/awards/d-ad-awards/categories/music-videos">D&amp;AD Music Videos</a></b><span>MVクラフト領域の参照。</span></div>
+            <div class="source"><b><a href="https://www.berlinmva.com/main/categories/">Berlin Music Video Awards Categories</a></b><span>アニメーション、実験、AI、奇妙系カテゴリ。</span></div>
+          </div>
+        </section>
+
+        <section id="protocol">
+          <div class="section-head">
+            <div>
+              <h2>活用プロトコル</h2>
+              <p class="note">曲ごとのビジュアル案を出す前に、下の手順で「見た目の好み」だけに寄らない発散を行う。特に生成AIを使う場合、画風名を1語で投げると既視感が強くなるため、媒体と制作痕跡まで指定する。</p>
+            </div>
+          </div>
+
+          <div class="rule-grid">
+            <div class="rule"><b>1. 分類を分ける</b><span>画風、制作技法、媒体素材、世界法則、時間表現を混ぜて考えない。まず別々に拾う。</span></div>
+            <div class="rule"><b>2. 5レーンで検索</b><span>美術史、版画/印刷、漫画/アニメ、工芸/民芸、デジタル/NPRを別レーンで調べる。</span></div>
+            <div class="rule"><b>3. ソースを残す</b><span>美術館、百科事典、教育機関、業界一次情報を優先する。SNS由来の流行語は補助扱い。</span></div>
+            <div class="rule"><b>4. 作家名にしない</b><span>存命作家、スタジオ、作品名をそのまま画風ラベルにしない。線、色、背景、撮影処理へ分解する。</span></div>
+            <div class="rule"><b>5. 素材痕跡を書く</b><span>彫り跡、版ズレ、繊維、縫い目、釉薬、粒子、走査線など、画面に現れる物質的なルールを指定する。</span></div>
+            <div class="rule"><b>6. 文化圏を雑に使わない</b><span>宗教、儀式、先住民、民芸は「雰囲気」だけで使わない。由来、文脈、避けるべき記号を確認する。</span></div>
+            <div class="rule"><b>7. 組み合わせで使う</b><span>媒体、線、色、動き、空間、編集のうち3から5軸を組み合わせる。単語1つで決めない。</span></div>
+            <div class="rule"><b>8. 罠を併記する</b><span>きれい、かわいい、レトロ、アニメ風などの雑な語で止まったら、具体痕跡に戻す。</span></div>
+          </div>
+        </section>
+
+        <section id="mix">
+          <div class="section-head">
+            <div>
+              <h2>組み合わせテンプレート</h2>
+              <p class="note">単独の画風名は弱い。MV案にするときは、最低でも「媒体」「線/表面」「動き」「空間」「編集」のうち3つを組み合わせる。</p>
+            </div>
+          </div>
+
+          <div class="mix-grid">
+            <div class="mix-card"><b>媒体 + 痕跡 + 動き</b><p>例: リノカットの黒白、彫り跡、On twosの低FPS。怒りや反復の曲で強い。</p></div>
+            <div class="mix-card"><b>工芸 + 歌詞 + 空間</b><p>例: 刺し子の縫い目を波形字幕にし、布の部屋全体が歌う。</p></div>
+            <div class="mix-card"><b>美術運動 + 漫画文法</b><p>例: 構成主義の斜線と少年漫画の集中線を統合し、ビートを命令形にする。</p></div>
+            <div class="mix-card"><b>伝統図像 + 現代処理</b><p>例: イコン的正面性にグリッチを入れる。宗教記号は文脈確認が必須。</p></div>
+            <div class="mix-card"><b>物理素材 + デジタル</b><p>例: 粘土人形を点群スキャンし、顔だけデータモッシュで崩す。</p></div>
+            <div class="mix-card"><b>印刷 + 編集</b><p>例: RISOの色分版がサビでずれ、最後にCMYKが合って一瞬だけ像が合う。</p></div>
+            <div class="mix-card"><b>紙芝居 + 2.5D</b><p>例: 切り絵レイヤーの奥に実写影を置き、横スクロールで絵巻化する。</p></div>
+            <div class="mix-card"><b>科学図版 + 感情</b><p>例: 心拍、声帯、波形を銅版画風の注釈で描く。説明過多に注意。</p></div>
+            <div class="mix-card"><b>民芸 + 抽象</b><p>例: 補修布のBoroを抽象的な色面として使い、歌の断片を縫い直す。</p></div>
+          </div>
+        </section>
+
+        <section id="qa">
+          <div class="section-head">
+            <div>
+              <h2>品質チェック</h2>
+              <p class="note">画風リストから実際の案に進む前に確認する。ここを通らない案は、見た目だけの薄いコンセプトになりやすい。</p>
+            </div>
+          </div>
+
+          <ul class="check-list">
+            <li>その語は本当に画風か。主題、ジャンル、時代、素材、制作技法、編集効果が混ざっていないか。</li>
+            <li>画面に出る痕跡を言えるか。例: 彫り跡、版ズレ、紙目、繊維、線の揺れ、低FPS、走査線。</li>
+            <li>作家名、スタジオ名、作品名に依存していないか。一般語に分解できているか。</li>
+            <li>文化固有の文様や宗教図像を、雰囲気素材として雑に使っていないか。</li>
+            <li>曲の構成に接続しているか。Aメロ、サビ、間奏で画風がどう変わるか。</li>
+            <li>「かわいい」「レトロ」「アニメ風」「幻想的」などの曖昧語を、具体技法に分解したか。</li>
+            <li>単一色調、単一素材、単一ギミックで最後まで持たせようとしていないか。</li>
+            <li>静止画では成立しても、動画で動かしたときに情報量、可読性、テンポが崩れないか。</li>
+            <li>画像生成を使う場合、生成結果を探索の代用品にせず、候補ごとに参照元と採用理由を残したか。</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+  <dialog class="image-modal" id="image-modal" aria-labelledby="image-modal-title" aria-describedby="image-modal-description">
+    <div class="modal-shell">
+      <button class="modal-close" type="button" aria-label="閉じる">×</button>
+      <button class="modal-nav prev" type="button" aria-label="前の画像">‹</button>
+      <button class="modal-nav next" type="button" aria-label="次の画像">›</button>
+      <div class="modal-frame">
+        <img id="image-modal-img" alt="">
+      </div>
+      <div class="modal-copy">
+        <h2 id="image-modal-title"></h2>
+        <p id="image-modal-description"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      const modal = document.getElementById("image-modal");
+      const modalImage = document.getElementById("image-modal-img");
+      const modalTitle = document.getElementById("image-modal-title");
+      const modalDescription = document.getElementById("image-modal-description");
+      const closeButton = modal.querySelector(".modal-close");
+      const prevButton = modal.querySelector(".modal-nav.prev");
+      const nextButton = modal.querySelector(".modal-nav.next");
+      const modalFrame = modal.querySelector(".modal-frame");
+      const viewerItems = Array.from(document.querySelectorAll(".style-thumb img"));
+      let currentIndex = -1;
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let pointerStartX = 0;
+      let pointerStartY = 0;
+
+      const text = (node) => node?.textContent.trim().replace(/\s+/g, " ") || "";
+      const closeModal = () => {
+        if (typeof modal.close === "function") {
+          modal.close();
+        } else {
+          modal.removeAttribute("open");
+          modalImage.removeAttribute("src");
+        }
+      };
+
+      const getImageContext = (image) => {
+        const row = image.closest("tr");
+        if (row?.cells?.length >= 5) {
+          const title = text(row.cells[1]) || image.alt || "画像";
+          const description = text(row.cells[2]) || image.alt;
+          const use = text(row.cells[3]);
+          const trap = text(row.cells[4]);
+          const parts = [description];
+
+          if (use) {
+            parts.push(`使い方: ${use}`);
+          }
+
+          if (trap) {
+            parts.push(`失敗しやすい罠: ${trap}`);
+          }
+
+          return {
+            title,
+            description: parts.join(" "),
+          };
+        }
+
+        return {
+          title: image.alt || "画像",
+          description: image.alt || "",
+        };
+      };
+
+      const setModalImage = (index) => {
+        currentIndex = (index + viewerItems.length) % viewerItems.length;
+        const image = viewerItems[currentIndex];
+        const context = getImageContext(image);
+
+        modalImage.src = image.currentSrc || image.src;
+        modalImage.alt = image.alt || context.title;
+        modalTitle.textContent = context.title;
+        modalDescription.textContent = context.description;
+      };
+
+      const openModal = (index) => {
+        setModalImage(index);
+
+        if (typeof modal.showModal === "function") {
+          modal.showModal();
+        } else {
+          modal.setAttribute("open", "");
+        }
+
+        closeButton.focus();
+      };
+
+      const showRelativeImage = (offset) => {
+        if (currentIndex < 0 || viewerItems.length === 0) {
+          return;
+        }
+
+        setModalImage(currentIndex + offset);
+      };
+
+      const handleSwipe = (startX, startY, endX, endY) => {
+        const deltaX = endX - startX;
+        const deltaY = endY - startY;
+
+        if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+          showRelativeImage(deltaX < 0 ? 1 : -1);
+        }
+      };
+
+      viewerItems.forEach((image, index) => {
+        const context = getImageContext(image);
+
+        image.setAttribute("role", "button");
+        image.setAttribute("tabindex", "0");
+        image.setAttribute("aria-label", `${context.title}を拡大表示`);
+
+        image.addEventListener("click", () => openModal(index));
+        image.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openModal(index);
+          }
+        });
+      });
+
+      closeButton.addEventListener("click", closeModal);
+      prevButton.addEventListener("click", () => showRelativeImage(-1));
+      nextButton.addEventListener("click", () => showRelativeImage(1));
+
+      document.addEventListener("keydown", (event) => {
+        if (!modal.open) {
+          return;
+        }
+
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          showRelativeImage(-1);
+        }
+
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          showRelativeImage(1);
+        }
+      });
+
+      if ("PointerEvent" in window) {
+        modalFrame.addEventListener("pointerdown", (event) => {
+          pointerStartX = event.clientX;
+          pointerStartY = event.clientY;
+          try {
+            modalFrame.setPointerCapture?.(event.pointerId);
+          } catch {
+            // Synthetic pointer events do not always create a capturable pointer.
+          }
+        });
+
+        modalFrame.addEventListener("pointerup", (event) => {
+          handleSwipe(pointerStartX, pointerStartY, event.clientX, event.clientY);
+          try {
+            modalFrame.releasePointerCapture?.(event.pointerId);
+          } catch {
+            // Ignore release attempts for pointers that were not captured.
+          }
+        });
+      } else {
+        modalFrame.addEventListener("touchstart", (event) => {
+          const touch = event.changedTouches[0];
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+        }, { passive: true });
+
+        modalFrame.addEventListener("touchend", (event) => {
+          const touch = event.changedTouches[0];
+          handleSwipe(touchStartX, touchStartY, touch.clientX, touch.clientY);
+        }, { passive: true });
+      }
+
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+      modal.addEventListener("close", () => {
+        currentIndex = -1;
+        modalImage.removeAttribute("src");
+      });
+    })();
+  </script>
+</body>
+</html>
