@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MV Visual Vocabulary Reference</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fb;
+      --paper: #ffffff;
+      --ink: #18202a;
+      --muted: #5d6878;
+      --line: #d9dee8;
+      --line-strong: #b8c1d0;
+      --teal: #0f766e;
+      --blue: #315a9f;
+      --coral: #b54738;
+      --amber: #9a6417;
+      --violet: #6d519b;
+      --green: #476f35;
+      --shadow: 0 10px 30px rgba(25, 32, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Yu Gothic", "Meiryo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.72;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow: auto;
+      border-right: 1px solid var(--line);
+      background: #eef2f7;
+      padding: 24px 20px;
+    }
+
+    .sidebar h2 {
+      margin: 0 0 16px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 13px;
+    }
+
+    .nav-list > li {
+      min-width: 0;
+    }
+
+    .nav-list a {
+      display: block;
+      padding: 7px 9px;
+      border-radius: 6px;
+      color: #243140;
+      text-decoration: none;
+    }
+
+    .nav-list a:hover {
+      background: #ffffff;
+      color: var(--blue);
+    }
+
+    .nav-sublist {
+      display: grid;
+      gap: 2px;
+      margin: 4px 0 0 9px;
+      padding: 0 0 0 10px;
+      border-left: 1px solid var(--line-strong);
+      list-style: none;
+      font-size: 12px;
+    }
+
+    .nav-sublist a {
+      padding: 5px 7px;
+      color: #506071;
+      line-height: 1.35;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      padding: 52px clamp(24px, 5vw, 72px) 34px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 36px;
+      align-items: end;
+      max-width: 1260px;
+      margin: 0 auto;
+    }
+
+    .hero-grid > *,
+    .section-head > *,
+    .card,
+    .rule,
+    .callout,
+    .notice,
+    details {
+      min-width: 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      max-width: 840px;
+      margin: 0;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 880px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .notice {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--coral);
+      border-radius: 8px;
+      padding: 16px 18px;
+      background: #fff8f6;
+      color: #51352f;
+      font-size: 14px;
+    }
+
+    .notice strong {
+      color: #2d1d19;
+    }
+
+    .content {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 36px clamp(24px, 5vw, 72px) 72px;
+    }
+
+    section {
+      margin-top: 44px;
+    }
+
+    section:first-child {
+      margin-top: 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(200px, 360px);
+      gap: 28px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 36px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .rule-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .rule {
+      min-height: 134px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 16px;
+      box-shadow: 0 1px 0 rgba(24, 32, 42, 0.03);
+    }
+
+    .rule b {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--teal);
+      font-size: 14px;
+    }
+
+    .rule span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-bottom: 1px solid var(--line);
+      background: #e7ebf2;
+    }
+
+    .card img,
+    .territory-thumb img {
+      cursor: zoom-in;
+    }
+
+    .card img:focus-visible,
+    .territory-thumb img:focus-visible {
+      outline: 3px solid rgba(49, 90, 159, 0.58);
+      outline-offset: 3px;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      margin-bottom: 9px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #edf7f5;
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .meta-list b {
+      color: var(--ink);
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 1px 0 rgba(24, 32, 42, 0.03);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 840px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      vertical-align: top;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #f0f3f8;
+      color: #253244;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .tag {
+      display: inline-block;
+      max-width: 100%;
+      margin: 0 4px 5px 0;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f0f3f8;
+      color: #344053;
+      font-size: 12px;
+      white-space: normal;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 1px 0 rgba(24, 32, 42, 0.03);
+    }
+
+    details + details {
+      margin-top: 12px;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 16px 18px;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    details[open] summary {
+      border-bottom: 1px solid var(--line);
+      color: var(--blue);
+    }
+
+    .details-body {
+      padding: 0;
+    }
+
+    .territory-map .table-wrap {
+      overflow: visible;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .territory-map table,
+    .territory-map thead,
+    .territory-map tbody,
+    .territory-map tr,
+    .territory-map td {
+      display: block;
+    }
+
+    .territory-map table {
+      width: 100%;
+      min-width: 0;
+      border-collapse: separate;
+    }
+
+    .territory-map thead {
+      position: absolute;
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .territory-map tbody {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 16px;
+      background: #f4f7fb;
+    }
+
+    .territory-map tr {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 1px 0 rgba(24, 32, 42, 0.03);
+    }
+
+    .territory-map td {
+      border-bottom: 0;
+      padding: 0;
+    }
+
+    .territory-map td:not(.territory-thumb) {
+      padding-inline: 16px;
+    }
+
+    .territory-map td:nth-child(2) {
+      padding-top: 14px;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .territory-map td:nth-child(3) {
+      padding-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .territory-map td:nth-child(4) {
+      padding-top: 12px;
+    }
+
+    .territory-map td:nth-child(4)::before {
+      content: "検索語";
+      display: block;
+      margin-bottom: 6px;
+      color: #6a7381;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .territory-map td:nth-child(5) {
+      margin: 12px 16px 16px;
+      padding: 10px 12px;
+      border-left: 4px solid #f0d3ab;
+      border-radius: 6px;
+      background: #fff8ec;
+      color: #5d4020;
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .territory-map td:nth-child(5)::before {
+      content: "罠";
+      display: block;
+      margin-bottom: 4px;
+      color: var(--amber);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .territory-thumb {
+      width: auto;
+      min-width: 0;
+    }
+
+    .territory-thumb img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
+      background: #e7ebf2;
+    }
+
+    .image-modal {
+      width: min(1480px, calc(100vw - 20px));
+      max-width: none;
+      max-height: calc(100dvh - 20px);
+      margin: auto;
+      padding: 0;
+      border: 0;
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--ink);
+      overflow: hidden;
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.34);
+    }
+
+    .image-modal::backdrop {
+      background: rgba(10, 15, 24, 0.72);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-shell {
+      position: relative;
+      display: grid;
+      max-height: calc(100dvh - 20px);
+      grid-template-rows: minmax(0, 1fr) auto;
+    }
+
+    .modal-frame {
+      display: grid;
+      place-items: center;
+      min-height: 0;
+      background: #101820;
+    }
+
+    .modal-frame img {
+      width: 100%;
+      max-height: min(84dvh, 960px);
+      object-fit: contain;
+    }
+
+    .modal-copy {
+      padding: 18px 20px 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .modal-copy h2 {
+      margin: 0 48px 7px 0;
+      font-size: 21px;
+      line-height: 1.28;
+    }
+
+    .modal-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.66;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      border-radius: 999px;
+      background: rgba(8, 13, 22, 0.72);
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .modal-close:hover,
+    .modal-close:focus-visible,
+    .modal-nav:hover,
+    .modal-nav:focus-visible {
+      background: rgba(8, 13, 22, 0.92);
+    }
+
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 64px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      background: rgba(8, 13, 22, 0.58);
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 42px;
+      line-height: 1;
+      transform: translateY(-50%);
+    }
+
+    .modal-nav.prev {
+      left: 14px;
+    }
+
+    .modal-nav.next {
+      right: 14px;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .source {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 14px 16px;
+      font-size: 14px;
+    }
+
+    .source b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .source span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .callout {
+      border: 1px solid #f0d3ab;
+      border-left: 5px solid var(--amber);
+      border-radius: 8px;
+      background: #fff8ec;
+      padding: 16px 18px;
+    }
+
+    .qa {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .qa div {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 14px 16px;
+    }
+
+    .qa b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green);
+    }
+
+    @media (max-width: 1120px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .hero-grid,
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery,
+      .rule-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .territory-map tbody {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-list,
+      .gallery,
+      .rule-grid,
+      .source-grid,
+      .qa {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .content {
+        padding-inline: 18px;
+      }
+
+      .territory-map tbody {
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .modal-frame img {
+        max-height: 72dvh;
+      }
+
+      .modal-copy {
+        padding: 15px 16px 17px;
+      }
+
+      .modal-nav {
+        width: 38px;
+        height: 52px;
+        font-size: 34px;
+      }
+
+      .modal-nav.prev {
+        left: 8px;
+      }
+
+      .modal-nav.next {
+        right: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="ページ内ナビゲーション">
+      <h2>MV Visual Vocabulary Reference</h2>
+      <ul class="nav-list">
+        <li><a href="#purpose">目的</a></li>
+        <li><a href="#atlas">18語彙アトラス</a></li>
+        <li>
+          <a href="#territories">領域マップ</a>
+          <ul class="nav-sublist">
+            <li><a href="#territory-concept-form">Concept Form: 映像の形式</a></li>
+            <li><a href="#territory-medium">Medium: 作り方と媒体</a></li>
+            <li><a href="#territory-visual-language">Visual Language: 美術・記号・抽象度</a></li>
+            <li><a href="#territory-art-levers">Art Department Levers: 実制作で操作する変数</a></li>
+          </ul>
+        </li>
+        <li><a href="#sources">参照ソース</a></li>
+        <li><a href="#protocol">活用プロトコル</a></li>
+        <li><a href="#assignments">調査分担例</a></li>
+        <li><a href="#qa">品質チェック</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <header class="hero" id="purpose">
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">Generic reference for music-video art direction</p>
+            <h1>MV美術の語彙と探索領域</h1>
+            <p class="lead">ミュージックビデオの初期コンセプトが「実写の部屋」「歌う人物」「既視感の強い情緒演出」へ寄りすぎるのを防ぐための参照資料です。ここでは特定の楽曲や案件に紐づけず、映像美術で操作できる要素、表現領域、検索分担、失敗しやすい罠を一覧化します。</p>
+          </div>
+          <div class="notice">
+            <strong>重要:</strong> このHTML内の画像は、特定案件のコンセプトアートではありません。汎用的な語彙サンプルとして作成したものです。曲名、歌詞、人物設定、物語設定を読み取らせないことを優先しています。
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="atlas">
+          <div class="section-head">
+            <div>
+              <h2>18語彙アトラス</h2>
+              <p class="note">各画像は「この見た目が良い」という提案ではなく、「MV美術でどの変数を操作できるか」を見るための汎用サンプルです。人物や物語を主語にせず、構図、光、質感、動き、記号の制御単位として読んでください。</p>
+            </div>
+            <div class="callout">
+              <p><strong>読み方:</strong> 案出しでは、この18枚から最低6カテゴリを選んで別々の提案へ展開します。1つのカテゴリを全案へ薄く混ぜるより、提案ごとに主語を変える方が幅が出ます。</p>
+            </div>
+          </div>
+
+          <div class="gallery">
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/01-space-set-design.png" alt="空間構成とセット設計の抽象サンプル">
+              <div class="card-body">
+                <span class="kicker">01 Space / Set</span>
+                <h3>空間構成・セット設計</h3>
+                <p>部屋、舞台、通路、段差、入口、余白など、MVの世界を支える空間ルール。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 登場人物より先に、どこで何が起きられるかを決めたい時。</li>
+                  <li><b>罠:</b> きれいな部屋を置いただけで、映像のルールがない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/02-color-script.png" alt="色彩設計の比較サンプル">
+              <div class="card-body">
+                <span class="kicker">02 Color</span>
+                <h3>色彩設計</h3>
+                <p>単色、補色、低彩度、高彩度、アクセント色、セクションごとの色の変化。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 曲の展開を画面の温度や彩度で分節したい時。</li>
+                  <li><b>罠:</b> 1色の雰囲気に頼り、変化が編集や構成へ接続しない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/03-light-shadow.png" alt="光と影のスタジオ実験サンプル">
+              <div class="card-body">
+                <span class="kicker">03 Light</span>
+                <h3>光と影</h3>
+                <p>逆光、拡散、硬い影、シルエット、スポット、投影をドラマの材料として使う。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 小道具やロケに頼らず、感情の圧力を作りたい時。</li>
+                  <li><b>罠:</b> ムード照明だけで、視線誘導や曲展開の機能がない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/04-material-texture.png" alt="素材と質感の抽象サンプル">
+              <div class="card-body">
+                <span class="kicker">04 Material</span>
+                <h3>素材・質感</h3>
+                <p>紙、布、木、金属、ガラス、粘土、粉、プラスチックなどの触覚的な画面設計。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 物語よりも手触り、摩耗、硬さ、軽さで曲を翻訳したい時。</li>
+                  <li><b>罠:</b> 質感が表面装飾で止まり、アクションや編集へ効かない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/05-prop-object-system.png" alt="小道具とオブジェクトシステムのサンプル">
+              <div class="card-body">
+                <span class="kicker">05 Props</span>
+                <h3>小道具・オブジェクト</h3>
+                <p>反復、変形、配置、数、大小関係によって、物をモチーフシステムにする。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 小さな物を曲中で変化する記号として扱いたい時。</li>
+                  <li><b>罠:</b> 象徴物を増やしすぎて、どれも必要に見えない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/06-costume-silhouette.png" alt="衣装とシルエットのサンプル">
+              <div class="card-body">
+                <span class="kicker">06 Costume</span>
+                <h3>衣装・シルエット</h3>
+                <p>服の意味より、輪郭、重さ、硬さ、可動域、揺れ方で人物像を作る。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 顔や演技より身体の形で役割を分けたい時。</li>
+                  <li><b>罠:</b> スタイリングが高品質でも、楽曲や動きと切り離されている。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/07-body-gesture.png" alt="身体とジェスチャーのサンプル">
+              <div class="card-body">
+                <span class="kicker">07 Body</span>
+                <h3>身体・ジェスチャー</h3>
+                <p>到達、折り畳み、回転、静止、緊張、解放など、身体を文法として設計する。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> ダンス未満の動作を、曲のリズムや内面の構造にしたい時。</li>
+                  <li><b>罠:</b> ただの反復ポーズになり、同一主人公の資料に見える。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/08-face-gaze-portrait.png" alt="顔と視線とポートレート距離のサンプル">
+              <div class="card-body">
+                <span class="kicker">08 Face</span>
+                <h3>顔・視線・距離</h3>
+                <p>正面、横顔、後頭部、遮蔽、影、距離の変化で関係性を作る。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 表情そのものではなく、見る距離と隠し方を設計したい時。</li>
+                  <li><b>罠:</b> 泣き顔や無表情のアップに寄り、既視感のあるポートレートになる。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/09-framing-negative-space.png" alt="フレーミングと余白のサンプル">
+              <div class="card-body">
+                <span class="kicker">09 Framing</span>
+                <h3>フレーミング・余白</h3>
+                <p>中央、端、対称、非対称、圧縮、余白で、画面の緊張を制御する。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 何を写すかより、どこに置くかで意味を変えたい時。</li>
+                  <li><b>罠:</b> 映画風の横長構図だけで、画面内の圧力が設計されていない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/10-layers-depth.png" alt="レイヤーと奥行きのサンプル">
+              <div class="card-body">
+                <span class="kicker">10 Depth</span>
+                <h3>レイヤー・奥行き</h3>
+                <p>前景、中景、背景、透過、影、スクリーン、フレームで画面密度を作る。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 1つの場所でも視線の経路と隠れ方を増やしたい時。</li>
+                  <li><b>罠:</b> 情報を重ねるだけで、主従関係や編集上の意味がない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/11-motion-quality.png" alt="動きの質感のサンプル">
+              <div class="card-body">
+                <span class="kicker">11 Motion</span>
+                <h3>動きの質感</h3>
+                <p>滑走、跳躍、弾性、重さ、停止、スパイラルなど、運動のキャラクター。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 動くものが何かより、どう動くかを先に決めたい時。</li>
+                  <li><b>罠:</b> エフェクトの数だけ増えて、曲の構造を読ませない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/12-typography.png" alt="タイポグラフィの抽象サンプル">
+              <div class="card-body">
+                <span class="kicker">12 Type</span>
+                <h3>タイポグラフィ</h3>
+                <p>歌詞表示ではなく、文字らしさを空間、リズム、質量、ノイズとして扱う。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 声や言葉を字幕ではない画面要素に変えたい時。</li>
+                  <li><b>罠:</b> 読める文字が勝ち、MVではなく lyric video へ寄る。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/13-motion-graphics.png" alt="モーショングラフィックスのサンプル">
+              <div class="card-body">
+                <span class="kicker">13 Graphics</span>
+                <h3>モーショングラフィックス</h3>
+                <p>線、円、グリッド、信号、図形、タイミング図で曲の構造を可視化する。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 人物やロケなしで、リズムと構成を主役にしたい時。</li>
+                  <li><b>罠:</b> UI風やスクリーンセーバー風になり、映像の意思が薄い。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/14-abstract-animation.png" alt="抽象アニメーションのサンプル">
+              <div class="card-body">
+                <span class="kicker">14 Abstract</span>
+                <h3>抽象アニメーション</h3>
+                <p>形、色、変形、流れで、歌詞ではなく音の構造や心理を表す。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 物語を捨てても曲の進行を画面に持たせたい時。</li>
+                  <li><b>罠:</b> サイケ風の模様だけで、セクションごとの判断がない。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/15-handmade-animation.png" alt="手触りのあるアニメーションのサンプル">
+              <div class="card-body">
+                <span class="kicker">15 Handmade</span>
+                <h3>手触りアニメーション</h3>
+                <p>紙、糸、切り絵、線、テープ、ストップモーションなど、制作の痕跡を残す。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> 物理的な不安定さ、手作業、記憶の断片を見せたい時。</li>
+                  <li><b>罠:</b> かわいい工作風になり、映像設計の厳しさが落ちる。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/16-fine-art-installation.png" alt="美術史とインスタレーション語彙のサンプル">
+              <div class="card-body">
+                <span class="kicker">16 Fine Art</span>
+                <h3>美術史・インスタレーション</h3>
+                <p>彫刻、展示、光、投影、空間配置、身体性をMVの中心に置く。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> ストーリーより、鑑賞行為や空間の変化を主役にしたい時。</li>
+                  <li><b>罠:</b> 有名作家風の引用や、展示室っぽさだけで終わる。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/17-worldbuilding-environment.png" alt="環境と世界観設計のサンプル">
+              <div class="card-body">
+                <span class="kicker">17 World</span>
+                <h3>環境・世界観設計</h3>
+                <p>都市、自然、人工構造、内装、スケール、環境条件を組み合わせて世界の法則を作る。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> MVの中でしか成立しない場所や社会の手触りを作りたい時。</li>
+                  <li><b>罠:</b> 観光映像、災害っぽい背景、実在ロケの借景で止まる。</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card">
+              <img src="mv-visual-vocabulary-assets/18-anti-cliche.png" alt="アンチクリシェ設計のサンプル">
+              <div class="card-body">
+                <span class="kicker">18 Anti-Cliche</span>
+                <h3>アンチクリシェ設計</h3>
+                <p>定番表現を検出し、制限、反転、置換、欠落によって新しいルールへ変換する。</p>
+                <ul class="meta-list">
+                  <li><b>使う時:</b> アイデアがジャンルの初期値へ戻ってしまう時。</li>
+                  <li><b>罠:</b> 奇抜さだけを足して、曲固有の必然性が消える。</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="territories" class="territory-map">
+          <div class="section-head">
+            <div>
+              <h2>領域マップ</h2>
+              <p class="note">コンセプトの候補を出す前に、どの領域を探索したかを表で確認します。ここにない案は無効ではありませんが、ここを見ずに案を閉じると、実写や作りやすい言葉へ偏りやすくなります。</p>
+            </div>
+          </div>
+
+          <details id="territory-concept-form" open>
+            <summary>Concept Form: 映像の形式</summary>
+            <div class="details-body table-wrap">
+              <table>
+                <thead>
+                  <tr><th>実例</th><th>領域</th><th>何をするか</th><th>検索語の例</th><th>失敗しやすい罠</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-01-narrative-short.png" alt="ナラティブ短編の実例画像" loading="lazy"></td><td>ナラティブ短編</td><td>人物、因果、場面展開で曲を運ぶ。</td><td><span class="tag">music video narrative treatment</span><span class="tag">short film music video concept</span></td><td>歌詞説明になり、普通の短編に曲を貼っただけになる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-02-concept-led.png" alt="コンセプト主導の実例画像" loading="lazy"></td><td>コンセプト主導</td><td>1つの形式ルールで全体を貫く。</td><td><span class="tag">non narrative music video concept</span></td><td>アイデアが一発芸で終わり、展開しない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-03-performance-led.png" alt="パフォーマンス主導の実例画像" loading="lazy"></td><td>パフォーマンス主導</td><td>歌唱、演奏、身体、儀式を中心に置く。</td><td><span class="tag">performance art music video</span></td><td>歌う人を置いただけの部屋やステージになる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-04-choreography-movement.png" alt="振付・ムーブメントの実例画像" loading="lazy"></td><td>振付・ムーブメント</td><td>反復、ずれ、蓄積、対位法で身体を構造にする。</td><td><span class="tag">movement direction music video</span></td><td>振付が飾りになり、編集や歌と接続しない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-05-process-system.png" alt="プロセス・システムの実例画像" loading="lazy"></td><td>プロセス・システム</td><td>機械、作業、ワンショット、変換ルールを見せる。</td><td><span class="tag">process based music video</span></td><td>仕組みは面白いが、感情が乗らない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-06-durational-installation.png" alt="持続・インスタレーションの実例画像" loading="lazy"></td><td>持続・インスタレーション</td><td>空間や行為を観察し、反復と時間を見せる。</td><td><span class="tag">durational music video</span></td><td>静的すぎて曲の圧力が落ちる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-07-visualizer.png" alt="ビジュアライザーの実例画像" loading="lazy"></td><td>ビジュアライザー</td><td>音量、周波数、オンセットなどを形や色に変換する。</td><td><span class="tag">audio reactive music video</span></td><td>背景映像になり、曲の転回が見えない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-08-lyrics-typography.png" alt="歌詞・タイポグラフィの実例画像" loading="lazy"></td><td>歌詞・タイポグラフィ</td><td>言葉を空間、物質、リズムとして扱う。</td><td><span class="tag">kinetic typography music video</span></td><td>字幕やカラオケ画面に寄る。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-09-interactive.png" alt="インタラクティブの実例画像" loading="lazy"></td><td>インタラクティブ</td><td>視聴者操作、Web、分岐、生成で映像を変える。</td><td><span class="tag">interactive music video</span></td><td>技術デモになり、絵の強さが落ちる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-10-archive-found-footage.png" alt="アーカイブ・発見映像の実例画像" loading="lazy"></td><td>アーカイブ・発見映像</td><td>既存映像や記録を再文脈化する。</td><td><span class="tag">found footage music video</span></td><td>懐古的な寄せ集めで終わる。権利も要確認。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/cf-11-bizarre-anti-beauty.png" alt="奇妙・反美麗・低俗美の実例画像" loading="lazy"></td><td>奇妙・反美麗・低俗美</td><td>不快、過剰、滑稽、粗さを意図的に使う。</td><td><span class="tag">bizarre music video</span><span class="tag">trash aesthetic music video</span></td><td>ただのランダムなショック表現になる。</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <details id="territory-medium">
+            <summary>Medium: 作り方と媒体</summary>
+            <div class="details-body table-wrap">
+              <table>
+                <thead>
+                  <tr><th>実例</th><th>領域</th><th>何をするか</th><th>検索語の例</th><th>失敗しやすい罠</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-01-live-action-production-design.png" alt="実写プロダクションデザインの実例画像" loading="lazy"></td><td>実写プロダクションデザイン</td><td>セット、衣装、小道具、実用光で世界を作る。</td><td><span class="tag">music video production design</span></td><td>きれいな部屋に人物を置くだけ。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-02-miniature-diorama.png" alt="ミニチュア・ジオラマの実例画像" loading="lazy"></td><td>ミニチュア・ジオラマ</td><td>小さな世界、模型、スケール差を使う。</td><td><span class="tag">miniature set music video</span></td><td>かわいい工作に留まり、曲のスケールが出ない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-03-theatrical-tableau.png" alt="劇場・タブローの実例画像" loading="lazy"></td><td>劇場・タブロー</td><td>幕、書き割り、スポット、仮面、静止構図。</td><td><span class="tag">theatrical music video art direction</span></td><td>舞台練習の記録に見える。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-04-stop-motion.png" alt="ストップモーションの実例画像" loading="lazy"></td><td>ストップモーション</td><td>物体、紙、人形、粘土をコマ撮りで動かす。</td><td><span class="tag">stop motion music video</span></td><td>動くこと自体が目的になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-05-cutout-collage.png" alt="切り絵・コラージュの実例画像" loading="lazy"></td><td>切り絵・コラージュ</td><td>紙、写真、布、アーカイブを層にする。</td><td><span class="tag">cutout animation music video</span></td><td>ムードボードの寄せ集めになる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-06-handdrawn-rotoscope.png" alt="手描き・ロトスコープの実例画像" loading="lazy"></td><td>手描き・ロトスコープ</td><td>実写の身体時間と線の揺れを混ぜる。</td><td><span class="tag">rotoscope music video</span></td><td>映像にフィルターをかけただけに見える。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-07-3dcg-virtual-world.png" alt="3DCG・仮想世界の実例画像" loading="lazy"></td><td>3DCG・仮想世界</td><td>物理的に不可能なカメラ、空間、シミュレーションを使う。</td><td><span class="tag">3D animated music video</span></td><td>汎用的なゲーム映像やCGデモになる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-08-motion-graphics.png" alt="モーショングラフィックスの実例画像" loading="lazy"></td><td>モーショングラフィックス</td><td>図形、記号、グリッド、タイミングを映像化する。</td><td><span class="tag">abstract graphic music video</span></td><td>広告バンパーやスクリーンセーバーに見える。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-09-generative-procedural.png" alt="生成・プロシージャルの実例画像" loading="lazy"></td><td>生成・プロシージャル</td><td>ルール、粒子、波形、パラメータで変化を作る。</td><td><span class="tag">generative music video system</span></td><td>無限変化はあるが編集判断がない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-10-projection-light-installation.png" alt="投影・ライトインスタレーションの実例画像" loading="lazy"></td><td>投影・ライトインスタレーション</td><td>建築、身体、布、彫刻を映像面にする。</td><td><span class="tag">projection mapping music video</span></td><td>スペクタクルだけで焦点がない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-11-fashion-beauty.png" alt="ファッション・ビューティの実例画像" loading="lazy"></td><td>ファッション・ビューティ</td><td>衣装、髪、メイク、姿勢、質感でコンセプトを担う。</td><td><span class="tag">fashion music video art direction</span></td><td>どの曲にも合う美しい写真になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-12-practical-special-effects.png" alt="実用特殊効果の実例画像" loading="lazy"></td><td>実用特殊効果</td><td>鏡、逆再生、強制遠近、光学トリックを使う。</td><td><span class="tag">in camera effects music video</span></td><td>トリック集で、感情の流れがない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-13-screen-surveillance-ui.png" alt="スクリーン・監視・UIの実例画像" loading="lazy"></td><td>スクリーン・監視・UI</td><td>CCTV、端末、放送、分割画面、信号を使う。</td><td><span class="tag">screenlife music video</span></td><td>安いUI再現や読めない画面になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/md-14-science-diagram.png" alt="科学・図解の実例画像" loading="lazy"></td><td>科学・図解</td><td>波形、図表、地図、機械、医療図を映像化する。</td><td><span class="tag">scientific visual music video</span></td><td>曲を説明しすぎ、映画として弱い。</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <details id="territory-visual-language">
+            <summary>Visual Language: 美術・記号・抽象度</summary>
+            <div class="details-body table-wrap">
+              <table>
+                <thead>
+                  <tr><th>実例</th><th>領域</th><th>何をするか</th><th>検索語の例</th><th>失敗しやすい罠</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-01-surrealism.png" alt="シュルレアリスムの実例画像" loading="lazy"></td><td>シュルレアリスム</td><td>夢、置換、不可能な並置で内面を見せる。</td><td><span class="tag">surrealist music video</span></td><td>理由のない変な絵になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-02-symbolism.png" alt="シンボリズムの実例画像" loading="lazy"></td><td>シンボリズム</td><td>反復する物、色、身振りに意味を持たせる。</td><td><span class="tag">visual symbolism music video</span></td><td>記号が多すぎて一覧表になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-03-minimalism.png" alt="ミニマリズムの実例画像" loading="lazy"></td><td>ミニマリズム</td><td>少数要素、反復、余白、小さな変化に賭ける。</td><td><span class="tag">minimalist music video</span></td><td>空っぽを洗練と誤認する。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-04-psychedelia.png" alt="サイケデリアの実例画像" loading="lazy"></td><td>サイケデリア</td><td>歪み、色スペクトル、変形、内的幻覚を使う。</td><td><span class="tag">psychedelic music video art direction</span></td><td>万華鏡や派手色だけになる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-05-expressionism.png" alt="表現主義の実例画像" loading="lazy"></td><td>表現主義</td><td>歪んだセット、影、色、身振りで感情を外在化する。</td><td><span class="tag">expressionist music video</span></td><td>大げさな暗さへ傾く。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-06-brutalism-industrial.png" alt="ブルータリズム・産業の実例画像" loading="lazy"></td><td>ブルータリズム・産業</td><td>コンクリート、構造物、格子、制度感を使う。</td><td><span class="tag">industrial art direction music video</span></td><td>冷たい建築が曲から浮く。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-07-pop-art-kitsch.png" alt="ポップアート・キッチュの実例画像" loading="lazy"></td><td>ポップアート・キッチュ</td><td>消費物、フラット色、人工性、演劇的過剰を使う。</td><td><span class="tag">pop art music video</span></td><td>皮肉が感情を食う。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-08-ritual-gothic.png" alt="儀式・ゴシックの実例画像" loading="lazy"></td><td>儀式・ゴシック</td><td>仮面、行列、供物、反復行為を使う。</td><td><span class="tag">ritual music video art direction</span></td><td>借り物の宗教感やジャンル衣装になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-09-anatomical-body.png" alt="身体・解剖の実例画像" loading="lazy"></td><td>身体・解剖</td><td>口、手、喉、皮膚、器官、スキャンを使う。</td><td><span class="tag">anatomical music video visual</span></td><td>浅いグロテスクさが曲を覆う。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-10-organic-ecological.png" alt="有機・生態の実例画像" loading="lazy"></td><td>有機・生態</td><td>植物、腐敗、増殖、潮汐、菌類、季節を扱う。</td><td><span class="tag">ecological music video visuals</span></td><td>自然風景の壁紙になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-11-mechanical-automata.png" alt="機械・オートマタの実例画像" loading="lazy"></td><td>機械・オートマタ</td><td>機械、時計、反復装置、組立ラインで心理を表す。</td><td><span class="tag">automata music video</span></td><td>時計仕掛けの比喩が直球すぎる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-12-glitch-analog-media.png" alt="グリッチ・アナログ媒体の実例画像" loading="lazy"></td><td>グリッチ・アナログ媒体</td><td>テープ劣化、CRT、圧縮、ミストラッキングを使う。</td><td><span class="tag">glitch music video analog tape</span></td><td>ノイズで弱いコンセプトを隠す。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-13-retro-future.png" alt="レトロフューチャーの実例画像" loading="lazy"></td><td>レトロフューチャー</td><td>古い未来、アナログ機器、仮想端末を使う。</td><td><span class="tag">retro futurist music video</span></td><td>汎用サイバーパンクに流れる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-14-outsider-folk.png" alt="民芸・アウトサイダーの実例画像" loading="lazy"></td><td>民芸・アウトサイダー</td><td>粗い工作、素朴画、家庭素材、奉納物を使う。</td><td><span class="tag">outsider art music video</span></td><td>雑なかわいさや貧乏演出になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-15-documentary-realism.png" alt="ドキュメンタリーリアリズムの実例画像" loading="lazy"></td><td>ドキュメンタリーリアリズム</td><td>観察、手持ち、実在空間、非俳優を使う。</td><td><span class="tag">verite music video</span></td><td>現実を撮るだけで、曲の内的論理が弱まる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-16-game-avatar.png" alt="ゲーム・アバターの実例画像" loading="lazy"></td><td>ゲーム・アバター</td><td>仮想身体、HUD風論理、ゲーム物理を使う。</td><td><span class="tag">machinima music video</span></td><td>ゲームトレーラーや技術デモに見える。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-17-sacred-icon.png" alt="聖像・宗教画の実例画像" loading="lazy"></td><td>聖像・宗教画</td><td>祭壇、後光、供物、遺物、正面性を引用する。</td><td><span class="tag">sacred art music video</span></td><td>根拠のない荘厳さになる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-18-optical-impossible-space.png" alt="錯視・不可能空間の実例画像" loading="lazy"></td><td>錯視・不可能空間</td><td>強制遠近、アナモルフォーズ、鏡、Escher的空間。</td><td><span class="tag">optical illusion music video</span></td><td>パズルとしては賢いが感情が薄い。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-19-color-field-abstract.png" alt="色面・抽象絵画の実例画像" loading="lazy"></td><td>色面・抽象絵画</td><td>色塊、染み、塗り、流動で心理を作る。</td><td><span class="tag">color field music video</span></td><td>きれいな色面で編集機能がない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/vl-20-data-waveform-notation.png" alt="データ・波形・記譜の実例画像" loading="lazy"></td><td>データ・波形・記譜</td><td>スペクトログラム、信号、譜面、点群で音を扱う。</td><td><span class="tag">waveform music video</span></td><td>理科教材っぽくなり、映像の強度が落ちる。</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <details id="territory-art-levers">
+            <summary>Art Department Levers: 実制作で操作する変数</summary>
+            <div class="details-body table-wrap">
+              <table>
+                <thead>
+                  <tr><th>実例</th><th>変数</th><th>見るべきこと</th><th>検索語の例</th><th>よくある失敗</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-01-set-location.png" alt="セット・ロケーションの実例画像" loading="lazy"></td><td>セット・ロケーション</td><td>部屋、街、舞台、空白、身体内、画面内などの世界ルール。</td><td><span class="tag">music video set design references</span></td><td>便利な場所を選ぶだけ。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-02-props-motifs.png" alt="小道具・モチーフの実例画像" loading="lazy"></td><td>小道具・モチーフ</td><td>反復して意味が変わる物の設計。</td><td><span class="tag">production design props music video</span></td><td>小物が多いが、必要な物がない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-03-wardrobe-hair-makeup.png" alt="衣装・髪・メイクの実例画像" loading="lazy"></td><td>衣装・髪・メイク</td><td>輪郭、社会性、変形、損傷、可動域。</td><td><span class="tag">music video wardrobe makeup art direction</span></td><td>服が良いだけで、映像のルールと結びつかない。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-04-color-design.png" alt="色彩設計の実例画像" loading="lazy"></td><td>色彩設計</td><td>曲の区間ごとの色温度、彩度、アクセント。</td><td><span class="tag">music video color palette treatment</span></td><td>1つの雰囲気が最初から最後まで続く。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-05-lighting-logic.png" alt="照明ロジックの実例画像" loading="lazy"></td><td>照明ロジック</td><td>実用光、投影、逆光、暗部、露出、ストロボ。</td><td><span class="tag">music video lighting design visual concept</span></td><td>ムード照明で終わる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-06-material-texture.png" alt="素材・質感の実例画像" loading="lazy"></td><td>素材・質感</td><td>紙、布、金属、粘土、粉、ガラス、ピクセル、テープ。</td><td><span class="tag">material based animation music video</span></td><td>表面だけの質感になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-07-camera-lens.png" alt="カメラ・レンズの実例画像" loading="lazy"></td><td>カメラ・レンズ</td><td>距離、画角、歪み、主観、固定、手持ち、空間圧縮。</td><td><span class="tag">music video cinematography treatment camera movement</span></td><td>ジャンルの既定ショットを流用する。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-08-editing-grammar.png" alt="編集文法の実例画像" loading="lazy"></td><td>編集文法</td><td>反復、遅延、逆再生、マッチカット、時間伸縮。</td><td><span class="tag">music video editing concept rhythm</span></td><td>編集が素材の後処理になる。</td></tr>
+                  <tr><td class="territory-thumb"><img src="mv-visual-vocabulary-assets/territories/al-09-typographic-graphic-layer.png" alt="文字・グラフィック層の実例画像" loading="lazy"></td><td>文字・グラフィック層</td><td>文字、記号、UI、線、図形を画面内の物質にする。</td><td><span class="tag">typographic music video treatment</span></td><td>歌詞字幕を重ねただけになる。</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </section>
+
+        <section id="sources">
+          <div class="section-head">
+            <div>
+              <h2>参照ソース</h2>
+              <p class="note">この資料は外部のMV賞カテゴリ、治療案テンプレート、映像技法、美術領域を起点に整理しています。実案件で精密な引用や最新版が必要な場合は、各リンクを再確認してください。</p>
+            </div>
+          </div>
+
+          <div class="source-grid">
+            <div class="source"><b><a href="https://www.dandad.org/awards/d-ad-awards/categories/music-videos">D&amp;AD Music Videos</a></b><span>MVカテゴリとクラフト領域の参照。</span></div>
+            <div class="source"><b><a href="https://www.berlinmva.com/main/categories/">Berlin Music Video Awards Categories</a></b><span>アニメーション、実験、奇妙、AI映像などのカテゴリ参照。</span></div>
+            <div class="source"><b><a href="https://factorportalprod.blob.core.windows.net/portal/Documents/Updates/FACTOR_Video_Treatment_Guide.pdf">FACTOR Video Treatment Guide</a></b><span>カメラ、照明、編集、衣装、振付、ビジュアルサンプルの整理。</span></div>
+            <div class="source"><b><a href="https://www.onassemble.com/template-library/music-video-treatment-template">Assemble Music Video Treatment Template</a></b><span>治療案の構造、色、スタイル、制作美術、ポストの参照。</span></div>
+            <div class="source"><b><a href="https://en.wikipedia.org/wiki/Cutout_animation">Cutout Animation</a></b><span>切り絵、写真、素材の混成アニメーションの背景。</span></div>
+            <div class="source"><b><a href="https://en.wikipedia.org/wiki/Take_On_Me">a-ha "Take On Me"</a></b><span>ロトスコープと実写ハイブリッドMVの代表例。</span></div>
+            <div class="source"><b><a href="https://www.commarts.com/exhibit/lifecycles-music-video">Communication Arts: Lifecycles Music Video</a></b><span>タイポグラフィや生成的な歌詞表現の参照。</span></div>
+            <div class="source"><b><a href="https://en.wikipedia.org/wiki/Projection_mapping">Projection Mapping</a></b><span>物理空間を映像面化する技法の参照。</span></div>
+            <div class="source"><b><a href="https://www.behance.net/gallery/103066263/Battles-Tonto-Music-Video">Battles "Tonto" Music Video</a></b><span>ライトアートやインスタレーション的MVの参照。</span></div>
+            <div class="source"><b><a href="https://en.wikipedia.org/wiki/Psychedelic_art">Psychedelic Art</a></b><span>歪み、スペクトル、内的視覚の語彙参照。</span></div>
+          </div>
+        </section>
+
+        <section id="protocol">
+          <div class="section-head">
+            <div>
+              <h2>活用プロトコル</h2>
+              <p class="note">案出しでは、最初から完成案に絞るのではなく、まず視覚領域を広げる。検索、分担、カバレッジ確認、短縮候補化の順番を固定します。</p>
+            </div>
+            <div class="callout">
+              <p><strong>最低ライン:</strong> 実写、アニメーション、グラフィック、象徴、美術史、抽象または生成系のうち、少なくとも6系統を初回スプレッドに入れる。4系統未満ならレビューに進めません。</p>
+            </div>
+          </div>
+
+          <div class="rule-grid">
+            <div class="rule"><b>1. Territory Scan</b><span>楽曲入力を見る前後で、使えそうな視覚領域を8から12個選ぶ。歌詞の単語だけを起点にしない。</span></div>
+            <div class="rule"><b>2. Web Research</b><span>担当領域ごとに検索領域を分け、外部参照を必須化する。手元の思いつきだけの提案は採用しない。</span></div>
+            <div class="rule"><b>3. Concept Spread</b><span>最初は12個以上の短い種を表で出す。同じ部屋、同じ人物、同じ実写文法に寄せない。</span></div>
+            <div class="rule"><b>4. Coverage Check</b><span>媒体、抽象度、主体、空間、時間論理、感情文法が偏っていないかを見る。</span></div>
+            <div class="rule"><b>5. Anti-Cliche Pass</b><span>ありがちな失恋記号、空室、反射、夜景、情緒的なスローを検出して、拒否または反転する。</span></div>
+            <div class="rule"><b>6. Shortlist</b><span>3から5案に絞るのは、領域の幅が見えたあと。作りやすさだけで先に落とさない。</span></div>
+            <div class="rule"><b>7. Concept Art</b><span>短縮候補ごとに絵を作る。画像生成結果を探索範囲の代用品にしない。</span></div>
+            <div class="rule"><b>8. Review Gate</b><span>探索済み領域、未探索領域、参照元、採用理由、捨てた罠をセットで確認する。</span></div>
+          </div>
+        </section>
+
+        <section id="assignments">
+          <div class="section-head">
+            <div>
+              <h2>調査分担例</h2>
+              <p class="note">複数人で調査する場合は、同じ問いを別々に考えるのではなく、検索領域と出力責任を分ける。各担当は検索語、参照ソース、追加された視覚領域、3から5個の種、アンチクリシェを記録します。</p>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>担当</th><th>検索フォーカス</th><th>必須出力</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Treatment / Awards Scout</td><td>MV賞、カテゴリ、近年のクラフト分類、治療案テンプレート。</td><td>MVで認められている形式と、見落とされやすいクラフト領域。</td></tr>
+                <tr><td>Animation / Handmade Scout</td><td>ストップモーション、切り絵、粘土、ロトスコープ、コラージュ、発見映像。</td><td>非実写領域、素材制約、実制作上の注意。</td></tr>
+                <tr><td>Fine Art / Installation Scout</td><td>シュルレアリスム、シンボリズム、ミニマリズム、映像芸術、投影、光。</td><td>ギャラリー、儀式、象徴、空間システムの種。</td></tr>
+                <tr><td>Graphic / Type / Motion Scout</td><td>キネティックタイプ、波形、データ、生成、音響反応、Web Audio。</td><td>人物や部屋が主役でなくても成立するグラフィック案。</td></tr>
+                <tr><td>Body / Fashion Scout</td><td>振付、ジェスチャー、口、手、衣装、メイク、耐久パフォーマンス。</td><td>デフォルト歌唱ではない身体主導の案。</td></tr>
+                <tr><td>Anti-Boring Scout</td><td>ジャンルの定番、失恋記号、反射、夜景、AI動画臭、過剰な美麗化。</td><td>拒否リスト、反転ルール、提案ごとの危険箇所。</td></tr>
+                <tr><td>Feasibility Scout</td><td>生成AI、編集可能性、キャラ一貫性、素材分解、撮影難易度。</td><td>面白い案が出た後のリスク表。初期探索を殺さない。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="qa">
+          <div class="section-head">
+            <div>
+              <h2>品質チェック</h2>
+              <p class="note">提案を共有する前に、幅と汚染の両方を点検します。特に画像が強い場合、画像生成結果がそのまま方向性を狭めることがあります。</p>
+            </div>
+          </div>
+
+          <div class="qa">
+            <div><b>幅のチェック</b><p>6系統以上の領域があるか。同じ部屋、同じ人物、同じ実写文法へ偏っていないか。</p></div>
+            <div><b>汚染のチェック</b><p>特定の楽曲、人物、既存MV、歌詞、タイトル、物語設定が画像や表現語彙に混ざっていないか。</p></div>
+            <div><b>罠のチェック</b><p>既視感の強い失恋記号、空室、反射、夜景、情緒的なスロー、生成AI由来の均質な美麗さに寄っていないか。</p></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <dialog class="image-modal" id="image-modal" aria-labelledby="image-modal-title" aria-describedby="image-modal-description">
+    <div class="modal-shell">
+      <button class="modal-close" type="button" aria-label="閉じる">×</button>
+      <button class="modal-nav prev" type="button" aria-label="前の画像">‹</button>
+      <button class="modal-nav next" type="button" aria-label="次の画像">›</button>
+      <div class="modal-frame">
+        <img id="image-modal-img" alt="">
+      </div>
+      <div class="modal-copy">
+        <h2 id="image-modal-title"></h2>
+        <p id="image-modal-description"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      const modal = document.getElementById("image-modal");
+      const modalImage = document.getElementById("image-modal-img");
+      const modalTitle = document.getElementById("image-modal-title");
+      const modalDescription = document.getElementById("image-modal-description");
+      const closeButton = modal.querySelector(".modal-close");
+      const prevButton = modal.querySelector(".modal-nav.prev");
+      const nextButton = modal.querySelector(".modal-nav.next");
+      const modalFrame = modal.querySelector(".modal-frame");
+      const viewerItems = Array.from(document.querySelectorAll(".gallery .card img, .territory-map .territory-thumb img"));
+      let currentIndex = -1;
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let pointerStartX = 0;
+      let pointerStartY = 0;
+
+      const text = (node) => node?.textContent.trim().replace(/\s+/g, " ") || "";
+      const closeModal = () => {
+        if (typeof modal.close === "function") {
+          modal.close();
+        } else {
+          modal.removeAttribute("open");
+          modalImage.removeAttribute("src");
+        }
+      };
+
+      const getImageContext = (image) => {
+        const card = image.closest(".card");
+        if (card) {
+          const kicker = text(card.querySelector(".kicker"));
+          const title = text(card.querySelector("h3")) || image.alt || "画像";
+          const description = text(card.querySelector(".card-body > p")) || image.alt;
+
+          return {
+            title: kicker ? `${kicker} / ${title}` : title,
+            description,
+          };
+        }
+
+        const row = image.closest("tr");
+        if (row?.cells?.length >= 3) {
+          const title = text(row.cells[1]) || image.alt || "画像";
+          const description = text(row.cells[2]) || image.alt;
+          const trap = row.cells[4] ? text(row.cells[4]) : "";
+
+          return {
+            title,
+            description: trap ? `${description} 失敗しやすい罠: ${trap}` : description,
+          };
+        }
+
+        return {
+          title: image.alt || "画像",
+          description: image.alt || "",
+        };
+      };
+
+      const setModalImage = (index) => {
+        currentIndex = (index + viewerItems.length) % viewerItems.length;
+        const image = viewerItems[currentIndex];
+        const context = getImageContext(image);
+
+        modalImage.src = image.currentSrc || image.src;
+        modalImage.alt = image.alt || context.title;
+        modalTitle.textContent = context.title;
+        modalDescription.textContent = context.description;
+      };
+
+      const openModal = (index) => {
+        setModalImage(index);
+
+        if (typeof modal.showModal === "function") {
+          modal.showModal();
+        } else {
+          modal.setAttribute("open", "");
+        }
+
+        closeButton.focus();
+      };
+
+      const showRelativeImage = (offset) => {
+        if (currentIndex < 0 || viewerItems.length === 0) {
+          return;
+        }
+
+        setModalImage(currentIndex + offset);
+      };
+
+      const handleSwipe = (startX, startY, endX, endY) => {
+        const deltaX = endX - startX;
+        const deltaY = endY - startY;
+
+        if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+          showRelativeImage(deltaX < 0 ? 1 : -1);
+        }
+      };
+
+      viewerItems.forEach((image, index) => {
+        const context = getImageContext(image);
+
+        image.setAttribute("role", "button");
+        image.setAttribute("tabindex", "0");
+        image.setAttribute("aria-label", `${context.title}を拡大表示`);
+
+        image.addEventListener("click", () => openModal(index));
+        image.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openModal(index);
+          }
+        });
+      });
+
+      closeButton.addEventListener("click", closeModal);
+      prevButton.addEventListener("click", () => showRelativeImage(-1));
+      nextButton.addEventListener("click", () => showRelativeImage(1));
+
+      document.addEventListener("keydown", (event) => {
+        if (!modal.open) {
+          return;
+        }
+
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          showRelativeImage(-1);
+        }
+
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          showRelativeImage(1);
+        }
+      });
+
+      if ("PointerEvent" in window) {
+        modalFrame.addEventListener("pointerdown", (event) => {
+          pointerStartX = event.clientX;
+          pointerStartY = event.clientY;
+          try {
+            modalFrame.setPointerCapture?.(event.pointerId);
+          } catch {
+            // Synthetic pointer events do not always create a capturable pointer.
+          }
+        });
+
+        modalFrame.addEventListener("pointerup", (event) => {
+          handleSwipe(pointerStartX, pointerStartY, event.clientX, event.clientY);
+          try {
+            modalFrame.releasePointerCapture?.(event.pointerId);
+          } catch {
+            // Ignore release attempts for pointers that were not captured.
+          }
+        });
+      } else {
+        modalFrame.addEventListener("touchstart", (event) => {
+          const touch = event.changedTouches[0];
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+        }, { passive: true });
+
+        modalFrame.addEventListener("touchend", (event) => {
+          const touch = event.changedTouches[0];
+          handleSwipe(touchStartX, touchStartY, touch.clientX, touch.clientY);
+        }, { passive: true });
+      }
+
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+      modal.addEventListener("close", () => {
+        currentIndex = -1;
+        modalImage.removeAttribute("src");
+      });
+    })();
+  </script>
+</body>
+</html>
