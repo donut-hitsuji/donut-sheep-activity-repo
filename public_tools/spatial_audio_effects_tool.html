@@ -374,6 +374,29 @@
         #121519;
     }
 
+    .timeline-title-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .bpm-grid-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .bpm-grid-toggle input {
+      width: auto;
+      min-height: 0;
+      accent-color: var(--accent);
+    }
+
     .time-ruler {
       position: sticky;
       top: 0;
@@ -406,8 +429,28 @@
       min-height: 100%;
     }
 
+    .bpm-grid-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bpm-grid-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(55, 183, 166, 0.22);
+    }
+
+    .bpm-grid-line.bar {
+      background: rgba(242, 184, 75, 0.42);
+    }
+
     .timeline-row {
       position: relative;
+      z-index: 1;
       height: var(--track-row-h);
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
@@ -469,10 +512,26 @@
       border: 1px dashed rgba(255,255,255,0.32);
       border-radius: 5px;
       background: rgba(242,184,75,0.08);
-      pointer-events: none;
+      color: #f8dfaa;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: grab;
+      pointer-events: auto;
+      z-index: 2;
     }
 
-    .event-handle {
+    .section-range-block.selected {
+      outline: 2px solid #fff3c4;
+      outline-offset: 1px;
+    }
+
+    .event-handle,
+    .section-handle {
       position: absolute;
       top: 0;
       width: 7px;
@@ -481,11 +540,13 @@
       cursor: ew-resize;
     }
 
-    .event-handle.left {
+    .event-handle.left,
+    .section-handle.left {
       left: 0;
     }
 
-    .event-handle.right {
+    .event-handle.right,
+    .section-handle.right {
       right: 0;
     }
 
@@ -827,7 +888,13 @@
     <section class="center-stack">
       <section class="timeline-section">
         <div class="panel-head">
-          <div class="panel-title">Timeline</div>
+          <div class="timeline-title-bar">
+            <div class="panel-title">Timeline</div>
+            <label class="bpm-grid-toggle" title="BPMに合わせた拍グリッドを表示し、イベントの開始/終了を拍へ吸着します。">
+              <input id="bpmGridToggle" type="checkbox">
+              BPMグリッド
+            </label>
+          </div>
           <div class="button-row">
             <button id="fitDurationBtn" type="button">曲長を再計算</button>
           </div>
@@ -1140,6 +1207,10 @@
               <input id="masterGainInput" type="number" min="-24" max="12" step="0.1" value="-1">
             </div>
           </div>
+          <div class="field">
+            <label for="globalRoomAmountInput">Global Room Amount <span id="globalRoomAmountValue">1.00</span></label>
+            <input id="globalRoomAmountInput" type="range" min="0" max="2" step="0.01" value="1">
+          </div>
           <div class="form-grid">
             <div class="field">
               <label for="sectionRoomSelect">Section Room</label>
@@ -1149,6 +1220,10 @@
               <label for="sectionMasterGainInput">Section Master dB</label>
               <input id="sectionMasterGainInput" type="number" min="-24" max="12" step="0.1" placeholder="global">
             </div>
+          </div>
+          <div class="field">
+            <label for="sectionRoomAmountInput">Section Room Amount <span id="sectionRoomAmountValue">global</span></label>
+            <input id="sectionRoomAmountInput" type="range" min="0" max="2" step="0.01" value="1">
           </div>
           <div class="section-title">Global Beat Grid</div>
           <div class="form-grid">
@@ -1619,6 +1694,7 @@
       clearTracksBtn: $("#clearTracksBtn"),
       trackList: $("#trackList"),
       timelineWrap: $("#timelineWrap"),
+      bpmGridToggle: $("#bpmGridToggle"),
       timeRuler: $("#timeRuler"),
       timelineRows: $("#timelineRows"),
       playhead: $("#playhead"),
@@ -1698,8 +1774,12 @@
       deleteEventBtn: $("#deleteEventBtn"),
       roomSelect: $("#roomSelect"),
       masterGainInput: $("#masterGainInput"),
+      globalRoomAmountInput: $("#globalRoomAmountInput"),
+      globalRoomAmountValue: $("#globalRoomAmountValue"),
       sectionRoomSelect: $("#sectionRoomSelect"),
       sectionMasterGainInput: $("#sectionMasterGainInput"),
+      sectionRoomAmountInput: $("#sectionRoomAmountInput"),
+      sectionRoomAmountValue: $("#sectionRoomAmountValue"),
       globalBpmInput: $("#globalBpmInput"),
       globalBeatOffsetInput: $("#globalBeatOffsetInput"),
       analyzeGlobalBpmBtn: $("#analyzeGlobalBpmBtn"),
@@ -1724,6 +1804,7 @@
       activeRoomId: "studio",
       master: {
         gainDb: -1,
+        roomAmount: 1,
         limiterEnabled: false,
         clipWarningEnabled: true
       }
@@ -1737,6 +1818,7 @@
     let effectClipboard = null;
     let pendingControlHistory = false;
     let activeInspectorTab = "track";
+    let bpmGridEnabled = false;
     let spaceCreateMode = false;
     let spaceDragState = null;
 
@@ -1827,6 +1909,11 @@
       els.timeRuler.addEventListener("pointerdown", onTimeRulerPointerDown);
       els.timelineRows.addEventListener("pointerdown", onTimelinePointerDown);
       els.timelineRows.addEventListener("dblclick", onTimelineDoubleClick);
+      els.bpmGridToggle.addEventListener("change", () => {
+        bpmGridEnabled = els.bpmGridToggle.checked;
+        renderTimeline();
+        setStatus(bpmGridEnabled ? "BPMグリッドを有効にしました。" : "BPMグリッドを無効にしました。");
+      });
       els.spaceCreateEventBtn.addEventListener("click", toggleSpaceCreateMode);
       els.spaceCanvas.addEventListener("pointerdown", onSpaceCanvasPointerDown);
       window.addEventListener("pointermove", onSpaceCanvasPointerMove);
@@ -1942,9 +2029,17 @@
         project.master.gainDb = Number(els.masterGainInput.value) || 0;
       });
       els.masterGainInput.addEventListener("change", finishControlHistory);
+      els.globalRoomAmountInput.addEventListener("input", () => {
+        rememberControlHistory();
+        project.master.roomAmount = clamp(Number(els.globalRoomAmountInput.value), 0, 2);
+        els.globalRoomAmountValue.textContent = project.master.roomAmount.toFixed(2);
+      });
+      els.globalRoomAmountInput.addEventListener("change", finishControlHistory);
       els.sectionRoomSelect.addEventListener("change", updateSelectedSectionRoomMaster);
       els.sectionMasterGainInput.addEventListener("input", updateSelectedSectionRoomMaster);
       els.sectionMasterGainInput.addEventListener("change", finishControlHistory);
+      els.sectionRoomAmountInput.addEventListener("input", updateSelectedSectionRoomMaster);
+      els.sectionRoomAmountInput.addEventListener("change", finishControlHistory);
       els.globalBpmInput.addEventListener("input", updateGlobalBeatGrid);
       els.globalBeatOffsetInput.addEventListener("input", updateGlobalBeatGrid);
       els.globalBpmInput.addEventListener("change", finishControlHistory);
@@ -1998,6 +2093,7 @@
         beatOffsetSec: startSec,
         beatConfidence: null,
         roomId: "",
+        roomAmount: null,
         masterGainDb: null
       };
       project.sections.push(section);
@@ -2353,6 +2449,7 @@
         project.activeRoomId = loaded.activeRoomId || project.rooms[0]?.id || "studio";
         project.master = {
           gainDb: Number(loaded.master?.gainDb ?? -1),
+          roomAmount: clamp(Number(loaded.master?.roomAmount ?? 1), 0, 2),
           limiterEnabled: Boolean(loaded.master?.limiterEnabled),
           clipWarningEnabled: loaded.master?.clipWarningEnabled !== false
         };
@@ -2413,6 +2510,9 @@
         beatOffsetSec: section.beatOffsetSec === null || section.beatOffsetSec === undefined || section.beatOffsetSec === "" ? startSec : Math.max(0, Number(section.beatOffsetSec)),
         beatConfidence: section.beatConfidence === null || section.beatConfidence === undefined ? null : Number(section.beatConfidence),
         roomId: section.roomId || "",
+        roomAmount: section.roomAmount === null || section.roomAmount === undefined || section.roomAmount === ""
+          ? null
+          : clamp(Number(section.roomAmount), 0, 2),
         masterGainDb: section.masterGainDb === null || section.masterGainDb === undefined || section.masterGainDb === ""
           ? null
           : Number(section.masterGainDb)
@@ -2701,6 +2801,7 @@
       els.pasteEffectsBtn.disabled = !selectedLane || !effectClipboard?.events?.length;
       els.sectionRoomSelect.disabled = !hasSection;
       els.sectionMasterGainInput.disabled = !hasSection;
+      els.sectionRoomAmountInput.disabled = !hasSection;
 
       if (track) {
         els.trackNameInput.value = track.name;
@@ -2759,6 +2860,8 @@
         els.sectionBpmConfidence.textContent = section.beatConfidence == null ? "confidence -" : `confidence ${section.beatConfidence.toFixed(2)}`;
         els.sectionRoomSelect.value = section.roomId || "";
         els.sectionMasterGainInput.value = section.masterGainDb ?? "";
+        els.sectionRoomAmountInput.value = section.roomAmount ?? project.master.roomAmount ?? 1;
+        els.sectionRoomAmountValue.textContent = section.roomAmount == null ? "global" : section.roomAmount.toFixed(2);
       } else {
         els.sectionNameInput.value = "";
         els.sectionStartInput.value = 0;
@@ -2770,6 +2873,8 @@
         els.sectionBpmConfidence.textContent = "confidence -";
         els.sectionRoomSelect.value = "";
         els.sectionMasterGainInput.value = "";
+        els.sectionRoomAmountInput.value = project.master.roomAmount ?? 1;
+        els.sectionRoomAmountValue.textContent = "global";
       }
 
       els.eventTrackSelect.innerHTML = getTimelineLanes()
@@ -2808,6 +2913,8 @@
       els.sectionRoomSelect.innerHTML = `<option value="">Follow Global</option>${project.rooms.map((room) => `<option value="${room.id}">${escapeHtml(room.name)}</option>`).join("")}`;
       els.roomSelect.value = project.activeRoomId;
       els.masterGainInput.value = project.master.gainDb;
+      els.globalRoomAmountInput.value = project.master.roomAmount ?? 1;
+      els.globalRoomAmountValue.textContent = Number(project.master.roomAmount ?? 1).toFixed(2);
       els.globalBpmInput.value = project.bpm ?? "";
       els.globalBeatOffsetInput.value = project.beatOffsetSec ?? 0;
       els.globalBpmConfidence.textContent = project.beatConfidence == null ? "confidence -" : `confidence ${project.beatConfidence.toFixed(2)}`;
@@ -2833,6 +2940,7 @@
       const duration = Math.max(project.durationSec, 1);
       const minWidth = Math.max(900, Math.ceil(duration * 18));
       const lanes = getTimelineLanes();
+      els.bpmGridToggle.checked = bpmGridEnabled;
       els.timeRuler.style.width = `${minWidth}px`;
       els.timelineRows.style.width = `${minWidth}px`;
       els.timelineRows.style.height = `${Math.max(lanes.length * 46, 160)}px`;
@@ -2845,10 +2953,16 @@
       }
       els.timeRuler.innerHTML = ticks;
 
+      const gridLayer = bpmGridEnabled ? renderBpmGridLayer(duration) : "";
       const overlapIds = findOverlappingEventIds();
       const rows = lanes.map((lane) => {
+        const sectionSelected = lane.type === "section" && lane.id === selectedTrackId && !selectedEventId ? "selected" : "";
         const sectionRange = lane.type === "section" ? `
-          <div class="section-range-block" style="left:${(lane.startSec / duration) * 100}%;width:${Math.max(0.2, ((lane.endSec - lane.startSec) / duration) * 100)}%;border-color:${lane.color};"></div>
+          <div class="section-range-block ${sectionSelected}" data-section-id="${lane.id}" style="left:${(lane.startSec / duration) * 100}%;width:${Math.max(0.2, ((lane.endSec - lane.startSec) / duration) * 100)}%;border-color:${lane.color};">
+            <span class="section-handle left" data-section-handle="start"></span>
+            <span>${escapeHtml(lane.name)}</span>
+            <span class="section-handle right" data-section-handle="end"></span>
+          </div>
         ` : "";
         const blocks = project.events
           .filter((event) => event.trackId === lane.id)
@@ -2879,8 +2993,18 @@
         `;
       }).join("");
 
-      els.timelineRows.innerHTML = rows || `<div class="track-empty" style="margin:12px;width:360px">音声トラックかセクションを追加するとタイムラインが表示されます。</div>`;
+      els.timelineRows.innerHTML = gridLayer + (rows || `<div class="track-empty" style="margin:12px;width:360px">音声トラックかセクションを追加するとタイムラインが表示されます。</div>`);
       positionPlayhead();
+    }
+
+    function renderBpmGridLayer(duration) {
+      const lines = getBpmGridPoints(duration)
+        .map((point) => {
+          const left = (point.time / duration) * 100;
+          return `<div class="bpm-grid-line ${point.bar ? "bar" : ""}" style="left:${left}%"></div>`;
+        })
+        .join("");
+      return `<div class="bpm-grid-layer" aria-hidden="true">${lines}</div>`;
     }
 
     function renderTransport() {
@@ -2971,6 +3095,8 @@
       section.roomId = els.sectionRoomSelect.value || "";
       const masterValue = els.sectionMasterGainInput.value;
       section.masterGainDb = masterValue === "" ? null : Number(masterValue);
+      section.roomAmount = clamp(Number(els.sectionRoomAmountInput.value), 0, 2);
+      els.sectionRoomAmountValue.textContent = section.roomAmount.toFixed(2);
       renderTrackList();
       renderReadouts();
     }
@@ -2979,6 +3105,7 @@
       rememberControlHistory();
       project.bpm = els.globalBpmInput.value === "" ? null : Number(els.globalBpmInput.value);
       project.beatOffsetSec = Math.max(0, Number(els.globalBeatOffsetInput.value) || 0);
+      if (bpmGridEnabled) renderTimeline();
       renderReadouts();
     }
 
@@ -3165,6 +3292,32 @@
 
     function onTimelinePointerDown(event) {
       const block = event.target.closest(".event-block");
+      const sectionBlock = event.target.closest(".section-range-block");
+      if (!block && sectionBlock) {
+        const section = project.sections.find((candidate) => candidate.id === sectionBlock.dataset.sectionId);
+        if (!section) return;
+        selectedTrackId = section.id;
+        selectedEventId = null;
+        syncInspectorTabForSelection("section");
+        const handle = event.target.dataset.sectionHandle;
+        dragState = {
+          id: section.id,
+          kind: "section",
+          mode: handle || "move",
+          startX: event.clientX,
+          startSec: section.startSec,
+          endSec: section.endSec,
+          originalTrackId: section.id,
+          beforeSnapshot: createSnapshot(),
+          changed: false,
+          snap: null,
+          duration: Math.max(project.durationSec, 1),
+          widthPx: els.timelineRows.getBoundingClientRect().width
+        };
+        event.preventDefault();
+        renderAll();
+        return;
+      }
       if (!block) {
         const row = event.target.closest(".timeline-row");
         if (row) {
@@ -3332,10 +3485,61 @@
       };
     }
 
+    function updateSectionDrag(event) {
+      const section = project.sections.find((candidate) => candidate.id === dragState.id);
+      if (!section) return;
+      const deltaPx = event.clientX - dragState.startX;
+      const deltaSec = (deltaPx / dragState.widthPx) * dragState.duration;
+      const minLen = 0.05;
+
+      if (dragState.mode === "start") {
+        const snapped = snapTime(dragState.startSec + deltaSec, null, section.id);
+        section.startSec = clamp(snapped.time, 0, section.endSec - minLen);
+        dragState.snap = snapped.snapped ? snapped : null;
+      } else if (dragState.mode === "end") {
+        const snapped = snapTime(dragState.endSec + deltaSec, null, section.id);
+        section.endSec = Math.max(section.startSec + minLen, snapped.time);
+        dragState.snap = snapped.snapped ? snapped : null;
+      } else {
+        const length = dragState.endSec - dragState.startSec;
+        let newStart = Math.max(0, dragState.startSec + deltaSec);
+        let newEnd = newStart + length;
+        const startSnap = snapTime(newStart, null, section.id);
+        const endSnap = snapTime(newEnd, null, section.id);
+        if (startSnap.snapped && (!endSnap.snapped || startSnap.distance <= endSnap.distance)) {
+          newStart = startSnap.time;
+          newEnd = newStart + length;
+          dragState.snap = startSnap;
+        } else if (endSnap.snapped) {
+          newEnd = endSnap.time;
+          newStart = Math.max(0, newEnd - length);
+          dragState.snap = endSnap;
+        } else {
+          dragState.snap = null;
+        }
+        section.startSec = newStart;
+        section.endSec = newEnd;
+      }
+
+      dragState.changed = Math.abs(section.startSec - dragState.startSec) > 0.0001
+        || Math.abs(section.endSec - dragState.endSec) > 0.0001;
+      selectedTrackId = section.id;
+      selectedEventId = null;
+      recalculateDuration(false);
+      renderTimeline();
+      renderInspector();
+      drawSpaceView();
+      updateSnapGuide();
+    }
+
     function onWindowPointerMove(event) {
       if (!dragState) return;
       if (dragState.mode === "create") {
         updateCreateDrag(event);
+        return;
+      }
+      if (dragState.kind === "section") {
+        updateSectionDrag(event);
         return;
       }
 
@@ -3395,7 +3599,9 @@
 
         if (dragState.changed) {
           pushHistorySnapshot(dragState.beforeSnapshot);
-          setStatus(dragState.snap ? `スナップ: ${formatTime(dragState.snap.time)}` : "イベントを移動しました。");
+          setStatus(dragState.kind === "section"
+            ? (dragState.snap ? `セクションをスナップ: ${formatTime(dragState.snap.time)}` : "セクションを移動しました。")
+            : (dragState.snap ? `スナップ: ${formatTime(dragState.snap.time)}` : "イベントを移動しました。"));
         }
         dragState = null;
         hideSnapGuide();
@@ -3417,13 +3623,13 @@
       return lanes[rowIndex]?.id || null;
     }
 
-    function snapTime(timeSec, excludeEventId) {
+    function snapTime(timeSec, excludeEventId, excludeSectionId = null) {
       const duration = Math.max(project.durationSec, 1);
       const widthPx = Math.max(1, els.timelineRows.getBoundingClientRect().width);
       const threshold = Math.min(0.25, Math.max(0.06, (12 / widthPx) * duration));
       let best = { time: Math.max(0, timeSec), snapped: false, distance: Infinity };
 
-      for (const point of getSnapPoints(excludeEventId)) {
+      for (const point of getSnapPoints(excludeEventId, bpmGridEnabled, excludeSectionId)) {
         const distance = Math.abs(point.time - timeSec);
         if (distance <= threshold && distance < best.distance) {
           best = { time: point.time, snapped: true, distance, label: point.label };
@@ -3432,10 +3638,11 @@
       return best;
     }
 
-    function getSnapPoints(excludeEventId) {
+    function getSnapPoints(excludeEventId, includeBpmGrid = false, excludeSectionId = null) {
       const points = [{ time: 0, label: "start" }];
       if (project.durationSec > 0) points.push({ time: project.durationSec, label: "end" });
       for (const section of project.sections) {
+        if (section.id === excludeSectionId) continue;
         points.push({ time: section.startSec, label: section.name });
         points.push({ time: section.endSec, label: section.name });
       }
@@ -3444,7 +3651,58 @@
         points.push({ time: event.startSec, label: event.label || event.presetId });
         points.push({ time: event.endSec, label: event.label || event.presetId });
       }
+      if (includeBpmGrid) {
+        for (const point of getBpmGridPoints(Math.max(project.durationSec, 1))) {
+          points.push({ time: point.time, label: point.bar ? "bar" : "beat" });
+        }
+      }
       return points.filter((point) => Number.isFinite(point.time) && point.time >= 0);
+    }
+
+    function getBpmGridPoints(duration = Math.max(project.durationSec, 1)) {
+      const endSec = Math.max(0, duration);
+      if (endSec <= 0) return [];
+
+      const pointMap = new Map();
+      const addPoint = (point) => {
+        if (!Number.isFinite(point.time) || point.time < -0.0001 || point.time > endSec + 0.0001) return;
+        const time = clamp(point.time, 0, endSec);
+        const key = time.toFixed(4);
+        const existing = pointMap.get(key);
+        if (!existing || point.bar) pointMap.set(key, { ...point, time });
+      };
+
+      for (const point of createBeatPoints(0, endSec, project.bpm, project.beatOffsetSec, "global")) {
+        if (!getSectionAtTime(point.time)) addPoint(point);
+      }
+
+      for (const section of project.sections) {
+        if (!section.enabled) continue;
+        const sectionStart = clamp(section.startSec, 0, endSec);
+        const sectionEnd = clamp(section.endSec, sectionStart, endSec);
+        const bpm = section.bpm ?? project.bpm;
+        const offsetSec = section.beatOffsetSec ?? project.beatOffsetSec ?? sectionStart;
+        for (const point of createBeatPoints(sectionStart, sectionEnd, bpm, offsetSec, section.name || "section")) {
+          const activeSection = getSectionAtTime(point.time);
+          if (!activeSection || activeSection.id === section.id) addPoint(point);
+        }
+      }
+
+      return Array.from(pointMap.values()).sort((a, b) => a.time - b.time);
+    }
+
+    function createBeatPoints(startSec, endSec, bpmValue, offsetValue, label) {
+      const bpm = clamp(Number(bpmValue || 120), 40, 240);
+      const beatSec = 60 / bpm;
+      const offsetSec = Number(offsetValue ?? 0) || 0;
+      const startIndex = Math.ceil((startSec - offsetSec) / beatSec - 0.000001);
+      const endIndex = Math.floor((endSec - offsetSec) / beatSec + 0.000001);
+      const points = [];
+      for (let index = startIndex; index <= endIndex; index += 1) {
+        const time = offsetSec + index * beatSec;
+        points.push({ time, label, bar: mod(index, 4) === 0 });
+      }
+      return points;
     }
 
     function updateSnapGuide() {
@@ -3556,10 +3814,11 @@
       for (const graph of playback.graphs) {
         const params = getTrackParams(graph.track, timeSec);
         const roomId = getRoomIdAtTime(timeSec);
+        const roomAmount = getRoomAmountAtTime(timeSec);
         graph.trackGain.gain.setTargetAtTime(dbToGain(params.totalGainDb), now, 0.018);
         graph.pan.pan.setTargetAtTime(clamp(params.pan, -1, 1), now, 0.018);
         for (const [id, sendGain] of graph.sendGains) {
-          sendGain.gain.setTargetAtTime(id === roomId ? clamp(params.reverbSend, 0, 1) : 0, now, 0.03);
+          sendGain.gain.setTargetAtTime(id === roomId ? clamp(params.reverbSend * roomAmount, 0, 2) : 0, now, 0.03);
         }
         graph.highShelf.gain.setTargetAtTime(clamp(params.highShelfDb, -18, 18), now, 0.03);
         graph.lowpass.frequency.setTargetAtTime(lowpassTarget(params, audioContext), now, 0.03);
@@ -3672,19 +3931,21 @@
       lowpass.connect(pan);
       pan.connect(dryGain);
       dryGain.connect(masterBus.masterGain);
+      const initial = getTrackParams(track, offsetSec);
+      const initialRoomId = getRoomIdAtTime(offsetSec);
+      const initialRoomAmount = getRoomAmountAtTime(offsetSec);
       for (const [roomId, roomBus] of masterBus.roomBuses) {
         const sendGain = ctx.createGain();
-        sendGain.gain.value = roomId === getRoomIdAtTime(offsetSec) ? track.reverbSend : 0;
+        sendGain.gain.value = roomId === initialRoomId ? clamp(initial.reverbSend * initialRoomAmount, 0, 2) : 0;
         pan.connect(sendGain);
         sendGain.connect(roomBus.input);
         sendGains.set(roomId, sendGain);
       }
 
-      const initial = getTrackParams(track, offsetSec);
       trackGain.gain.value = dbToGain(initial.totalGainDb);
       pan.pan.value = clamp(initial.pan, -1, 1);
       for (const [roomId, sendGain] of sendGains) {
-        sendGain.gain.value = roomId === getRoomIdAtTime(offsetSec) ? clamp(initial.reverbSend, 0, 1) : 0;
+        sendGain.gain.value = roomId === initialRoomId ? clamp(initial.reverbSend * initialRoomAmount, 0, 2) : 0;
       }
       highShelf.gain.value = clamp(initial.highShelfDb, -18, 18);
       lowpass.frequency.value = lowpassTarget(initial, ctx);
@@ -3712,7 +3973,7 @@
       scheduleAudioParam(graph.trackGain.gain, values, (item) => dbToGain(item.params.totalGainDb));
       scheduleAudioParam(graph.pan.pan, values, (item) => clamp(item.params.pan, -1, 1));
       for (const [roomId, sendGain] of graph.sendGains) {
-        scheduleAudioParam(sendGain.gain, values, (item) => getRoomIdAtTime(item.localTime) === roomId ? clamp(item.params.reverbSend, 0, 1) : 0);
+        scheduleAudioParam(sendGain.gain, values, (item) => getRoomIdAtTime(item.localTime) === roomId ? clamp(item.params.reverbSend * getRoomAmountAtTime(item.localTime), 0, 2) : 0);
       }
       scheduleAudioParam(graph.highShelf.gain, values, (item) => clamp(item.params.highShelfDb, -18, 18));
       scheduleAudioParam(graph.lowpass.frequency, values, (item) => lowpassTarget(item.params, ctx));
@@ -4398,6 +4659,11 @@
     function getRoomIdAtTime(timeSec) {
       const section = getSectionAtTime(timeSec);
       return section?.roomId || project.activeRoomId;
+    }
+
+    function getRoomAmountAtTime(timeSec) {
+      const section = getSectionAtTime(timeSec);
+      return clamp(Number(section?.roomAmount ?? project.master.roomAmount ?? 1), 0, 2);
     }
 
     function getMasterGainDbAtTime(timeSec) {
