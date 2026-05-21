@@ -1,0 +1,4521 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spatial Audio Effects Tool</title>
+  <link rel="canonical" href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/spatial_audio_effects_tool.html">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111315;
+      --panel: #181b1f;
+      --panel-2: #1f2329;
+      --line: #323841;
+      --line-strong: #48515d;
+      --text: #e9eef3;
+      --muted: #a8b0bb;
+      --soft: #737d8b;
+      --accent: #37b7a6;
+      --accent-2: #f2b84b;
+      --danger: #f06b64;
+      --ok: #72cf7a;
+      --input: #12161a;
+      --track-row-h: 46px;
+      font-family: "Segoe UI", "Yu Gothic UI", "Meiryo", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    body {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-width: 1180px;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    .file-button {
+      border: 1px solid var(--line-strong);
+      background: #242a31;
+      color: var(--text);
+      min-height: 30px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover,
+    .file-button:hover {
+      border-color: var(--accent);
+    }
+
+    button:disabled {
+      color: var(--soft);
+      border-color: var(--line);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--input);
+      color: var(--text);
+      border-radius: 5px;
+      min-height: 28px;
+      padding: 4px 8px;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      min-height: 0;
+    }
+
+    input[type="range"] {
+      padding: 0;
+      accent-color: var(--accent);
+    }
+
+    input[type="color"] {
+      min-height: 32px;
+      padding: 2px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 270px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #15181c;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .top-actions input[type="file"] {
+      display: none;
+    }
+
+    .top-note {
+      max-width: 250px;
+      padding-left: 8px;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .project-title-wrap {
+      display: grid;
+      grid-template-columns: 80px minmax(180px, 1fr);
+      align-items: center;
+      gap: 8px;
+      max-width: 430px;
+    }
+
+    .app-shell {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr) 340px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel {
+      min-height: 0;
+      min-width: 0;
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .inspector {
+      border-right: 0;
+      border-left: 1px solid var(--line);
+      z-index: 8;
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #171b20;
+    }
+
+    .panel-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .panel-body {
+      min-height: 0;
+      min-width: 0;
+      overflow: auto;
+      padding: 10px;
+    }
+
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .track-item {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-left-width: 5px;
+      border-radius: 6px;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .track-item.selected {
+      border-color: var(--accent);
+      border-left-color: var(--accent) !important;
+      background: #20282d;
+    }
+
+    .track-item.section-item {
+      background: #20221f;
+      border-style: dashed;
+    }
+
+    .track-item.section-item.selected {
+      background: #26281f;
+    }
+
+    .track-main {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .track-name {
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13px;
+    }
+
+    .track-meta {
+      margin-top: 2px;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .mini-toggle {
+      width: 30px;
+      min-height: 26px;
+      padding: 3px;
+      font-size: 12px;
+    }
+
+    .mini-toggle.active {
+      border-color: var(--accent-2);
+      background: #3a311f;
+      color: #ffd78a;
+    }
+
+    .track-sliders {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .track-param-control {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 58px;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .track-param-control input[type="number"] {
+      min-height: 24px;
+      padding: 2px 5px;
+      font-size: 12px;
+    }
+
+    .slider-number-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 76px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .track-empty {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      border: 1px dashed var(--line-strong);
+      padding: 14px;
+      border-radius: 6px;
+    }
+
+    .center-stack {
+      min-height: 0;
+      min-width: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: minmax(250px, 0.56fr) auto minmax(220px, 0.44fr);
+      background: #121519;
+    }
+
+    .timeline-section,
+    .space-section {
+      min-height: 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .space-section {
+      border-bottom: 0;
+    }
+
+    .transport-hub {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 42px;
+      padding: 6px 10px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #15191d;
+    }
+
+    .timeline-wrap {
+      position: relative;
+      min-height: 0;
+      min-width: 0;
+      max-width: 100%;
+      height: 100%;
+      overflow: auto;
+      background:
+        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px) 0 0 / 80px 100%,
+        #121519;
+    }
+
+    .time-ruler {
+      position: sticky;
+      top: 0;
+      height: 32px;
+      background: #171b20;
+      border-bottom: 1px solid var(--line);
+      z-index: 4;
+    }
+
+    .tick {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      border-left: 1px solid var(--line-strong);
+      color: var(--muted);
+      font-size: 11px;
+      padding-left: 4px;
+      line-height: 30px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .tick:hover {
+      color: var(--text);
+      border-left-color: var(--accent);
+    }
+
+    .timeline-rows {
+      position: relative;
+      min-height: 100%;
+    }
+
+    .timeline-row {
+      position: relative;
+      height: var(--track-row-h);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .timeline-row-label {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      width: 145px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      background: rgba(18,21,25,0.88);
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .event-block {
+      position: absolute;
+      top: 7px;
+      height: 31px;
+      border: 1px solid rgba(255,255,255,0.34);
+      border-radius: 5px;
+      color: #071012;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: grab;
+      z-index: 3;
+      min-width: 28px;
+    }
+
+    .event-block.selected {
+      outline: 2px solid #fff;
+      outline-offset: 1px;
+    }
+
+    .event-block.disabled {
+      opacity: 0.45;
+    }
+
+    .event-block.overlap {
+      box-shadow: 0 0 0 2px var(--danger) inset;
+    }
+
+    .section-range-block {
+      position: absolute;
+      top: 5px;
+      height: 36px;
+      border: 1px dashed rgba(255,255,255,0.32);
+      border-radius: 5px;
+      background: rgba(242,184,75,0.08);
+      pointer-events: none;
+    }
+
+    .event-handle {
+      position: absolute;
+      top: 0;
+      width: 7px;
+      height: 100%;
+      background: rgba(0,0,0,0.22);
+      cursor: ew-resize;
+    }
+
+    .event-handle.left {
+      left: 0;
+    }
+
+    .event-handle.right {
+      right: 0;
+    }
+
+    .playhead {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--danger);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .snap-guide {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 1px rgba(242,184,75,0.25);
+      z-index: 6;
+      pointer-events: none;
+      display: none;
+    }
+
+    .space-body {
+      display: grid;
+      grid-template-columns: 1fr 230px;
+      min-height: 0;
+      height: 100%;
+    }
+
+    #spaceCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #11171a;
+      cursor: crosshair;
+    }
+
+    .space-side {
+      border-left: 1px solid var(--line);
+      padding: 10px;
+      overflow: auto;
+      background: var(--panel);
+    }
+
+    .readout {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px;
+      font-size: 12px;
+      border-bottom: 1px solid var(--line);
+      padding: 7px 0;
+    }
+
+    .readout span:first-child {
+      color: var(--muted);
+    }
+
+    .form-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .form-grid.three {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .field.inline {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      padding-top: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      border-top: 1px solid var(--line);
+      margin-top: 2px;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .inspector-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .inspector-tab {
+      min-height: 30px;
+      padding: 4px 6px;
+    }
+
+    .inspector-tab.active {
+      border-color: var(--accent);
+      background: #1c3937;
+      color: #d9fffb;
+    }
+
+    .tab-panel {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tab-panel.active {
+      display: flex;
+    }
+
+    .space-button.active {
+      border-color: var(--accent-2);
+      background: #3a311f;
+      color: #ffd78a;
+    }
+
+    .help-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.64);
+      z-index: 30;
+      padding: 24px;
+    }
+
+    .help-overlay.open {
+      display: flex;
+    }
+
+    .help-dialog {
+      width: min(920px, calc(100vw - 48px));
+      max-height: calc(100vh - 48px);
+      overflow: auto;
+      border: 1px solid var(--line-strong);
+      background: var(--panel);
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+
+    .help-head {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #171b20;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .help-body {
+      padding: 14px;
+      display: grid;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .help-body h3 {
+      margin: 8px 0 4px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .help-body ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .danger-button {
+      border-color: #7c3b39;
+      background: #352020;
+      color: #ffd2cf;
+    }
+
+    .primary-button {
+      border-color: #2d887d;
+      background: #1c3937;
+      color: #d9fffb;
+    }
+
+    .transport {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      padding: 9px 14px;
+      background: #15181c;
+    }
+
+    .transport-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .transport-hub .transport-buttons button {
+      min-width: 70px;
+    }
+
+    .time-strip {
+      display: grid;
+      grid-template-columns: 70px 1fr 70px;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+    }
+
+    .status {
+      max-width: 460px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .status.warn {
+      color: var(--accent-2);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .meter {
+      width: 160px;
+      height: 10px;
+      border: 1px solid var(--line);
+      background: #0e1114;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--ok);
+    }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .drop-hint {
+      position: fixed;
+      inset: 14px;
+      display: none;
+      place-items: center;
+      border: 2px dashed var(--accent);
+      background: rgba(17,19,21,0.88);
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 700;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    body.dragging-audio .drop-hint {
+      display: grid;
+    }
+  </style>
+</head>
+<body>
+  <div class="drop-hint">音声ファイルをドロップして追加</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Spatial Audio Effects Tool</div>
+      <div class="brand-subtitle">stem spatial preset prototype</div>
+    </div>
+    <div class="top-actions">
+      <label class="file-button" for="audioFiles">音声追加</label>
+      <input id="audioFiles" type="file" multiple accept="audio/*,.wav,.mp3,.m4a,.flac,.ogg">
+      <label class="file-button" for="projectFile">JSON読込</label>
+      <input id="projectFile" type="file" accept="application/json,.json">
+      <button id="saveProjectBtn" type="button">JSON保存</button>
+      <button id="exportBtn" type="button" class="primary-button">WAV書出</button>
+      <button id="undoBtn" type="button" disabled>取り消し</button>
+      <button id="redoBtn" type="button" disabled>やり直し</button>
+      <span class="top-note" title="JSON読み込み後は再度音声ファイルのインポートが必要になります">JSON読込後は音声を再インポート</span>
+    </div>
+    <div class="project-title-wrap">
+      <label for="projectTitle">Project</label>
+      <input id="projectTitle" type="text" value="untitled spatial mix">
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Tracks / Sections</div>
+        <div class="panel-head-actions">
+          <button id="addSectionBtn" type="button">セクション追加</button>
+          <button id="deleteTrackBtn" type="button" class="danger-button">選択削除</button>
+          <button id="clearTracksBtn" type="button" class="danger-button">全削除</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div id="trackList" class="track-list"></div>
+      </div>
+    </aside>
+
+    <section class="center-stack">
+      <section class="timeline-section">
+        <div class="panel-head">
+          <div class="panel-title">Timeline</div>
+          <div class="button-row">
+            <button id="fitDurationBtn" type="button">曲長を再計算</button>
+          </div>
+        </div>
+        <div id="timelineWrap" class="timeline-wrap">
+          <div id="timeRuler" class="time-ruler"></div>
+          <div id="timelineRows" class="timeline-rows"></div>
+          <div id="playhead" class="playhead"></div>
+          <div id="snapGuide" class="snap-guide"></div>
+        </div>
+      </section>
+
+      <div class="transport-hub">
+        <div class="transport-buttons">
+          <button id="rewindBtn" type="button">先頭</button>
+          <button id="playBtn" type="button" class="primary-button">再生</button>
+          <button id="pauseBtn" type="button">一時停止</button>
+          <button id="stopBtn" type="button">停止</button>
+        </div>
+      </div>
+
+      <section class="space-section">
+        <div class="panel-head">
+          <div class="panel-title">2D Space View</div>
+          <div class="button-row">
+            <button id="spaceCreateEventBtn" type="button" class="space-button">イベント作成</button>
+            <div class="small-note">top view / headphones recommended</div>
+          </div>
+        </div>
+        <div class="space-body">
+          <canvas id="spaceCanvas"></canvas>
+          <div class="space-side">
+            <div class="readout"><span>Duration</span><strong id="durationReadout">0.00s</strong></div>
+            <div class="readout"><span>Sample rate</span><strong id="sampleRateReadout">-</strong></div>
+            <div class="readout"><span>Tracks</span><strong id="trackCountReadout">0</strong></div>
+            <div class="readout"><span>Sections</span><strong id="sectionCountReadout">0</strong></div>
+            <div class="readout"><span>Events</span><strong id="eventCountReadout">0</strong></div>
+            <div class="readout"><span>Room</span><strong id="roomReadout">Studio</strong></div>
+            <div class="readout"><span>Peak</span><strong id="peakReadout">not rendered</strong></div>
+            <p class="small-note">同一トラックでイベントが重なる場合、あとから作成したイベントを優先します。赤枠は重複警告です。</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <aside class="panel inspector">
+      <div class="panel-head">
+        <div class="panel-title">Inspector</div>
+      </div>
+      <div class="panel-body">
+        <div class="form-stack">
+          <div class="inspector-tabs">
+            <button class="inspector-tab active" type="button" data-inspector-tab="track">Track</button>
+            <button class="inspector-tab" type="button" data-inspector-tab="event">Event</button>
+            <button class="inspector-tab" type="button" data-inspector-tab="section">Section</button>
+          </div>
+          <div class="tab-panel active" data-tab-panel="track">
+          <div class="section-title">Track</div>
+          <div class="field">
+            <label for="trackNameInput">名前</label>
+            <input id="trackNameInput" type="text">
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="trackKindSelect">種別</label>
+              <select id="trackKindSelect"></select>
+            </div>
+            <div class="field">
+              <label for="trackMonoSelect">Mono mode</label>
+              <select id="trackMonoSelect">
+                <option value="preserve">preserve</option>
+                <option value="sum_to_mono">sum_to_mono</option>
+                <option value="left_only">left_only</option>
+                <option value="right_only">right_only</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="trackGainInput">音量 dB <span id="trackGainValue">0.0</span></label>
+              <div class="slider-number-pair">
+                <input id="trackGainInput" type="range" min="-24" max="12" step="0.1" data-reset-param="gain">
+                <input id="trackGainNumberInput" type="number" min="-24" max="12" step="0.1" data-reset-param="gain">
+              </div>
+            </div>
+            <div class="field">
+              <label for="trackPanInput">初期パン <span id="trackPanValue">0.00</span></label>
+              <div class="slider-number-pair">
+                <input id="trackPanInput" type="range" min="-1" max="1" step="0.01" data-reset-param="pan">
+                <input id="trackPanNumberInput" type="number" min="-1" max="1" step="0.01" data-reset-param="pan">
+              </div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="trackWidthInput">ステレオ幅 <span id="trackWidthValue">1.00</span></label>
+              <input id="trackWidthInput" type="range" min="0" max="1.6" step="0.01">
+            </div>
+            <div class="field">
+              <label for="trackReverbInput">リバーブ送信 <span id="trackReverbValue">0.08</span></label>
+              <input id="trackReverbInput" type="range" min="0" max="0.8" step="0.01">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="trackLowCutInput">Low cut Hz</label>
+              <input id="trackLowCutInput" type="number" min="20" max="1000" step="1">
+            </div>
+            <div class="field">
+              <label for="trackHighShelfInput">High shelf dB</label>
+              <input id="trackHighShelfInput" type="number" min="-12" max="12" step="0.1">
+            </div>
+          </div>
+          <div class="form-grid three">
+            <div class="field">
+              <label for="trackPosXInput">X</label>
+              <input id="trackPosXInput" type="number" min="-2" max="2" step="0.05">
+            </div>
+            <div class="field">
+              <label for="trackPosYInput">Y</label>
+              <input id="trackPosYInput" type="number" min="-2" max="2" step="0.05">
+            </div>
+            <div class="field">
+              <label for="trackPosZInput">Z</label>
+              <input id="trackPosZInput" type="number" min="-2" max="2" step="0.05">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field inline">
+              <label for="trackMutedInput">Muted</label>
+              <input id="trackMutedInput" type="checkbox">
+            </div>
+            <div class="field inline">
+              <label for="trackSoloInput">Solo</label>
+              <input id="trackSoloInput" type="checkbox">
+            </div>
+          </div>
+          <div class="field">
+            <label for="trackColorInput">色</label>
+            <input id="trackColorInput" type="color">
+          </div>
+          <div class="button-row">
+            <button id="copyEffectsBtn" type="button">効果コピー</button>
+            <button id="pasteEffectsBtn" type="button">効果ペースト</button>
+          </div>
+          </div>
+
+          <div class="tab-panel" data-tab-panel="section">
+          <div class="section-title">Section</div>
+          <div class="field">
+            <label for="sectionNameInput">セクション名</label>
+            <input id="sectionNameInput" type="text">
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="sectionStartInput">開始秒</label>
+              <input id="sectionStartInput" type="number" min="0" step="0.01" value="0">
+            </div>
+            <div class="field">
+              <label for="sectionEndInput">終了秒</label>
+              <input id="sectionEndInput" type="number" min="0" step="0.01" value="8">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field inline">
+              <label for="sectionEnabledInput">有効</label>
+              <input id="sectionEnabledInput" type="checkbox" checked>
+            </div>
+            <div class="field">
+              <label for="sectionColorInput">色</label>
+              <input id="sectionColorInput" type="color" value="#f2b84b">
+            </div>
+          </div>
+          <div class="section-title">Beat Grid</div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="sectionBpmInput">Section BPM</label>
+              <input id="sectionBpmInput" type="number" min="40" max="240" step="0.01" placeholder="global">
+            </div>
+            <div class="field">
+              <label for="sectionBeatOffsetInput">Beat Offset 秒</label>
+              <input id="sectionBeatOffsetInput" type="number" min="0" step="0.001" placeholder="section start">
+            </div>
+          </div>
+          <div class="button-row">
+            <button id="analyzeSectionBpmBtn" type="button">区間BPM解析</button>
+            <span class="small-note" id="sectionBpmConfidence">confidence -</span>
+          </div>
+          </div>
+
+          <div class="tab-panel" data-tab-panel="event">
+          <div class="section-title">Preset Event</div>
+          <div class="field">
+            <label for="eventTrackSelect">対象レーン</label>
+            <select id="eventTrackSelect"></select>
+          </div>
+          <div class="field">
+            <label for="presetSelect">プリセット</label>
+            <select id="presetSelect"></select>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="eventStartInput">開始秒</label>
+              <input id="eventStartInput" type="number" min="0" step="0.01" value="0">
+            </div>
+            <div class="field">
+              <label for="eventEndInput">終了秒</label>
+              <input id="eventEndInput" type="number" min="0" step="0.01" value="4">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="eventIntensityInput">強度 <span id="eventIntensityValue">0.65</span></label>
+              <input id="eventIntensityInput" type="range" min="0" max="1" step="0.01" value="0.65">
+            </div>
+            <div class="field">
+              <label for="curveSelect">曲線</label>
+              <select id="curveSelect">
+                <option value="linear">linear</option>
+                <option value="ease_in">ease_in</option>
+                <option value="ease_out">ease_out</option>
+                <option value="ease_in_out">ease_in_out</option>
+                <option value="hold">hold</option>
+                <option value="sine">sine</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="eventLabelInput">ラベル</label>
+            <input id="eventLabelInput" type="text" placeholder="例: サビ前 adlib flyby">
+          </div>
+          <div class="field inline">
+            <label for="eventEnabledInput">有効</label>
+            <input id="eventEnabledInput" type="checkbox" checked>
+          </div>
+          <div class="section-title">Beat Sync Params</div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="beatDivisionSelect">Division</label>
+              <select id="beatDivisionSelect">
+                <option value="0.5">1/2拍</option>
+                <option value="1" selected>1拍</option>
+                <option value="2">2拍</option>
+                <option value="4">1小節</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="beatPhaseInput">Phase 拍</label>
+              <input id="beatPhaseInput" type="number" step="0.01" value="0">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="beatDepthInput">Depth <span id="beatDepthValue">0.70</span></label>
+              <input id="beatDepthInput" type="range" min="0" max="1" step="0.01" value="0.7">
+            </div>
+            <div class="field">
+              <label for="beatDecayInput">Decay ms</label>
+              <input id="beatDecayInput" type="number" min="20" max="2000" step="10" value="180">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="beatCurveSelect">Beat curve</label>
+              <select id="beatCurveSelect">
+                <option value="sharp">sharp</option>
+                <option value="smooth" selected>smooth</option>
+                <option value="bounce">bounce</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="beatAlternateSelect">Alternate</label>
+              <select id="beatAlternateSelect">
+                <option value="lr" selected>left/right</option>
+                <option value="front_back">front/back</option>
+                <option value="odd">odd beats</option>
+                <option value="even">even beats</option>
+                <option value="none">none</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid three">
+            <div class="field">
+              <label for="beatBaseXInput">基準 X</label>
+              <input id="beatBaseXInput" type="number" min="-1.2" max="1.2" step="0.05" value="0">
+            </div>
+            <div class="field">
+              <label for="beatBaseYInput">基準 Y</label>
+              <input id="beatBaseYInput" type="number" min="-1.2" max="1.2" step="0.05" value="0">
+            </div>
+            <div class="field">
+              <label for="beatBaseZInput">基準 Z</label>
+              <input id="beatBaseZInput" type="number" min="-1.2" max="1.2" step="0.05" value="0.2">
+            </div>
+          </div>
+          <div class="button-row">
+            <button id="addEventBtn" type="button" class="primary-button">イベント追加</button>
+            <button id="deleteEventBtn" type="button" class="danger-button">削除</button>
+          </div>
+          </div>
+
+          <div class="section-title">Room / Master</div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="roomSelect">Global Room</label>
+              <select id="roomSelect"></select>
+            </div>
+            <div class="field">
+              <label for="masterGainInput">Global Master dB</label>
+              <input id="masterGainInput" type="number" min="-24" max="12" step="0.1" value="-1">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="sectionRoomSelect">Section Room</label>
+              <select id="sectionRoomSelect"></select>
+            </div>
+            <div class="field">
+              <label for="sectionMasterGainInput">Section Master dB</label>
+              <input id="sectionMasterGainInput" type="number" min="-24" max="12" step="0.1" placeholder="global">
+            </div>
+          </div>
+          <div class="section-title">Global Beat Grid</div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="globalBpmInput">Global BPM</label>
+              <input id="globalBpmInput" type="number" min="40" max="240" step="0.01" placeholder="unset">
+            </div>
+            <div class="field">
+              <label for="globalBeatOffsetInput">Beat Offset 秒</label>
+              <input id="globalBeatOffsetInput" type="number" min="0" step="0.001" value="0">
+            </div>
+          </div>
+          <div class="button-row">
+            <button id="analyzeGlobalBpmBtn" type="button">全体BPM解析</button>
+            <span class="small-note" id="globalBpmConfidence">confidence -</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="transport">
+    <div class="time-strip">
+      <span id="currentTimeLabel">0.00s</span>
+      <input id="seekInput" type="range" min="0" max="0" step="0.01" value="0">
+      <span id="durationLabel">0.00s</span>
+    </div>
+    <div class="button-row">
+      <div class="meter" title="最後の書き出しピーク">
+        <div id="peakMeterFill" class="meter-fill"></div>
+      </div>
+      <div id="statusText" class="status">音声ファイルを追加してください。</div>
+      <button id="helpBtn" type="button">HELP</button>
+    </div>
+  </footer>
+
+  <div id="helpOverlay" class="help-overlay" aria-hidden="true">
+    <div class="help-dialog" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="help-head">
+        <div class="panel-title" id="helpTitle">Preset / Beat Sync Help</div>
+        <button id="helpCloseBtn" type="button">閉じる</button>
+      </div>
+      <div class="help-body">
+        <section>
+          <h3>Beat Sync 共通パラメータ</h3>
+          <ul>
+            <li><strong>Division</strong>: 何拍ごとに反応するか。1拍、2拍、1小節など。</li>
+            <li><strong>Phase</strong>: 拍をどれだけずらすか。裏拍なら0.5付近。</li>
+            <li><strong>Depth</strong>: 拍同期効果の深さ。イベント強度と掛け合わせます。</li>
+            <li><strong>Decay</strong>: 拍頭から何msで戻すか。短いほどクリック的、長いほど揺れます。</li>
+            <li><strong>Beat curve</strong>: sharpは鋭く、smoothは自然、bounceは少し跳ねます。</li>
+            <li><strong>Alternate</strong>: 左右交互、前後交互、奇数/偶数拍限定など。</li>
+            <li><strong>基準 X/Y/Z</strong>: Beat Syncの定位変化やorbitの中心位置です。トラックイベントは未設定時にトラック基本位置、セクションイベントは中央付近を初期値にします。</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Beat Sync プリセット</h3>
+          <ul>
+            <li><strong>beat_pan_alternate</strong>: 拍ごとに左右へ定位を揺らします。アドリブ、SE、薄いシンセ向き。</li>
+            <li><strong>beat_gain_pulse</strong>: 拍頭だけ音量を少し押します。やりすぎるとポンピングします。</li>
+            <li><strong>beat_reverb_throw</strong>: 拍頭だけ短くリバーブ送信を上げます。装飾音や語尾向き。</li>
+            <li><strong>beat_width_pulse</strong>: 拍でステレオ幅を開閉します。コーラスやパッド向き。</li>
+            <li><strong>downbeat_focus</strong>: 小節頭だけ中央・近め・少し明瞭に寄せます。展開の頭を強調します。</li>
+            <li><strong>orbit_on_bar</strong>: 1小節周期でゆっくり周回します。主ボーカルより装飾音向き。</li>
+          </ul>
+        </section>
+        <section>
+          <h3>通常プリセット</h3>
+          <ul>
+            <li><strong>whisper_close_left/right</strong>: 耳元寄りの囁き配置。</li>
+            <li><strong>walk_in_front / walk_away_front</strong>: 前後方向の接近・遠ざかり。</li>
+            <li><strong>pass_left_to_right / pass_right_to_left / pass_behind</strong>: 横切りや背後通過。</li>
+            <li><strong>chorus_widen</strong>: コーラスやハモリを広げます。</li>
+            <li><strong>adlib_flyby</strong>: 短いアドリブやSEを横に抜けさせます。</li>
+            <li><strong>custom_space_path</strong>: 2D Space Viewで作成した独自移動。</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const TRACK_KINDS = [
+      "vocal_main",
+      "vocal_adlib",
+      "vocal_chorus",
+      "drums",
+      "bass",
+      "guitar",
+      "piano",
+      "strings",
+      "synth",
+      "fx",
+      "other"
+    ];
+
+    const ROOM_PRESETS = [
+      { id: "dry", name: "Dry", reverbType: "none", irName: null, globalWet: 0, decaySec: 0, damping: 1.0 },
+      { id: "small_room", name: "Small Room", reverbType: "convolver", irName: "generated_small_room", globalWet: 0.10, decaySec: 0.42, damping: 2.4 },
+      { id: "studio", name: "Studio", reverbType: "convolver", irName: "generated_studio", globalWet: 0.16, decaySec: 0.72, damping: 2.8 },
+      { id: "garage", name: "Garage", reverbType: "convolver", irName: "generated_garage", globalWet: 0.18, decaySec: 1.12, damping: 1.8 },
+      { id: "hall", name: "Hall", reverbType: "convolver", irName: "generated_hall", globalWet: 0.22, decaySec: 2.2, damping: 2.0 }
+    ];
+
+    const BEAT_PRESET_IDS = new Set([
+      "beat_pan_alternate",
+      "beat_gain_pulse",
+      "beat_reverb_throw",
+      "beat_width_pulse",
+      "downbeat_focus",
+      "orbit_on_bar"
+    ]);
+
+    const PRESETS = {
+      custom_space_path: {
+        label: "custom_space_path",
+        category: "Custom",
+        color: "#d9fffb",
+        render: ({ t, track, event, intensity }) => {
+          const start = event.params?.spaceStart || track.basePosition;
+          const end = event.params?.spaceEnd || start;
+          const position = {
+            x: lerp(Number(start.x ?? track.basePosition.x), Number(end.x ?? track.basePosition.x), t),
+            y: lerp(Number(start.y ?? track.basePosition.y), Number(end.y ?? track.basePosition.y), t),
+            z: lerp(Number(start.z ?? track.basePosition.z), Number(end.z ?? track.basePosition.z), t)
+          };
+          const closeness = clamp((position.z + 1.2) / 2.4, 0, 1);
+          return {
+            position,
+            pan: lerp(track.basePan, clamp(position.x, -1, 1), intensity),
+            gainDb: lerp(-0.8, 0.5, closeness) * intensity,
+            reverbSend: lerp(0.22, 0.04, closeness) * intensity + track.reverbSend * (1 - intensity),
+            highShelfDb: lerp(-0.6, 0.6, closeness) * intensity
+          };
+        }
+      },
+      static_front_center: {
+        label: "static_front_center",
+        category: "Safe Mix",
+        color: "#37b7a6",
+        render: ({ track, intensity }) => ({
+          pan: lerp(track.basePan, 0, intensity),
+          position: {
+            x: lerp(track.basePosition.x, 0, intensity),
+            y: track.basePosition.y,
+            z: lerp(track.basePosition.z, 0.75, intensity)
+          },
+          reverbSend: lerp(track.reverbSend, 0.08, intensity),
+          stereoWidth: lerp(track.stereoWidth, 0.85, intensity)
+        })
+      },
+      whisper_close_left: {
+        label: "whisper_close_left",
+        category: "Vocal Intimacy",
+        color: "#f2b84b",
+        render: ({ track, intensity }) => ({
+          pan: lerp(track.basePan, -0.72, intensity),
+          position: {
+            x: lerp(track.basePosition.x, -0.9, intensity),
+            y: track.basePosition.y,
+            z: lerp(track.basePosition.z, 1.05, intensity)
+          },
+          gainDb: 0.9 * intensity,
+          reverbSend: lerp(track.reverbSend, 0.025, intensity),
+          stereoWidth: lerp(track.stereoWidth, 0.55, intensity),
+          highShelfDb: 1.4 * intensity
+        })
+      },
+      whisper_close_right: {
+        label: "whisper_close_right",
+        category: "Vocal Intimacy",
+        color: "#f2b84b",
+        render: ({ track, intensity }) => ({
+          pan: lerp(track.basePan, 0.72, intensity),
+          position: {
+            x: lerp(track.basePosition.x, 0.9, intensity),
+            y: track.basePosition.y,
+            z: lerp(track.basePosition.z, 1.05, intensity)
+          },
+          gainDb: 0.9 * intensity,
+          reverbSend: lerp(track.reverbSend, 0.025, intensity),
+          stereoWidth: lerp(track.stereoWidth, 0.55, intensity),
+          highShelfDb: 1.4 * intensity
+        })
+      },
+      walk_in_front: {
+        label: "walk_in_front",
+        category: "Vocal Intimacy",
+        color: "#72cf7a",
+        render: ({ t, track, intensity }) => {
+          const farToClose = lerp(-0.95, 0.92, t);
+          return {
+            pan: lerp(track.basePan, 0, 0.45 * intensity),
+            position: {
+              x: lerp(track.basePosition.x, 0, 0.55 * intensity),
+              y: track.basePosition.y,
+              z: lerp(track.basePosition.z, farToClose, intensity)
+            },
+            gainDb: lerp(-1.1, 0.9, t) * intensity,
+            reverbSend: lerp(0.22, 0.045, t) * intensity + track.reverbSend * (1 - intensity),
+            highShelfDb: lerp(-0.5, 1.2, t) * intensity,
+            lowpassHz: lerp(11000, 21000, t)
+          };
+        }
+      },
+      walk_away_front: {
+        label: "walk_away_front",
+        category: "Room Shift",
+        color: "#8bb8ff",
+        render: ({ t, track, intensity }) => {
+          const closeToFar = lerp(0.92, -0.95, t);
+          return {
+            pan: lerp(track.basePan, 0, 0.4 * intensity),
+            position: {
+              x: lerp(track.basePosition.x, 0, 0.45 * intensity),
+              y: track.basePosition.y,
+              z: lerp(track.basePosition.z, closeToFar, intensity)
+            },
+            gainDb: lerp(0.4, -1.7, t) * intensity,
+            reverbSend: lerp(0.05, 0.24, t) * intensity + track.reverbSend * (1 - intensity),
+            highShelfDb: lerp(0.4, -1.5, t) * intensity,
+            lowpassHz: lerp(21000, 9800, t)
+          };
+        }
+      },
+      pass_left_to_right: {
+        label: "pass_left_to_right",
+        category: "Motion FX",
+        color: "#ef7f6f",
+        render: ({ t, track, intensity }) => {
+          const pan = lerp(-0.86, 0.86, t);
+          return {
+            pan: lerp(track.basePan, pan, intensity),
+            position: {
+              x: lerp(track.basePosition.x, pan, intensity),
+              y: track.basePosition.y,
+              z: lerp(track.basePosition.z, 0.15, 0.55 * intensity)
+            },
+            gainDb: Math.sin(Math.PI * t) * 0.45 * intensity,
+            reverbSend: lerp(track.reverbSend, 0.10, 0.5 * intensity)
+          };
+        }
+      },
+      pass_right_to_left: {
+        label: "pass_right_to_left",
+        category: "Motion FX",
+        color: "#ef7f6f",
+        render: ({ t, track, intensity }) => {
+          const pan = lerp(0.86, -0.86, t);
+          return {
+            pan: lerp(track.basePan, pan, intensity),
+            position: {
+              x: lerp(track.basePosition.x, pan, intensity),
+              y: track.basePosition.y,
+              z: lerp(track.basePosition.z, 0.15, 0.55 * intensity)
+            },
+            gainDb: Math.sin(Math.PI * t) * 0.45 * intensity,
+            reverbSend: lerp(track.reverbSend, 0.10, 0.5 * intensity)
+          };
+        }
+      },
+      pass_behind: {
+        label: "pass_behind",
+        category: "Motion FX",
+        color: "#b78bff",
+        render: ({ t, track, intensity }) => {
+          const pan = lerp(-0.72, 0.72, t);
+          return {
+            pan: lerp(track.basePan, pan, intensity),
+            position: {
+              x: lerp(track.basePosition.x, pan, intensity),
+              y: track.basePosition.y,
+              z: lerp(track.basePosition.z, -0.75, intensity)
+            },
+            gainDb: -0.8 * intensity,
+            reverbSend: lerp(track.reverbSend, 0.17, intensity),
+            highShelfDb: -0.7 * intensity,
+            lowpassHz: lerp(15000, 12000, Math.sin(Math.PI * t))
+          };
+        }
+      },
+      chorus_widen: {
+        label: "chorus_widen",
+        category: "Chorus Width",
+        color: "#54c8ff",
+        render: ({ track, intensity }) => ({
+          pan: track.basePan,
+          position: {
+            x: track.basePosition.x,
+            y: track.basePosition.y,
+            z: lerp(track.basePosition.z, 0.2, 0.5 * intensity)
+          },
+          stereoWidth: lerp(track.stereoWidth, 1.35, intensity),
+          gainDb: -0.45 * intensity,
+          reverbSend: lerp(track.reverbSend, 0.15, intensity),
+          highShelfDb: -0.25 * intensity
+        })
+      },
+      adlib_flyby: {
+        label: "adlib_flyby",
+        category: "Motion FX",
+        color: "#ff91c8",
+        render: ({ t, track, intensity }) => {
+          const shaped = clamp((1 - Math.cos(Math.PI * t)) / 2, 0, 1);
+          const pan = lerp(-0.96, 0.96, shaped);
+          return {
+            pan: lerp(track.basePan, pan, intensity),
+            position: {
+              x: lerp(track.basePosition.x, pan, intensity),
+              y: lerp(track.basePosition.y, 0.12, 0.4 * intensity),
+              z: lerp(track.basePosition.z, 0.55, 0.65 * intensity)
+            },
+            gainDb: Math.sin(Math.PI * t) * 0.75 * intensity,
+            reverbSend: lerp(track.reverbSend, 0.13, intensity),
+            highShelfDb: 0.5 * intensity
+          };
+        }
+      },
+      room_to_close: {
+        label: "room_to_close",
+        category: "Room Shift",
+        color: "#a9c76f",
+        render: ({ t, track, intensity }) => ({
+          pan: lerp(track.basePan, 0, 0.3 * intensity),
+          position: {
+            x: lerp(track.basePosition.x, 0, 0.4 * intensity),
+            y: track.basePosition.y,
+            z: lerp(track.basePosition.z, lerp(-0.55, 0.95, t), intensity)
+          },
+          gainDb: lerp(-1.0, 0.65, t) * intensity,
+          reverbSend: lerp(0.24, 0.04, t) * intensity + track.reverbSend * (1 - intensity),
+          highShelfDb: lerp(-1.0, 0.8, t) * intensity
+        })
+      },
+      close_to_room: {
+        label: "close_to_room",
+        category: "Room Shift",
+        color: "#a9c76f",
+        render: ({ t, track, intensity }) => ({
+          pan: lerp(track.basePan, 0, 0.25 * intensity),
+          position: {
+            x: lerp(track.basePosition.x, 0, 0.35 * intensity),
+            y: track.basePosition.y,
+            z: lerp(track.basePosition.z, lerp(0.95, -0.55, t), intensity)
+          },
+          gainDb: lerp(0.55, -1.2, t) * intensity,
+          reverbSend: lerp(0.04, 0.24, t) * intensity + track.reverbSend * (1 - intensity),
+          highShelfDb: lerp(0.6, -1.0, t) * intensity
+        })
+      },
+      beat_pan_alternate: {
+        label: "beat_pan_alternate",
+        category: "Beat Sync",
+        color: "#7dd3fc",
+        render: ({ timeSec, track, event, intensity }) => {
+          const beat = getBeatPulse(timeSec, event, intensity);
+          const base = getBeatBasePosition(event, track);
+          if ((event.params?.beatAlternate || "lr") === "front_back") {
+            const z = clamp(base.z + (beat.sign < 0 ? 0.75 : -0.75), -1.2, 1.2);
+            return {
+              pan: lerp(clamp(base.x, -1, 1), clamp(base.x, -1, 1), beat.amount),
+              position: {
+                x: base.x,
+                y: base.y,
+                z: lerp(base.z, z, beat.amount)
+              }
+            };
+          }
+          const x = clamp(base.x + beat.sign * 0.82, -1.2, 1.2);
+          return {
+            pan: lerp(clamp(base.x, -1, 1), clamp(x, -1, 1), beat.amount),
+            position: {
+              x: lerp(base.x, x, beat.amount),
+              y: base.y,
+              z: base.z
+            }
+          };
+        }
+      },
+      beat_gain_pulse: {
+        label: "beat_gain_pulse",
+        category: "Beat Sync",
+        color: "#facc15",
+        render: ({ timeSec, event, intensity }) => {
+          const beat = getBeatPulse(timeSec, event, intensity);
+          return { gainDb: 1.8 * beat.amount };
+        }
+      },
+      beat_reverb_throw: {
+        label: "beat_reverb_throw",
+        category: "Beat Sync",
+        color: "#c084fc",
+        render: ({ timeSec, track, event, intensity }) => {
+          const beat = getBeatPulse(timeSec, event, intensity);
+          return {
+            reverbSend: clamp(track.reverbSend + 0.48 * beat.amount, 0, 1),
+            highShelfDb: -0.25 * beat.amount
+          };
+        }
+      },
+      beat_width_pulse: {
+        label: "beat_width_pulse",
+        category: "Beat Sync",
+        color: "#22d3ee",
+        render: ({ timeSec, track, event, intensity }) => {
+          const beat = getBeatPulse(timeSec, event, intensity);
+          return {
+            stereoWidth: clamp(track.stereoWidth + 0.7 * beat.amount, 0, 1.6),
+            gainDb: -0.25 * beat.amount
+          };
+        }
+      },
+      downbeat_focus: {
+        label: "downbeat_focus",
+        category: "Beat Sync",
+        color: "#86efac",
+        render: ({ timeSec, track, event, intensity }) => {
+          const beat = getBeatPulse(timeSec, event, intensity, { downbeatOnly: true });
+          const base = getBeatBasePosition(event, track);
+          const focusZ = clamp(base.z + 0.62, -1.2, 1.2);
+          return {
+            pan: lerp(track.basePan, clamp(base.x, -1, 1), beat.amount),
+            position: {
+              x: lerp(track.basePosition.x, base.x, beat.amount),
+              y: lerp(track.basePosition.y, base.y, beat.amount),
+              z: lerp(track.basePosition.z, focusZ, beat.amount)
+            },
+            gainDb: 1.0 * beat.amount,
+            reverbSend: lerp(track.reverbSend, Math.max(0.03, track.reverbSend * 0.55), beat.amount),
+            highShelfDb: 0.55 * beat.amount
+          };
+        }
+      },
+      orbit_on_bar: {
+        label: "orbit_on_bar",
+        category: "Beat Sync",
+        color: "#fb7185",
+        render: ({ timeSec, track, event, intensity }) => {
+          const beat = getBeatPulse(timeSec, event, intensity);
+          const base = getBeatBasePosition(event, track);
+          const radius = 0.55 * beat.depth;
+          const angle = beat.barT * Math.PI * 2;
+          const x = clamp(base.x + Math.sin(angle) * radius, -1.2, 1.2);
+          const z = clamp(base.z + Math.cos(angle) * radius * 0.7, -1.2, 1.2);
+          return {
+            pan: lerp(clamp(base.x, -1, 1), clamp(x, -1, 1), intensity * beat.depth),
+            position: {
+              x: lerp(base.x, x, intensity * beat.depth),
+              y: base.y,
+              z: lerp(base.z, z, intensity * beat.depth)
+            },
+            reverbSend: lerp(track.reverbSend, track.reverbSend + 0.08, intensity * beat.depth)
+          };
+        }
+      }
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const els = {
+      audioFiles: $("#audioFiles"),
+      projectFile: $("#projectFile"),
+      projectTitle: $("#projectTitle"),
+      saveProjectBtn: $("#saveProjectBtn"),
+      exportBtn: $("#exportBtn"),
+      undoBtn: $("#undoBtn"),
+      redoBtn: $("#redoBtn"),
+      addSectionBtn: $("#addSectionBtn"),
+      clearTracksBtn: $("#clearTracksBtn"),
+      trackList: $("#trackList"),
+      timelineWrap: $("#timelineWrap"),
+      timeRuler: $("#timeRuler"),
+      timelineRows: $("#timelineRows"),
+      playhead: $("#playhead"),
+      snapGuide: $("#snapGuide"),
+      spaceCanvas: $("#spaceCanvas"),
+      spaceCreateEventBtn: $("#spaceCreateEventBtn"),
+      currentTimeLabel: $("#currentTimeLabel"),
+      durationLabel: $("#durationLabel"),
+      seekInput: $("#seekInput"),
+      rewindBtn: $("#rewindBtn"),
+      playBtn: $("#playBtn"),
+      pauseBtn: $("#pauseBtn"),
+      stopBtn: $("#stopBtn"),
+      fitDurationBtn: $("#fitDurationBtn"),
+      statusText: $("#statusText"),
+      durationReadout: $("#durationReadout"),
+      sampleRateReadout: $("#sampleRateReadout"),
+      trackCountReadout: $("#trackCountReadout"),
+      sectionCountReadout: $("#sectionCountReadout"),
+      eventCountReadout: $("#eventCountReadout"),
+      roomReadout: $("#roomReadout"),
+      peakReadout: $("#peakReadout"),
+      peakMeterFill: $("#peakMeterFill"),
+      deleteTrackBtn: $("#deleteTrackBtn"),
+      trackNameInput: $("#trackNameInput"),
+      trackKindSelect: $("#trackKindSelect"),
+      trackMonoSelect: $("#trackMonoSelect"),
+      trackGainInput: $("#trackGainInput"),
+      trackGainNumberInput: $("#trackGainNumberInput"),
+      trackGainValue: $("#trackGainValue"),
+      trackPanInput: $("#trackPanInput"),
+      trackPanNumberInput: $("#trackPanNumberInput"),
+      trackPanValue: $("#trackPanValue"),
+      trackWidthInput: $("#trackWidthInput"),
+      trackWidthValue: $("#trackWidthValue"),
+      trackReverbInput: $("#trackReverbInput"),
+      trackReverbValue: $("#trackReverbValue"),
+      trackLowCutInput: $("#trackLowCutInput"),
+      trackHighShelfInput: $("#trackHighShelfInput"),
+      trackPosXInput: $("#trackPosXInput"),
+      trackPosYInput: $("#trackPosYInput"),
+      trackPosZInput: $("#trackPosZInput"),
+      trackMutedInput: $("#trackMutedInput"),
+      trackSoloInput: $("#trackSoloInput"),
+      trackColorInput: $("#trackColorInput"),
+      copyEffectsBtn: $("#copyEffectsBtn"),
+      pasteEffectsBtn: $("#pasteEffectsBtn"),
+      sectionNameInput: $("#sectionNameInput"),
+      sectionStartInput: $("#sectionStartInput"),
+      sectionEndInput: $("#sectionEndInput"),
+      sectionEnabledInput: $("#sectionEnabledInput"),
+      sectionColorInput: $("#sectionColorInput"),
+      sectionBpmInput: $("#sectionBpmInput"),
+      sectionBeatOffsetInput: $("#sectionBeatOffsetInput"),
+      analyzeSectionBpmBtn: $("#analyzeSectionBpmBtn"),
+      sectionBpmConfidence: $("#sectionBpmConfidence"),
+      eventTrackSelect: $("#eventTrackSelect"),
+      presetSelect: $("#presetSelect"),
+      eventStartInput: $("#eventStartInput"),
+      eventEndInput: $("#eventEndInput"),
+      eventIntensityInput: $("#eventIntensityInput"),
+      eventIntensityValue: $("#eventIntensityValue"),
+      curveSelect: $("#curveSelect"),
+      eventLabelInput: $("#eventLabelInput"),
+      eventEnabledInput: $("#eventEnabledInput"),
+      beatDivisionSelect: $("#beatDivisionSelect"),
+      beatPhaseInput: $("#beatPhaseInput"),
+      beatDepthInput: $("#beatDepthInput"),
+      beatDepthValue: $("#beatDepthValue"),
+      beatDecayInput: $("#beatDecayInput"),
+      beatCurveSelect: $("#beatCurveSelect"),
+      beatAlternateSelect: $("#beatAlternateSelect"),
+      beatBaseXInput: $("#beatBaseXInput"),
+      beatBaseYInput: $("#beatBaseYInput"),
+      beatBaseZInput: $("#beatBaseZInput"),
+      addEventBtn: $("#addEventBtn"),
+      deleteEventBtn: $("#deleteEventBtn"),
+      roomSelect: $("#roomSelect"),
+      masterGainInput: $("#masterGainInput"),
+      sectionRoomSelect: $("#sectionRoomSelect"),
+      sectionMasterGainInput: $("#sectionMasterGainInput"),
+      globalBpmInput: $("#globalBpmInput"),
+      globalBeatOffsetInput: $("#globalBeatOffsetInput"),
+      analyzeGlobalBpmBtn: $("#analyzeGlobalBpmBtn"),
+      globalBpmConfidence: $("#globalBpmConfidence"),
+      helpBtn: $("#helpBtn"),
+      helpOverlay: $("#helpOverlay"),
+      helpCloseBtn: $("#helpCloseBtn")
+    };
+
+    const project = {
+      version: "0.1.0",
+      title: "untitled spatial mix",
+      sampleRate: null,
+      bpm: null,
+      beatOffsetSec: 0,
+      beatConfidence: null,
+      durationSec: 0,
+      sections: [],
+      tracks: [],
+      events: [],
+      rooms: structuredClone(ROOM_PRESETS),
+      activeRoomId: "studio",
+      master: {
+        gainDb: -1,
+        limiterEnabled: false,
+        clipWarningEnabled: true
+      }
+    };
+
+    let audioContext = null;
+    let selectedTrackId = null;
+    let selectedEventId = null;
+    let lastRenderedPeak = null;
+    let dragState = null;
+    let effectClipboard = null;
+    let pendingControlHistory = false;
+    let activeInspectorTab = "track";
+    let spaceCreateMode = false;
+    let spaceDragState = null;
+
+    const history = {
+      undo: [],
+      redo: [],
+      limit: 10
+    };
+
+    const playback = {
+      state: "stopped",
+      offsetSec: 0,
+      startedAt: 0,
+      masterBus: null,
+      graphs: [],
+      updateTimer: null,
+      animationFrame: null
+    };
+
+    init();
+
+    function init() {
+      populateSelects();
+      bindEvents();
+      renderAll();
+      drawSpaceView();
+    }
+
+    function populateSelects() {
+      els.trackKindSelect.innerHTML = TRACK_KINDS.map((kind) => `<option value="${kind}">${kind}</option>`).join("");
+      const normalOptions = Object.entries(PRESETS)
+        .filter(([id]) => !BEAT_PRESET_IDS.has(id))
+        .map(([id, preset]) => `<option value="${id}">${id} / ${preset.category}</option>`)
+        .join("");
+      const beatOptions = Object.entries(PRESETS)
+        .filter(([id]) => BEAT_PRESET_IDS.has(id))
+        .map(([id]) => `<option value="${id}">${id}</option>`)
+        .join("");
+      els.presetSelect.innerHTML = `<optgroup label="Spatial / Mix">${normalOptions}</optgroup><optgroup label="Beat Sync">${beatOptions}</optgroup>`;
+      els.roomSelect.innerHTML = project.rooms.map((room) => `<option value="${room.id}">${room.name}</option>`).join("");
+      els.sectionRoomSelect.innerHTML = `<option value="">Follow Global</option>${project.rooms.map((room) => `<option value="${room.id}">${room.name}</option>`).join("")}`;
+    }
+
+    function bindEvents() {
+      els.audioFiles.addEventListener("change", async () => {
+        await addAudioFiles(Array.from(els.audioFiles.files || []));
+        els.audioFiles.value = "";
+      });
+
+      els.projectFile.addEventListener("change", async () => {
+        await loadProjectFile(els.projectFile.files?.[0]);
+        els.projectFile.value = "";
+      });
+
+      els.projectTitle.addEventListener("input", () => {
+        rememberControlHistory();
+        project.title = els.projectTitle.value.trim() || "untitled spatial mix";
+      });
+      els.projectTitle.addEventListener("change", finishControlHistory);
+
+      els.saveProjectBtn.addEventListener("click", saveProjectJson);
+      els.exportBtn.addEventListener("click", exportWav);
+      els.undoBtn.addEventListener("click", undo);
+      els.redoBtn.addEventListener("click", redo);
+      els.addSectionBtn.addEventListener("click", addSection);
+      els.clearTracksBtn.addEventListener("click", clearTracks);
+      els.fitDurationBtn.addEventListener("click", () => {
+        rememberState();
+        recalculateDuration();
+        renderAll();
+        setStatus("曲長を再計算しました。");
+      });
+
+      els.playBtn.addEventListener("click", startPlayback);
+      els.pauseBtn.addEventListener("click", pausePlayback);
+      els.stopBtn.addEventListener("click", stopPlayback);
+      els.rewindBtn.addEventListener("click", () => seekTo(0, true));
+      els.seekInput.addEventListener("input", () => seekTo(Number(els.seekInput.value), false));
+      els.seekInput.addEventListener("change", () => seekTo(Number(els.seekInput.value), true));
+
+      els.trackList.addEventListener("click", onTrackListClick);
+      els.trackList.addEventListener("input", onTrackListInput);
+      els.trackList.addEventListener("dblclick", onTrackListDoubleClick);
+      els.trackList.addEventListener("change", onTrackListChange);
+      document.querySelectorAll("[data-inspector-tab]").forEach((button) => {
+        button.addEventListener("click", () => selectInspectorTab(button.dataset.inspectorTab));
+      });
+      els.timeRuler.addEventListener("pointerdown", onTimeRulerPointerDown);
+      els.timelineRows.addEventListener("pointerdown", onTimelinePointerDown);
+      els.timelineRows.addEventListener("dblclick", onTimelineDoubleClick);
+      els.spaceCreateEventBtn.addEventListener("click", toggleSpaceCreateMode);
+      els.spaceCanvas.addEventListener("pointerdown", onSpaceCanvasPointerDown);
+      window.addEventListener("pointermove", onSpaceCanvasPointerMove);
+      window.addEventListener("pointerup", onSpaceCanvasPointerUp);
+      window.addEventListener("pointermove", onWindowPointerMove);
+      window.addEventListener("pointerup", onWindowPointerUp);
+      window.addEventListener("resize", drawSpaceView);
+      window.addEventListener("dragenter", onWindowDragEnter);
+      window.addEventListener("dragover", onWindowDragOver);
+      window.addEventListener("dragleave", onWindowDragLeave);
+      window.addEventListener("drop", onWindowDrop);
+      window.addEventListener("keydown", onWindowKeyDown);
+
+      [
+        els.trackNameInput,
+        els.trackKindSelect,
+        els.trackMonoSelect,
+        els.trackGainInput,
+        els.trackGainNumberInput,
+        els.trackPanInput,
+        els.trackPanNumberInput,
+        els.trackWidthInput,
+        els.trackReverbInput,
+        els.trackLowCutInput,
+        els.trackHighShelfInput,
+        els.trackPosXInput,
+        els.trackPosYInput,
+        els.trackPosZInput,
+        els.trackMutedInput,
+        els.trackSoloInput,
+        els.trackColorInput
+      ].forEach((el) => el.addEventListener("input", updateSelectedTrackFromInspector));
+      [
+        els.trackNameInput,
+        els.trackKindSelect,
+        els.trackMonoSelect,
+        els.trackGainInput,
+        els.trackGainNumberInput,
+        els.trackPanInput,
+        els.trackPanNumberInput,
+        els.trackWidthInput,
+        els.trackReverbInput,
+        els.trackLowCutInput,
+        els.trackHighShelfInput,
+        els.trackPosXInput,
+        els.trackPosYInput,
+        els.trackPosZInput,
+        els.trackMutedInput,
+        els.trackSoloInput,
+        els.trackColorInput
+      ].forEach((el) => el.addEventListener("change", finishControlHistory));
+      [
+        els.trackGainInput,
+        els.trackGainNumberInput,
+        els.trackPanInput,
+        els.trackPanNumberInput
+      ].forEach((el) => el.addEventListener("dblclick", resetSelectedTrackParam));
+
+      [
+        els.sectionNameInput,
+        els.sectionStartInput,
+        els.sectionEndInput,
+        els.sectionEnabledInput,
+        els.sectionColorInput,
+        els.sectionBpmInput,
+        els.sectionBeatOffsetInput
+      ].forEach((el) => {
+        el.addEventListener("input", updateSelectedSectionFromInspector);
+        el.addEventListener("change", finishControlHistory);
+      });
+      els.analyzeSectionBpmBtn.addEventListener("click", analyzeSelectedSectionBpm);
+
+      els.deleteTrackBtn.addEventListener("click", deleteSelectedTrack);
+      els.copyEffectsBtn.addEventListener("click", copySelectedLaneEffects);
+      els.pasteEffectsBtn.addEventListener("click", pasteEffectsToSelectedLane);
+      els.eventIntensityInput.addEventListener("input", () => {
+        els.eventIntensityValue.textContent = Number(els.eventIntensityInput.value).toFixed(2);
+      });
+      els.addEventBtn.addEventListener("click", addEventFromInspector);
+      els.deleteEventBtn.addEventListener("click", deleteSelectedEvent);
+      [
+        els.eventTrackSelect,
+        els.presetSelect,
+        els.eventStartInput,
+        els.eventEndInput,
+        els.eventIntensityInput,
+        els.curveSelect,
+        els.eventLabelInput,
+        els.eventEnabledInput,
+        els.beatDivisionSelect,
+        els.beatPhaseInput,
+        els.beatDepthInput,
+        els.beatDecayInput,
+        els.beatCurveSelect,
+        els.beatAlternateSelect,
+        els.beatBaseXInput,
+        els.beatBaseYInput,
+        els.beatBaseZInput
+      ].forEach((el) => {
+        el.addEventListener("input", autoUpdateSelectedEventFromInspector);
+        el.addEventListener("change", finishControlHistory);
+      });
+      els.beatDepthInput.addEventListener("input", () => {
+        els.beatDepthValue.textContent = Number(els.beatDepthInput.value).toFixed(2);
+      });
+      els.roomSelect.addEventListener("change", () => {
+        rememberState();
+        project.activeRoomId = els.roomSelect.value;
+        renderAll();
+      });
+      els.masterGainInput.addEventListener("input", () => {
+        rememberControlHistory();
+        project.master.gainDb = Number(els.masterGainInput.value) || 0;
+      });
+      els.masterGainInput.addEventListener("change", finishControlHistory);
+      els.sectionRoomSelect.addEventListener("change", updateSelectedSectionRoomMaster);
+      els.sectionMasterGainInput.addEventListener("input", updateSelectedSectionRoomMaster);
+      els.sectionMasterGainInput.addEventListener("change", finishControlHistory);
+      els.globalBpmInput.addEventListener("input", updateGlobalBeatGrid);
+      els.globalBeatOffsetInput.addEventListener("input", updateGlobalBeatGrid);
+      els.globalBpmInput.addEventListener("change", finishControlHistory);
+      els.globalBeatOffsetInput.addEventListener("change", finishControlHistory);
+      els.analyzeGlobalBpmBtn.addEventListener("click", analyzeGlobalBpm);
+      els.helpBtn.addEventListener("click", openHelp);
+      els.helpCloseBtn.addEventListener("click", closeHelp);
+      els.helpOverlay.addEventListener("click", (event) => {
+        if (event.target === els.helpOverlay) closeHelp();
+      });
+    }
+
+    function selectInspectorTab(tab) {
+      activeInspectorTab = ["track", "event", "section"].includes(tab) ? tab : "track";
+      document.querySelectorAll("[data-inspector-tab]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.inspectorTab === activeInspectorTab);
+      });
+      document.querySelectorAll("[data-tab-panel]").forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.tabPanel === activeInspectorTab);
+      });
+    }
+
+    function syncInspectorTabForSelection(kind) {
+      if (kind === "event") selectInspectorTab("event");
+      else if (kind === "section") selectInspectorTab("section");
+      else if (kind === "track") selectInspectorTab("track");
+    }
+
+    function openHelp() {
+      els.helpOverlay.classList.add("open");
+      els.helpOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function closeHelp() {
+      els.helpOverlay.classList.remove("open");
+      els.helpOverlay.setAttribute("aria-hidden", "true");
+    }
+
+    function addSection() {
+      rememberState();
+      const startSec = clamp(getCurrentTime(), 0, Math.max(project.durationSec, 0));
+      const endSec = Math.max(startSec + 4, Math.min(Math.max(project.durationSec, startSec + 8), startSec + 8));
+      const section = {
+        id: uid("section"),
+        name: `Section ${project.sections.length + 1}`,
+        startSec,
+        endSec,
+        enabled: true,
+        color: pickTrackColor(project.sections.length + 2),
+        bpm: project.bpm,
+        beatOffsetSec: startSec,
+        beatConfidence: null,
+        roomId: "",
+        masterGainDb: null
+      };
+      project.sections.push(section);
+      selectedTrackId = section.id;
+      selectedEventId = null;
+      syncInspectorTabForSelection("section");
+      recalculateDuration(false);
+      renderAll();
+      setStatus("セクションを追加しました。");
+    }
+
+    function copySelectedLaneEffects() {
+      const lane = getSelectedLane();
+      if (!lane) return;
+      const events = project.events
+        .filter((event) => event.trackId === lane.id)
+        .map((event) => cloneEvent(event));
+      effectClipboard = {
+        sourceLaneId: lane.id,
+        sourceLaneName: lane.name,
+        events
+      };
+      renderInspector();
+      setStatus(events.length ? `${lane.name} の効果 ${events.length} 件をコピーしました。` : `${lane.name} にコピーできる効果はありません。`, events.length ? "" : "warn");
+    }
+
+    function pasteEffectsToSelectedLane() {
+      const lane = getSelectedLane();
+      if (!lane || !effectClipboard?.events?.length) return;
+      rememberState();
+      const pasted = effectClipboard.events.map((event) => ({
+        ...cloneEvent(event),
+        id: uid("event"),
+        trackId: lane.id,
+        label: event.label || event.presetId
+      }));
+      project.events.push(...pasted);
+      selectedEventId = pasted[pasted.length - 1]?.id || null;
+      selectedTrackId = lane.id;
+      recalculateDuration(false);
+      renderAll();
+      setStatus(`${lane.name} に効果 ${pasted.length} 件をペーストしました。`);
+    }
+
+    function cloneEvent(event) {
+      return {
+        id: event.id,
+        trackId: event.trackId,
+        presetId: event.presetId,
+        startSec: event.startSec,
+        endSec: event.endSec,
+        intensity: event.intensity,
+        enabled: event.enabled,
+        label: event.label || "",
+        curve: event.curve || "ease_in_out",
+        params: event.params && typeof event.params === "object" ? structuredClone(event.params) : {},
+        color: event.color
+      };
+    }
+
+    function onWindowDragEnter(event) {
+      if (hasAudioFiles(event.dataTransfer?.items)) {
+        event.preventDefault();
+        document.body.classList.add("dragging-audio");
+      }
+    }
+
+    function onWindowDragOver(event) {
+      if (hasAudioFiles(event.dataTransfer?.items)) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "copy";
+        document.body.classList.add("dragging-audio");
+      }
+    }
+
+    function onWindowDragLeave(event) {
+      if (event.clientX <= 0 || event.clientY <= 0 || event.clientX >= window.innerWidth || event.clientY >= window.innerHeight) {
+        document.body.classList.remove("dragging-audio");
+      }
+    }
+
+    async function onWindowDrop(event) {
+      const droppedFiles = Array.from(event.dataTransfer?.files || []);
+      if (!droppedFiles.length) return;
+      event.preventDefault();
+      document.body.classList.remove("dragging-audio");
+      const files = droppedFiles.filter((file) => file.type.startsWith("audio/") || /\.(wav|mp3|m4a|flac|ogg)$/i.test(file.name));
+      if (!files.length) {
+        setStatus("音声ファイルだけをドロップしてください。", "warn");
+        return;
+      }
+      await addAudioFiles(files);
+    }
+
+    function hasAudioFiles(items) {
+      return Array.from(items || []).some((item) => item.kind === "file" && (item.type.startsWith("audio/") || item.type === ""));
+    }
+
+    function onWindowKeyDown(event) {
+      const key = event.key.toLowerCase();
+      if (isTextEditingTarget(event.target)) return;
+
+      if ((event.ctrlKey || event.metaKey) && key === "c") {
+        event.preventDefault();
+        copySelectedLaneEffects();
+      } else if ((event.ctrlKey || event.metaKey) && key === "v") {
+        event.preventDefault();
+        pasteEffectsToSelectedLane();
+      } else if ((event.ctrlKey || event.metaKey) && key === "z" && !event.shiftKey) {
+        event.preventDefault();
+        undo();
+      } else if ((event.ctrlKey || event.metaKey) && (key === "y" || (key === "z" && event.shiftKey))) {
+        event.preventDefault();
+        redo();
+      }
+    }
+
+    function isTextEditingTarget(target) {
+      return target instanceof HTMLInputElement
+        || target instanceof HTMLTextAreaElement
+        || target instanceof HTMLSelectElement
+        || target?.isContentEditable;
+    }
+
+    async function addAudioFiles(files) {
+      if (!files.length) return;
+      const ctx = ensureAudioContext();
+      setStatus(`読み込み中: ${files.length} file(s)`);
+      rememberState();
+
+      for (const file of files) {
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+          attachDecodedAudio(file, audioBuffer);
+        } catch (error) {
+          console.error(error);
+          setStatus(`${file.name} を読み込めませんでした。Chrome/EdgeでWAVを推奨します。`, "error");
+        }
+      }
+
+      recalculateDuration();
+      if (!selectedTrackId && project.tracks.length) selectedTrackId = project.tracks[0].id;
+      renderAll();
+      setStatus("音声読み込み完了。");
+    }
+
+    async function analyzeGlobalBpm() {
+      const buffer = getAnalysisBuffer();
+      if (!buffer) {
+        setStatus("BPM解析する音声トラックがありません。", "error");
+        return;
+      }
+      setStatus("全体BPMを解析中...");
+      await nextFrame();
+      const result = estimateBpm(buffer, 0, Math.min(project.durationSec || buffer.duration, buffer.duration));
+      if (!result) {
+        setStatus("BPMを推定できませんでした。", "error");
+        return;
+      }
+      rememberState();
+      project.bpm = result.bpm;
+      project.beatOffsetSec = result.beatOffsetSec;
+      project.beatConfidence = result.confidence;
+      renderAll();
+      setStatus(`全体BPM推定: ${result.bpm.toFixed(2)} / confidence ${result.confidence.toFixed(2)}`);
+    }
+
+    async function analyzeSelectedSectionBpm() {
+      const section = getSelectedSection();
+      const buffer = getAnalysisBuffer();
+      if (!section) {
+        setStatus("BPM解析するセクションを選択してください。", "error");
+        return;
+      }
+      if (!buffer) {
+        setStatus("BPM解析する音声トラックがありません。", "error");
+        return;
+      }
+      setStatus(`${section.name} のBPMを解析中...`);
+      await nextFrame();
+      const result = estimateBpm(buffer, section.startSec, Math.min(section.endSec, buffer.duration));
+      if (!result) {
+        setStatus("区間BPMを推定できませんでした。", "error");
+        return;
+      }
+      rememberState();
+      section.bpm = result.bpm;
+      section.beatOffsetSec = result.beatOffsetSec;
+      section.beatConfidence = result.confidence;
+      renderAll();
+      setStatus(`${section.name} BPM推定: ${result.bpm.toFixed(2)} / confidence ${result.confidence.toFixed(2)}`);
+    }
+
+    function getAnalysisBuffer() {
+      const selectedTrack = getSelectedTrack();
+      if (selectedTrack?.audioBuffer) return selectedTrack.audioBuffer;
+      return project.tracks.find((track) => track.audioBuffer)?.audioBuffer || null;
+    }
+
+    function estimateBpm(buffer, startSec, endSec) {
+      const sampleRate = buffer.sampleRate;
+      const start = Math.max(0, Math.floor(startSec * sampleRate));
+      const end = Math.min(buffer.length, Math.floor(endSec * sampleRate));
+      if (end - start < sampleRate * 4) return null;
+
+      const hopSec = 0.025;
+      const hop = Math.max(128, Math.floor(sampleRate * hopSec));
+      const frameCount = Math.floor((end - start) / hop);
+      const energy = new Float32Array(frameCount);
+      const channels = Math.min(buffer.numberOfChannels, 2);
+      for (let frame = 0; frame < frameCount; frame += 1) {
+        const frameStart = start + frame * hop;
+        const frameEnd = Math.min(end, frameStart + hop);
+        let sum = 0;
+        for (let channel = 0; channel < channels; channel += 1) {
+          const data = buffer.getChannelData(channel);
+          let previous = data[frameStart] || 0;
+          for (let i = frameStart + 1; i < frameEnd; i += 1) {
+            const current = data[i];
+            sum += Math.max(0, Math.abs(current) - Math.abs(previous));
+            previous = current;
+          }
+        }
+        energy[frame] = sum / Math.max(1, frameEnd - frameStart);
+      }
+
+      const onset = new Float32Array(frameCount);
+      let mean = 0;
+      for (let i = 1; i < frameCount; i += 1) {
+        const localAvg = averageWindow(energy, Math.max(0, i - 8), i);
+        onset[i] = Math.max(0, energy[i] - localAvg);
+        mean += onset[i];
+      }
+      mean /= Math.max(1, frameCount - 1);
+      for (let i = 0; i < frameCount; i += 1) onset[i] = Math.max(0, onset[i] - mean * 0.5);
+
+      let best = { bpm: 0, score: 0, lag: 0 };
+      for (let bpm = 60; bpm <= 200; bpm += 0.5) {
+        const lag = Math.round((60 / bpm) / hopSec);
+        if (lag < 2 || lag >= frameCount * 0.5) continue;
+        let score = 0;
+        for (let i = lag; i < frameCount; i += 1) score += onset[i] * onset[i - lag];
+        score /= Math.max(1, frameCount - lag);
+        if (score > best.score) best = { bpm, score, lag };
+      }
+      if (!best.lag || best.score <= 0) return null;
+
+      const bins = Math.max(8, best.lag);
+      const phaseScores = new Float32Array(bins);
+      for (let i = 0; i < frameCount; i += 1) {
+        phaseScores[i % bins] += onset[i];
+      }
+      let phase = 0;
+      for (let i = 1; i < bins; i += 1) {
+        if (phaseScores[i] > phaseScores[phase]) phase = i;
+      }
+      const total = phaseScores.reduce((sum, value) => sum + value, 0);
+      const confidence = clamp((phaseScores[phase] / Math.max(0.000001, total)) * 4, 0, 1);
+      return {
+        bpm: best.bpm,
+        beatOffsetSec: startSec + phase * hopSec,
+        confidence
+      };
+    }
+
+    function averageWindow(values, start, end) {
+      let sum = 0;
+      let count = 0;
+      for (let i = start; i < end; i += 1) {
+        sum += values[i];
+        count += 1;
+      }
+      return count ? sum / count : 0;
+    }
+
+    function nextFrame() {
+      return new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+
+    function attachDecodedAudio(file, audioBuffer) {
+      const existing = project.tracks.find((track) => !track.audioBuffer && track.fileName === file.name);
+      const metadata = {
+        audioBuffer,
+        durationSec: audioBuffer.duration,
+        channels: audioBuffer.numberOfChannels,
+        sourceSampleRate: audioBuffer.sampleRate,
+        waveformPeaks: computePeaks(audioBuffer, 360)
+      };
+
+      if (!project.sampleRate) project.sampleRate = audioBuffer.sampleRate;
+
+      if (existing) {
+        Object.assign(existing, metadata);
+        return;
+      }
+
+      const color = pickTrackColor(project.tracks.length);
+      project.tracks.push({
+        id: uid("track"),
+        name: file.name.replace(/\.[^.]+$/, ""),
+        fileName: file.name,
+        kind: inferTrackKind(file.name),
+        muted: false,
+        solo: false,
+        gainDb: 0,
+        basePosition: { x: 0, y: 0, z: 0.55 },
+        basePan: 0,
+        monoMode: "preserve",
+        stereoWidth: 1,
+        reverbSend: 0.08,
+        eq: { lowCutHz: 80, highShelfDb: 0 },
+        color,
+        ...metadata
+      });
+    }
+
+    async function loadProjectFile(file) {
+      if (!file) return;
+      try {
+        const loaded = JSON.parse(await file.text());
+        if (!Array.isArray(loaded.tracks) || !Array.isArray(loaded.events)) {
+          throw new Error("Invalid project json");
+        }
+
+        rememberState();
+        stopPlayback();
+        const decodedByFileName = new Map(project.tracks.filter((track) => track.audioBuffer).map((track) => [track.fileName, track]));
+        project.version = String(loaded.version || "0.1.0");
+        project.title = String(loaded.title || "untitled spatial mix");
+        project.sampleRate = loaded.sampleRate ?? null;
+        project.bpm = loaded.bpm ?? null;
+        project.beatOffsetSec = Number(loaded.beatOffsetSec ?? 0) || 0;
+        project.beatConfidence = loaded.beatConfidence ?? null;
+        project.durationSec = Number(loaded.durationSec) || 0;
+        project.sections = Array.isArray(loaded.sections)
+          ? loaded.sections.map(normalizeSection)
+          : [];
+        project.tracks = loaded.tracks.map((track, index) => {
+          const previous = decodedByFileName.get(track.fileName);
+          return normalizeTrack({
+            ...track,
+            audioBuffer: previous?.audioBuffer,
+            durationSec: previous?.durationSec ?? track.durationSec,
+            channels: previous?.channels ?? track.channels,
+            sourceSampleRate: previous?.sourceSampleRate ?? track.sourceSampleRate,
+            waveformPeaks: previous?.waveformPeaks,
+            color: track.color || pickTrackColor(index)
+          });
+        });
+        project.events = loaded.events.map(normalizeEvent).filter(Boolean);
+        project.rooms = Array.isArray(loaded.rooms) && loaded.rooms.length ? loaded.rooms : structuredClone(ROOM_PRESETS);
+        project.activeRoomId = loaded.activeRoomId || project.rooms[0]?.id || "studio";
+        project.master = {
+          gainDb: Number(loaded.master?.gainDb ?? -1),
+          limiterEnabled: Boolean(loaded.master?.limiterEnabled),
+          clipWarningEnabled: loaded.master?.clipWarningEnabled !== false
+        };
+
+        selectedTrackId = getTimelineLanes()[0]?.id || null;
+        selectedEventId = null;
+        recalculateDuration(false);
+        renderAll();
+        setStatus("JSONを読み込みました。音声が未接続のトラックは同名ファイルを追加してください。");
+      } catch (error) {
+        console.error(error);
+        setStatus("JSONを読み込めませんでした。", "error");
+      }
+    }
+
+    function normalizeTrack(track) {
+      return {
+        id: String(track.id || uid("track")),
+        name: String(track.name || track.fileName || "track"),
+        fileName: String(track.fileName || ""),
+        kind: TRACK_KINDS.includes(track.kind) ? track.kind : "other",
+        muted: Boolean(track.muted),
+        solo: Boolean(track.solo),
+        gainDb: clamp(Number(track.gainDb ?? 0), -48, 24),
+        basePosition: {
+          x: Number(track.basePosition?.x ?? 0),
+          y: Number(track.basePosition?.y ?? 0),
+          z: Number(track.basePosition?.z ?? 0.55)
+        },
+        basePan: clamp(Number(track.basePan ?? 0), -1, 1),
+        monoMode: ["preserve", "sum_to_mono", "left_only", "right_only"].includes(track.monoMode) ? track.monoMode : "preserve",
+        stereoWidth: clamp(Number(track.stereoWidth ?? 1), 0, 1.6),
+        reverbSend: clamp(Number(track.reverbSend ?? 0.08), 0, 0.8),
+        eq: {
+          lowCutHz: clamp(Number(track.eq?.lowCutHz ?? 80), 20, 1000),
+          highShelfDb: clamp(Number(track.eq?.highShelfDb ?? 0), -12, 12)
+        },
+        color: track.color || "#37b7a6",
+        audioBuffer: track.audioBuffer,
+        durationSec: track.durationSec,
+        channels: track.channels,
+        sourceSampleRate: track.sourceSampleRate,
+        waveformPeaks: track.waveformPeaks
+      };
+    }
+
+    function normalizeSection(section) {
+      const startSec = Math.max(0, Number(section.startSec ?? 0));
+      const endSec = Math.max(startSec + 0.05, Number(section.endSec ?? startSec + 8));
+      return {
+        id: String(section.id || uid("section")),
+        name: String(section.name || "Section"),
+        startSec,
+        endSec,
+        enabled: section.enabled !== false,
+        color: section.color || "#f2b84b",
+        bpm: section.bpm === null || section.bpm === undefined || section.bpm === "" ? null : clamp(Number(section.bpm), 40, 240),
+        beatOffsetSec: section.beatOffsetSec === null || section.beatOffsetSec === undefined || section.beatOffsetSec === "" ? startSec : Math.max(0, Number(section.beatOffsetSec)),
+        beatConfidence: section.beatConfidence === null || section.beatConfidence === undefined ? null : Number(section.beatConfidence),
+        roomId: section.roomId || "",
+        masterGainDb: section.masterGainDb === null || section.masterGainDb === undefined || section.masterGainDb === ""
+          ? null
+          : Number(section.masterGainDb)
+      };
+    }
+
+    function normalizeEvent(event) {
+      const laneExists = hasLane(event.trackId);
+      if (!laneExists && event.trackId) return null;
+      const startSec = Math.max(0, Number(event.startSec ?? 0));
+      const endSec = Math.max(startSec + 0.05, Number(event.endSec ?? startSec + 1));
+      return {
+        id: String(event.id || uid("event")),
+        trackId: String(event.trackId || getTimelineLanes()[0]?.id || ""),
+        presetId: PRESETS[event.presetId] ? event.presetId : "pass_left_to_right",
+        startSec,
+        endSec,
+        intensity: clamp(Number(event.intensity ?? 0.65), 0, 1),
+        enabled: event.enabled !== false,
+        label: event.label ? String(event.label) : "",
+        curve: ["linear", "ease_in", "ease_out", "ease_in_out", "hold", "sine"].includes(event.curve) ? event.curve : "ease_in_out",
+        params: event.params && typeof event.params === "object" ? event.params : {},
+        color: event.color
+      };
+    }
+
+    function saveProjectJson() {
+      const payload = {
+        version: project.version,
+        title: project.title,
+        sampleRate: project.sampleRate,
+        bpm: project.bpm,
+        beatOffsetSec: project.beatOffsetSec,
+        beatConfidence: project.beatConfidence,
+        durationSec: project.durationSec,
+        sections: project.sections.map((section) => ({ ...section })),
+        tracks: project.tracks.map(serializeTrack),
+        events: project.events.map((event) => ({ ...event })),
+        rooms: project.rooms,
+        activeRoomId: project.activeRoomId,
+        master: project.master
+      };
+      downloadBlob(
+        new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }),
+        `${safeFileName(project.title || "spatial_mix")}.json`
+      );
+      setStatus("プロジェクトJSONを書き出しました。");
+    }
+
+    function serializeTrack(track) {
+      return {
+        id: track.id,
+        name: track.name,
+        fileName: track.fileName,
+        kind: track.kind,
+        muted: track.muted,
+        solo: track.solo,
+        gainDb: track.gainDb,
+        basePosition: track.basePosition,
+        basePan: track.basePan,
+        monoMode: track.monoMode,
+        stereoWidth: track.stereoWidth,
+        reverbSend: track.reverbSend,
+        eq: track.eq,
+        color: track.color,
+        durationSec: track.durationSec,
+        channels: track.channels,
+        sourceSampleRate: track.sourceSampleRate
+      };
+    }
+
+    function clearTracks() {
+      if (!project.tracks.length && !project.sections.length) return;
+      if (!confirm("全トラック、セクション、イベントを削除しますか？")) return;
+      rememberState();
+      stopPlayback();
+      project.tracks = [];
+      project.sections = [];
+      project.events = [];
+      selectedTrackId = null;
+      selectedEventId = null;
+      project.durationSec = 0;
+      lastRenderedPeak = null;
+      renderAll();
+      setStatus("全トラックとセクションを削除しました。");
+    }
+
+    function createSnapshot() {
+      return {
+        project: {
+          version: project.version,
+          title: project.title,
+          sampleRate: project.sampleRate,
+          bpm: project.bpm,
+          beatOffsetSec: project.beatOffsetSec,
+          beatConfidence: project.beatConfidence,
+          durationSec: project.durationSec,
+          sections: project.sections.map((section) => ({ ...section })),
+          tracks: project.tracks.map((track) => ({
+            ...serializeTrack(track),
+            audioBuffer: track.audioBuffer,
+            waveformPeaks: track.waveformPeaks ? track.waveformPeaks.slice() : undefined
+          })),
+          events: project.events.map((event) => cloneEvent(event)),
+          rooms: structuredClone(project.rooms),
+          activeRoomId: project.activeRoomId,
+          master: { ...project.master }
+        },
+        selectedTrackId,
+        selectedEventId,
+        lastRenderedPeak
+      };
+    }
+
+    function restoreSnapshot(snapshot) {
+      stopPlayback();
+      project.version = snapshot.project.version;
+      project.title = snapshot.project.title;
+      project.sampleRate = snapshot.project.sampleRate;
+      project.bpm = snapshot.project.bpm;
+      project.beatOffsetSec = snapshot.project.beatOffsetSec ?? 0;
+      project.beatConfidence = snapshot.project.beatConfidence ?? null;
+      project.durationSec = snapshot.project.durationSec;
+      project.sections = snapshot.project.sections.map(normalizeSection);
+      project.tracks = snapshot.project.tracks.map(normalizeTrack);
+      project.events = snapshot.project.events.map(normalizeEvent).filter(Boolean);
+      project.rooms = structuredClone(snapshot.project.rooms);
+      project.activeRoomId = snapshot.project.activeRoomId;
+      project.master = { ...snapshot.project.master };
+      selectedTrackId = snapshot.selectedTrackId && hasLane(snapshot.selectedTrackId) ? snapshot.selectedTrackId : getTimelineLanes()[0]?.id || null;
+      selectedEventId = snapshot.selectedEventId && project.events.some((event) => event.id === snapshot.selectedEventId) ? snapshot.selectedEventId : null;
+      lastRenderedPeak = snapshot.lastRenderedPeak;
+      pendingControlHistory = false;
+      renderAll();
+      updateHistoryButtons();
+    }
+
+    function rememberState() {
+      pushHistorySnapshot(createSnapshot());
+    }
+
+    function rememberControlHistory() {
+      if (pendingControlHistory) return;
+      rememberState();
+      pendingControlHistory = true;
+    }
+
+    function finishControlHistory() {
+      pendingControlHistory = false;
+    }
+
+    function pushHistorySnapshot(snapshot) {
+      history.undo.push(snapshot);
+      while (history.undo.length > history.limit) history.undo.shift();
+      history.redo = [];
+      updateHistoryButtons();
+    }
+
+    function undo() {
+      if (!history.undo.length) return;
+      const current = createSnapshot();
+      const previous = history.undo.pop();
+      history.redo.push(current);
+      while (history.redo.length > history.limit) history.redo.shift();
+      restoreSnapshot(previous);
+      setStatus("取り消しました。");
+    }
+
+    function redo() {
+      if (!history.redo.length) return;
+      const current = createSnapshot();
+      const next = history.redo.pop();
+      history.undo.push(current);
+      while (history.undo.length > history.limit) history.undo.shift();
+      restoreSnapshot(next);
+      setStatus("やり直しました。");
+    }
+
+    function updateHistoryButtons() {
+      els.undoBtn.disabled = !history.undo.length;
+      els.redoBtn.disabled = !history.redo.length;
+    }
+
+    function renderAll() {
+      els.projectTitle.value = project.title;
+      renderTrackList();
+      renderInspector();
+      renderTimeline();
+      renderTransport();
+      renderReadouts();
+      drawSpaceView();
+      updateOverlapStatus();
+      updateHistoryButtons();
+    }
+
+    function renderTrackList() {
+      const lanes = getTimelineLanes();
+      if (!lanes.length) {
+        els.trackList.innerHTML = `<div class="track-empty">音声追加から複数WAVまたはブラウザがdecodeできる音声を読み込んでください。セクションは音声なしの基準レーンとして使えます。</div>`;
+        return;
+      }
+
+      els.trackList.innerHTML = lanes.map((lane, index) => {
+        const eventCount = project.events.filter((event) => event.trackId === lane.id).length;
+        const selected = lane.id === selectedTrackId ? "selected" : "";
+        const sectionClass = lane.type === "section" ? "section-item" : "";
+        const loaded = lane.type === "section"
+          ? `${formatTime(lane.startSec)} - ${formatTime(lane.endSec)} / section`
+          : lane.audioBuffer ? `${formatTime(lane.audioBuffer.duration)} / ${lane.channels}ch / ${lane.sourceSampleRate}Hz` : "audio missing";
+        const controls = lane.type === "track" ? `
+              <div class="track-buttons">
+                <button type="button" class="mini-toggle ${lane.muted ? "active" : ""}" data-action="mute" title="Mute">M</button>
+                <button type="button" class="mini-toggle ${lane.solo ? "active" : ""}" data-action="solo" title="Solo">S</button>
+              </div>
+        ` : "";
+        const sliders = lane.type === "track" ? `
+            <div class="track-sliders">
+              <label>vol ${lane.gainDb.toFixed(1)}dB
+                <div class="track-param-control">
+                  <input type="range" min="-24" max="12" step="0.1" value="${lane.gainDb}" data-action="gain" data-reset-param="gain">
+                  <input type="number" min="-24" max="12" step="0.1" value="${lane.gainDb.toFixed(1)}" data-action="gain" data-reset-param="gain">
+                </div>
+              </label>
+              <label>pan ${lane.basePan.toFixed(2)}
+                <div class="track-param-control">
+                  <input type="range" min="-1" max="1" step="0.01" value="${lane.basePan}" data-action="pan" data-reset-param="pan">
+                  <input type="number" min="-1" max="1" step="0.01" value="${lane.basePan.toFixed(2)}" data-action="pan" data-reset-param="pan">
+                </div>
+              </label>
+            </div>
+        ` : "";
+        return `
+          <div class="track-item ${sectionClass} ${selected}" data-track-id="${lane.id}" style="border-left-color:${lane.color}">
+            <div class="track-main">
+              <div>
+                <div class="track-name">${escapeHtml(index + 1)}. ${escapeHtml(lane.name)}</div>
+                <div class="track-meta">${escapeHtml(lane.type === "section" ? "section" : lane.kind)} / ${escapeHtml(loaded)} / events ${eventCount}</div>
+              </div>
+              ${controls}
+            </div>
+            ${sliders}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderInspector() {
+      const track = getSelectedTrack();
+      const section = getSelectedSection();
+      const hasTrack = Boolean(track);
+      const hasSection = Boolean(section);
+      const selectedLane = getSelectedLane();
+      [
+        els.trackNameInput,
+        els.trackKindSelect,
+        els.trackMonoSelect,
+        els.trackGainInput,
+        els.trackGainNumberInput,
+        els.trackPanInput,
+        els.trackPanNumberInput,
+        els.trackWidthInput,
+        els.trackReverbInput,
+        els.trackLowCutInput,
+        els.trackHighShelfInput,
+        els.trackPosXInput,
+        els.trackPosYInput,
+        els.trackPosZInput,
+        els.trackMutedInput,
+        els.trackSoloInput,
+        els.trackColorInput
+      ].forEach((el) => { el.disabled = !hasTrack; });
+      [
+        els.sectionNameInput,
+        els.sectionStartInput,
+        els.sectionEndInput,
+        els.sectionEnabledInput,
+        els.sectionColorInput,
+        els.sectionBpmInput,
+        els.sectionBeatOffsetInput,
+        els.analyzeSectionBpmBtn
+      ].forEach((el) => { el.disabled = !hasSection; });
+
+      els.deleteTrackBtn.disabled = !selectedLane;
+      els.deleteTrackBtn.textContent = hasSection ? "選択セクション削除" : "選択トラック削除";
+      els.copyEffectsBtn.disabled = !selectedLane;
+      els.pasteEffectsBtn.disabled = !selectedLane || !effectClipboard?.events?.length;
+      els.sectionRoomSelect.disabled = !hasSection;
+      els.sectionMasterGainInput.disabled = !hasSection;
+
+      if (track) {
+        els.trackNameInput.value = track.name;
+        els.trackKindSelect.value = track.kind;
+        els.trackMonoSelect.value = track.monoMode;
+        els.trackGainInput.value = track.gainDb;
+        els.trackGainNumberInput.value = track.gainDb.toFixed(1);
+        els.trackGainValue.textContent = track.gainDb.toFixed(1);
+        els.trackPanInput.value = track.basePan;
+        els.trackPanNumberInput.value = track.basePan.toFixed(2);
+        els.trackPanValue.textContent = track.basePan.toFixed(2);
+        els.trackWidthInput.value = track.stereoWidth;
+        els.trackWidthValue.textContent = track.stereoWidth.toFixed(2);
+        els.trackReverbInput.value = track.reverbSend;
+        els.trackReverbValue.textContent = track.reverbSend.toFixed(2);
+        els.trackLowCutInput.value = track.eq.lowCutHz;
+        els.trackHighShelfInput.value = track.eq.highShelfDb;
+        els.trackPosXInput.value = track.basePosition.x;
+        els.trackPosYInput.value = track.basePosition.y;
+        els.trackPosZInput.value = track.basePosition.z;
+        els.trackMutedInput.checked = track.muted;
+        els.trackSoloInput.checked = track.solo;
+        els.trackColorInput.value = track.color;
+      } else {
+        els.trackNameInput.value = "";
+        els.trackKindSelect.value = "other";
+        els.trackMonoSelect.value = "preserve";
+        els.trackGainInput.value = 0;
+        els.trackGainNumberInput.value = 0;
+        els.trackGainValue.textContent = "0.0";
+        els.trackPanInput.value = 0;
+        els.trackPanNumberInput.value = 0;
+        els.trackPanValue.textContent = "0.00";
+        els.trackWidthInput.value = 1;
+        els.trackWidthValue.textContent = "1.00";
+        els.trackReverbInput.value = 0;
+        els.trackReverbValue.textContent = "0.00";
+        els.trackLowCutInput.value = 80;
+        els.trackHighShelfInput.value = 0;
+        els.trackPosXInput.value = 0;
+        els.trackPosYInput.value = 0;
+        els.trackPosZInput.value = 0;
+        els.trackMutedInput.checked = false;
+        els.trackSoloInput.checked = false;
+        els.trackColorInput.value = "#37b7a6";
+      }
+
+      if (section) {
+        els.sectionNameInput.value = section.name;
+        els.sectionStartInput.value = round2(section.startSec);
+        els.sectionEndInput.value = round2(section.endSec);
+        els.sectionEnabledInput.checked = section.enabled;
+        els.sectionColorInput.value = section.color;
+        els.sectionBpmInput.value = section.bpm ?? "";
+        els.sectionBeatOffsetInput.value = section.beatOffsetSec ?? section.startSec;
+        els.sectionBpmConfidence.textContent = section.beatConfidence == null ? "confidence -" : `confidence ${section.beatConfidence.toFixed(2)}`;
+        els.sectionRoomSelect.value = section.roomId || "";
+        els.sectionMasterGainInput.value = section.masterGainDb ?? "";
+      } else {
+        els.sectionNameInput.value = "";
+        els.sectionStartInput.value = 0;
+        els.sectionEndInput.value = 8;
+        els.sectionEnabledInput.checked = true;
+        els.sectionColorInput.value = "#f2b84b";
+        els.sectionBpmInput.value = "";
+        els.sectionBeatOffsetInput.value = "";
+        els.sectionBpmConfidence.textContent = "confidence -";
+        els.sectionRoomSelect.value = "";
+        els.sectionMasterGainInput.value = "";
+      }
+
+      els.eventTrackSelect.innerHTML = getTimelineLanes()
+        .map((item) => `<option value="${item.id}">${item.type === "section" ? "[Section] " : ""}${escapeHtml(item.name)}</option>`)
+        .join("");
+      els.eventTrackSelect.disabled = !getTimelineLanes().length;
+      if (getTimelineLanes().length) {
+        els.eventTrackSelect.value = selectedEventId ? getSelectedEvent()?.trackId || selectedTrackId : selectedTrackId || getTimelineLanes()[0].id;
+      }
+
+      const event = getSelectedEvent();
+      els.deleteEventBtn.disabled = !event;
+      els.addEventBtn.disabled = !getTimelineLanes().length;
+      if (event) {
+        els.eventTrackSelect.value = event.trackId;
+        els.presetSelect.value = event.presetId;
+        els.eventStartInput.value = round2(event.startSec);
+        els.eventEndInput.value = round2(event.endSec);
+        els.eventIntensityInput.value = event.intensity;
+        els.eventIntensityValue.textContent = event.intensity.toFixed(2);
+        els.curveSelect.value = event.curve || "ease_in_out";
+        els.eventLabelInput.value = event.label || "";
+        els.eventEnabledInput.checked = event.enabled;
+        renderBeatParamValues(event.params || {}, event.trackId);
+      } else {
+        els.eventTrackSelect.value = selectedTrackId || getTimelineLanes()[0]?.id || "";
+        const section = getSelectedSection();
+        if (section) {
+          els.eventStartInput.value = round2(section.startSec);
+          els.eventEndInput.value = round2(section.endSec);
+        }
+        renderBeatParamValues({}, els.eventTrackSelect.value);
+      }
+
+      els.roomSelect.innerHTML = project.rooms.map((room) => `<option value="${room.id}">${escapeHtml(room.name)}</option>`).join("");
+      els.sectionRoomSelect.innerHTML = `<option value="">Follow Global</option>${project.rooms.map((room) => `<option value="${room.id}">${escapeHtml(room.name)}</option>`).join("")}`;
+      els.roomSelect.value = project.activeRoomId;
+      els.masterGainInput.value = project.master.gainDb;
+      els.globalBpmInput.value = project.bpm ?? "";
+      els.globalBeatOffsetInput.value = project.beatOffsetSec ?? 0;
+      els.globalBpmConfidence.textContent = project.beatConfidence == null ? "confidence -" : `confidence ${project.beatConfidence.toFixed(2)}`;
+      if (section) els.sectionRoomSelect.value = section.roomId || "";
+      selectInspectorTab(activeInspectorTab);
+    }
+
+    function renderBeatParamValues(params, laneId) {
+      const base = getDefaultBeatBaseForLane(laneId);
+      els.beatDivisionSelect.value = String(params.beatDivision ?? "1");
+      els.beatPhaseInput.value = params.beatPhase ?? 0;
+      els.beatDepthInput.value = params.beatDepth ?? 0.7;
+      els.beatDepthValue.textContent = Number(els.beatDepthInput.value).toFixed(2);
+      els.beatDecayInput.value = params.beatDecayMs ?? 180;
+      els.beatCurveSelect.value = params.beatCurve || "smooth";
+      els.beatAlternateSelect.value = params.beatAlternate || "lr";
+      els.beatBaseXInput.value = params.beatBaseX ?? round2(base.x);
+      els.beatBaseYInput.value = params.beatBaseY ?? round2(base.y);
+      els.beatBaseZInput.value = params.beatBaseZ ?? round2(base.z);
+    }
+
+    function renderTimeline() {
+      const duration = Math.max(project.durationSec, 1);
+      const minWidth = Math.max(900, Math.ceil(duration * 18));
+      const lanes = getTimelineLanes();
+      els.timeRuler.style.width = `${minWidth}px`;
+      els.timelineRows.style.width = `${minWidth}px`;
+      els.timelineRows.style.height = `${Math.max(lanes.length * 46, 160)}px`;
+
+      const tickStep = chooseTickStep(duration);
+      let ticks = "";
+      for (let sec = 0; sec <= duration + 0.001; sec += tickStep) {
+        const left = (sec / duration) * 100;
+        ticks += `<div class="tick" style="left:${left}%">${formatTime(sec)}</div>`;
+      }
+      els.timeRuler.innerHTML = ticks;
+
+      const overlapIds = findOverlappingEventIds();
+      const rows = lanes.map((lane) => {
+        const sectionRange = lane.type === "section" ? `
+          <div class="section-range-block" style="left:${(lane.startSec / duration) * 100}%;width:${Math.max(0.2, ((lane.endSec - lane.startSec) / duration) * 100)}%;border-color:${lane.color};"></div>
+        ` : "";
+        const blocks = project.events
+          .filter((event) => event.trackId === lane.id)
+          .map((event) => {
+            const left = `${(event.startSec / duration) * 100}%`;
+            const width = `${Math.max(0.2, ((event.endSec - event.startSec) / duration) * 100)}%`;
+            const preset = PRESETS[event.presetId] || PRESETS.pass_left_to_right;
+            const label = event.label || event.presetId;
+            const selected = event.id === selectedEventId ? "selected" : "";
+            const disabled = event.enabled ? "" : "disabled";
+            const overlap = overlapIds.has(event.id) ? "overlap" : "";
+            const color = event.color || preset.color || lane.color;
+            return `
+              <div class="event-block ${selected} ${disabled} ${overlap}" data-event-id="${event.id}" style="left:${left};width:${width};background:${color}">
+                <span class="event-handle left" data-handle="start"></span>
+                <span>${escapeHtml(label)}</span>
+                <span class="event-handle right" data-handle="end"></span>
+              </div>
+            `;
+          }).join("");
+
+        return `
+          <div class="timeline-row" data-track-id="${lane.id}">
+            <div class="timeline-row-label">${escapeHtml(lane.type === "section" ? "[Section] " : "")}${escapeHtml(lane.name)}</div>
+            ${sectionRange}
+            ${blocks}
+          </div>
+        `;
+      }).join("");
+
+      els.timelineRows.innerHTML = rows || `<div class="track-empty" style="margin:12px;width:360px">音声トラックかセクションを追加するとタイムラインが表示されます。</div>`;
+      positionPlayhead();
+    }
+
+    function renderTransport() {
+      const duration = Math.max(project.durationSec, 0);
+      els.seekInput.max = String(duration);
+      els.seekInput.value = String(clamp(getCurrentTime(), 0, duration));
+      els.currentTimeLabel.textContent = `${formatTime(getCurrentTime())}`;
+      els.durationLabel.textContent = `${formatTime(duration)}`;
+      positionPlayhead();
+    }
+
+    function renderReadouts() {
+      els.durationReadout.textContent = formatTime(project.durationSec);
+      els.sampleRateReadout.textContent = project.sampleRate ? `${project.sampleRate} Hz` : "-";
+      els.trackCountReadout.textContent = String(project.tracks.length);
+      els.sectionCountReadout.textContent = String(project.sections.length);
+      els.eventCountReadout.textContent = String(project.events.length);
+      const readoutRoom = project.rooms.find((room) => room.id === getRoomIdAtTime(getCurrentTime())) || getActiveRoom();
+      els.roomReadout.textContent = readoutRoom?.name || "-";
+      if (lastRenderedPeak === null) {
+        els.peakReadout.textContent = "not rendered";
+        els.peakMeterFill.style.width = "0%";
+        els.peakMeterFill.style.background = "var(--ok)";
+      } else {
+        els.peakReadout.textContent = `${lastRenderedPeak.toFixed(3)} ${lastRenderedPeak > 1 ? "clip" : ""}`;
+        els.peakMeterFill.style.width = `${Math.min(100, lastRenderedPeak * 100)}%`;
+        els.peakMeterFill.style.background = lastRenderedPeak > 1 ? "var(--danger)" : lastRenderedPeak > 0.92 ? "var(--accent-2)" : "var(--ok)";
+      }
+    }
+
+    function updateSelectedTrackFromInspector(event) {
+      const track = getSelectedTrack();
+      if (!track) return;
+      rememberControlHistory();
+
+      track.name = els.trackNameInput.value.trim() || track.fileName || "track";
+      track.kind = els.trackKindSelect.value;
+      track.monoMode = els.trackMonoSelect.value;
+      const gainValue = event?.target === els.trackGainNumberInput ? Number(els.trackGainNumberInput.value) : Number(els.trackGainInput.value);
+      const panValue = event?.target === els.trackPanNumberInput ? Number(els.trackPanNumberInput.value) : Number(els.trackPanInput.value);
+      track.gainDb = clamp(Number.isFinite(gainValue) ? gainValue : track.gainDb, -24, 12);
+      track.basePan = clamp(Number.isFinite(panValue) ? panValue : track.basePan, -1, 1);
+      track.stereoWidth = Number(els.trackWidthInput.value);
+      track.reverbSend = Number(els.trackReverbInput.value);
+      track.eq.lowCutHz = clamp(Number(els.trackLowCutInput.value) || 80, 20, 1000);
+      track.eq.highShelfDb = clamp(Number(els.trackHighShelfInput.value) || 0, -12, 12);
+      track.basePosition = {
+        x: Number(els.trackPosXInput.value) || 0,
+        y: Number(els.trackPosYInput.value) || 0,
+        z: Number(els.trackPosZInput.value) || 0
+      };
+      track.muted = els.trackMutedInput.checked;
+      track.solo = els.trackSoloInput.checked;
+      track.color = els.trackColorInput.value;
+
+      renderTrackList();
+      renderTimeline();
+      renderInspector();
+      drawSpaceView();
+    }
+
+    function updateSelectedSectionFromInspector() {
+      const section = getSelectedSection();
+      if (!section) return;
+      rememberControlHistory();
+
+      const startSec = Math.max(0, Number(els.sectionStartInput.value) || 0);
+      const endSec = Math.max(startSec + 0.05, Number(els.sectionEndInput.value) || startSec + 0.05);
+      section.name = els.sectionNameInput.value.trim() || "Section";
+      section.startSec = startSec;
+      section.endSec = endSec;
+      section.enabled = els.sectionEnabledInput.checked;
+      section.color = els.sectionColorInput.value;
+      section.bpm = els.sectionBpmInput.value === "" ? null : Number(els.sectionBpmInput.value);
+      section.beatOffsetSec = els.sectionBeatOffsetInput.value === "" ? startSec : Math.max(0, Number(els.sectionBeatOffsetInput.value) || startSec);
+
+      recalculateDuration(false);
+      renderTrackList();
+      renderTimeline();
+      renderInspector();
+      renderReadouts();
+    }
+
+    function updateSelectedSectionRoomMaster() {
+      const section = getSelectedSection();
+      if (!section) return;
+      rememberControlHistory();
+      section.roomId = els.sectionRoomSelect.value || "";
+      const masterValue = els.sectionMasterGainInput.value;
+      section.masterGainDb = masterValue === "" ? null : Number(masterValue);
+      renderTrackList();
+      renderReadouts();
+    }
+
+    function updateGlobalBeatGrid() {
+      rememberControlHistory();
+      project.bpm = els.globalBpmInput.value === "" ? null : Number(els.globalBpmInput.value);
+      project.beatOffsetSec = Math.max(0, Number(els.globalBeatOffsetInput.value) || 0);
+      renderReadouts();
+    }
+
+    function addEventFromInspector() {
+      const values = readEventForm();
+      if (!values) return;
+      rememberState();
+      const event = {
+        id: uid("event"),
+        ...values
+      };
+      project.events.push(event);
+      selectedEventId = event.id;
+      selectedTrackId = event.trackId;
+      recalculateDuration(false);
+      renderAll();
+      setStatus("イベントを追加しました。");
+    }
+
+    function updateSelectedEventFromInspector() {
+      const event = getSelectedEvent();
+      const values = readEventForm();
+      if (!event || !values) return;
+      rememberState();
+      Object.assign(event, values);
+      selectedTrackId = event.trackId;
+      recalculateDuration(false);
+      renderAll();
+      setStatus("選択イベントを更新しました。");
+    }
+
+    function autoUpdateSelectedEventFromInspector() {
+      const event = getSelectedEvent();
+      if (!event) return;
+      const values = readEventForm(true);
+      if (!values) return;
+      rememberControlHistory();
+      Object.assign(event, values);
+      selectedTrackId = event.trackId;
+      recalculateDuration(false);
+      renderTimeline();
+      renderTrackList();
+      renderReadouts();
+      drawSpaceView();
+    }
+
+    function readEventForm(silent = false) {
+      const trackId = els.eventTrackSelect.value || selectedTrackId;
+      const startSec = Number(els.eventStartInput.value);
+      const endSec = Number(els.eventEndInput.value);
+      if (!trackId || !hasLane(trackId)) {
+        if (!silent) setStatus("イベント対象レーンを選択してください。", "error");
+        return null;
+      }
+      if (!Number.isFinite(startSec) || !Number.isFinite(endSec) || endSec <= startSec) {
+        if (!silent) setStatus("イベントの終了秒は開始秒より後にしてください。", "error");
+        return null;
+      }
+      const existing = getSelectedEvent();
+      const params = existing?.params && typeof existing.params === "object" ? structuredClone(existing.params) : {};
+      Object.assign(params, readBeatParamsFromForm());
+      return {
+        trackId,
+        presetId: els.presetSelect.value,
+        startSec: Math.max(0, startSec),
+        endSec: Math.max(startSec + 0.05, endSec),
+        intensity: clamp(Number(els.eventIntensityInput.value), 0, 1),
+        enabled: els.eventEnabledInput.checked,
+        label: els.eventLabelInput.value.trim(),
+        curve: els.curveSelect.value,
+        params,
+        color: PRESETS[els.presetSelect.value]?.color
+      };
+    }
+
+    function readBeatParamsFromForm() {
+      return {
+        beatDivision: Number(els.beatDivisionSelect.value) || 1,
+        beatPhase: Number(els.beatPhaseInput.value) || 0,
+        beatDepth: clamp(Number(els.beatDepthInput.value), 0, 1),
+        beatDecayMs: clamp(Number(els.beatDecayInput.value) || 180, 20, 2000),
+        beatCurve: els.beatCurveSelect.value || "smooth",
+        beatAlternate: els.beatAlternateSelect.value || "lr",
+        beatBaseX: clamp(Number(els.beatBaseXInput.value) || 0, -1.2, 1.2),
+        beatBaseY: clamp(Number(els.beatBaseYInput.value) || 0, -1.2, 1.2),
+        beatBaseZ: clamp(Number(els.beatBaseZInput.value) || 0, -1.2, 1.2)
+      };
+    }
+
+    function deleteSelectedEvent() {
+      const event = getSelectedEvent();
+      if (!event) return;
+      rememberState();
+      project.events = project.events.filter((item) => item.id !== event.id);
+      selectedEventId = null;
+      recalculateDuration(false);
+      renderAll();
+      setStatus("イベントを削除しました。");
+    }
+
+    function deleteSelectedTrack() {
+      const track = getSelectedTrack();
+      const section = getSelectedSection();
+      if (!track && !section) return;
+      rememberState();
+      stopPlayback();
+      const laneId = track?.id || section.id;
+      if (track) project.tracks = project.tracks.filter((item) => item.id !== track.id);
+      if (section) project.sections = project.sections.filter((item) => item.id !== section.id);
+      project.events = project.events.filter((event) => event.trackId !== laneId);
+      selectedTrackId = getTimelineLanes()[0]?.id || null;
+      selectedEventId = null;
+      recalculateDuration();
+      renderAll();
+      setStatus(track ? "選択トラックを削除しました。" : "選択セクションを削除しました。");
+    }
+
+    function onTrackListClick(event) {
+      const item = event.target.closest(".track-item");
+      if (!item) return;
+      const lane = getLaneById(item.dataset.trackId);
+      const track = project.tracks.find((candidate) => candidate.id === item.dataset.trackId);
+      if (!lane) return;
+      selectedTrackId = lane.id;
+      selectedEventId = null;
+      syncInspectorTabForSelection(lane.type);
+
+      const action = event.target.dataset.action;
+      if (track && action === "mute") {
+        rememberState();
+        track.muted = !track.muted;
+      }
+      if (track && action === "solo") {
+        rememberState();
+        track.solo = !track.solo;
+      }
+
+      renderAll();
+    }
+
+    function onTrackListInput(event) {
+      const item = event.target.closest(".track-item");
+      const track = project.tracks.find((candidate) => candidate.id === item?.dataset.trackId);
+      if (!track) return;
+      rememberControlHistory();
+      const value = Number(event.target.value);
+      if (!Number.isFinite(value)) return;
+      if (event.target.dataset.action === "gain") track.gainDb = clamp(value, -24, 12);
+      if (event.target.dataset.action === "pan") track.basePan = clamp(value, -1, 1);
+      selectedTrackId = track.id;
+      renderInspector();
+      drawSpaceView();
+    }
+
+    function onTrackListChange() {
+      finishControlHistory();
+      renderTrackList();
+      renderInspector();
+    }
+
+    function onTrackListDoubleClick(event) {
+      const item = event.target.closest(".track-item");
+      const track = project.tracks.find((candidate) => candidate.id === item?.dataset.trackId);
+      const param = event.target.dataset.resetParam;
+      if (!track || !param) return;
+      rememberState();
+      if (param === "gain") track.gainDb = 0;
+      if (param === "pan") track.basePan = 0;
+      selectedTrackId = track.id;
+      renderAll();
+      setStatus(param === "gain" ? "volを0.0dBに戻しました。" : "panを0.00に戻しました。");
+    }
+
+    function resetSelectedTrackParam(event) {
+      const track = getSelectedTrack();
+      const param = event.currentTarget.dataset.resetParam;
+      if (!track || !param) return;
+      rememberState();
+      if (param === "gain") track.gainDb = 0;
+      if (param === "pan") track.basePan = 0;
+      renderAll();
+      setStatus(param === "gain" ? "volを0.0dBに戻しました。" : "panを0.00に戻しました。");
+    }
+
+    function onTimelinePointerDown(event) {
+      const block = event.target.closest(".event-block");
+      if (!block) {
+        const row = event.target.closest(".timeline-row");
+        if (row) {
+          selectedTrackId = row.dataset.trackId;
+          syncInspectorTabForSelection(getSelectedSection() ? "section" : "track");
+          const rawSec = timelineXToSeconds(event.clientX);
+          const snappedStart = snapTime(rawSec, null);
+          const sec = snappedStart.snapped ? snappedStart.time : rawSec;
+          selectedEventId = null;
+          dragState = {
+            id: null,
+            mode: "create",
+            laneId: row.dataset.trackId,
+            startX: event.clientX,
+            originSec: sec,
+            startSec: sec,
+            endSec: sec,
+            originalTrackId: row.dataset.trackId,
+            beforeSnapshot: createSnapshot(),
+            changed: false,
+            createdEventId: null,
+            snap: snappedStart.snapped ? snappedStart : null,
+            duration: Math.max(project.durationSec, 1),
+            widthPx: els.timelineRows.getBoundingClientRect().width
+          };
+          event.preventDefault();
+          renderAll();
+        }
+        return;
+      }
+
+      const item = project.events.find((candidate) => candidate.id === block.dataset.eventId);
+      if (!item) return;
+      selectedEventId = item.id;
+      selectedTrackId = item.trackId;
+      syncInspectorTabForSelection("event");
+      const handle = event.target.dataset.handle;
+      dragState = {
+        id: item.id,
+        mode: handle || "move",
+        startX: event.clientX,
+        startSec: item.startSec,
+        endSec: item.endSec,
+        originalTrackId: item.trackId,
+        beforeSnapshot: createSnapshot(),
+        changed: false,
+        snap: null,
+        duration: Math.max(project.durationSec, 1),
+        widthPx: els.timelineRows.getBoundingClientRect().width
+      };
+      event.preventDefault();
+      renderAll();
+    }
+
+    function onTimeRulerPointerDown(event) {
+      const sec = timelineXToSeconds(event.clientX);
+      seekTo(sec, playback.state === "playing");
+      renderTransport();
+      setStatus(`シーク: ${formatTime(sec)}`);
+    }
+
+    function onTimelineDoubleClick(event) {
+      const row = event.target.closest(".timeline-row");
+      if (!row) return;
+      const sec = timelineXToSeconds(event.clientX);
+          selectedTrackId = row.dataset.trackId;
+          syncInspectorTabForSelection(getSelectedSection() ? "section" : "track");
+      selectedEventId = null;
+      els.eventTrackSelect.value = selectedTrackId;
+      els.eventStartInput.value = round2(sec);
+      els.eventEndInput.value = round2(Math.min(Math.max(project.durationSec, sec + 3), sec + 4));
+      renderInspector();
+    }
+
+    function updateCreateDrag(event) {
+      const distancePx = Math.abs(event.clientX - dragState.startX);
+      const laneId = laneIdFromTimelineY(event.clientY) || dragState.laneId;
+      let currentSec = timelineXToSeconds(event.clientX);
+      const snapped = snapTime(currentSec, dragState.createdEventId);
+      if (snapped.snapped) currentSec = snapped.time;
+
+      if (!dragState.createdEventId && distancePx < 4) {
+        dragState.snap = snapped.snapped ? snapped : null;
+        updateSnapGuide();
+        return;
+      }
+
+      if (!dragState.createdEventId) {
+        const eventItem = createEventFromDrag(laneId, dragState.originSec, currentSec);
+        project.events.push(eventItem);
+        dragState.createdEventId = eventItem.id;
+        selectedEventId = eventItem.id;
+      }
+
+      const item = project.events.find((candidate) => candidate.id === dragState.createdEventId);
+      if (!item) return;
+
+      const startSec = Math.min(dragState.originSec, currentSec);
+      const endSec = Math.max(dragState.originSec, currentSec);
+      item.trackId = laneId;
+      item.startSec = startSec;
+      item.endSec = Math.max(startSec + 0.05, endSec);
+      selectedTrackId = laneId;
+      dragState.changed = item.endSec - item.startSec >= 0.05;
+      dragState.snap = snapped.snapped ? snapped : null;
+      recalculateDuration(false);
+      renderTimeline();
+      renderInspector();
+      drawSpaceView();
+      updateSnapGuide();
+    }
+
+    function finishCreateDrag() {
+      const item = dragState.createdEventId
+        ? project.events.find((candidate) => candidate.id === dragState.createdEventId)
+        : null;
+
+      if (!item) {
+        const seekSec = dragState.originSec;
+        dragState = null;
+        hideSnapGuide();
+        seekTo(seekSec, playback.state === "playing");
+        renderAll();
+        return;
+      }
+
+      if (!dragState.changed || item.endSec - item.startSec < 0.05) {
+        project.events = project.events.filter((candidate) => candidate.id !== item.id);
+        selectedEventId = null;
+        const seekSec = dragState.originSec;
+        dragState = null;
+        hideSnapGuide();
+        seekTo(seekSec, playback.state === "playing");
+        recalculateDuration(false);
+        renderAll();
+        return;
+      }
+
+      pushHistorySnapshot(dragState.beforeSnapshot);
+      selectedTrackId = item.trackId;
+      selectedEventId = item.id;
+      dragState = null;
+      hideSnapGuide();
+      recalculateDuration(false);
+      renderAll();
+      setStatus("ドラッグ範囲からイベントを追加しました。");
+    }
+
+    function createEventFromDrag(trackId, startSec, endSec) {
+      const start = Math.max(0, Math.min(startSec, endSec));
+      const end = Math.max(start + 0.05, Math.max(startSec, endSec));
+      const presetId = els.presetSelect.value || "pass_left_to_right";
+      return {
+        id: uid("event"),
+        trackId,
+        presetId,
+        startSec: start,
+        endSec: end,
+        intensity: clamp(Number(els.eventIntensityInput.value), 0, 1),
+        enabled: true,
+        label: "",
+        curve: els.curveSelect.value || "ease_in_out",
+        params: {},
+        color: PRESETS[presetId]?.color
+      };
+    }
+
+    function onWindowPointerMove(event) {
+      if (!dragState) return;
+      if (dragState.mode === "create") {
+        updateCreateDrag(event);
+        return;
+      }
+
+      const item = project.events.find((candidate) => candidate.id === dragState.id);
+      if (!item) return;
+      const deltaPx = event.clientX - dragState.startX;
+      const deltaSec = (deltaPx / dragState.widthPx) * dragState.duration;
+      const minLen = 0.05;
+
+      if (dragState.mode === "start") {
+        const snapped = snapTime(dragState.startSec + deltaSec, item.id);
+        item.startSec = clamp(snapped.time, 0, item.endSec - minLen);
+        dragState.snap = snapped.snapped ? snapped : null;
+      } else if (dragState.mode === "end") {
+        const snapped = snapTime(dragState.endSec + deltaSec, item.id);
+        item.endSec = Math.max(item.startSec + minLen, snapped.time);
+        dragState.snap = snapped.snapped ? snapped : null;
+      } else {
+        const length = dragState.endSec - dragState.startSec;
+        let newStart = Math.max(0, dragState.startSec + deltaSec);
+        let newEnd = newStart + length;
+        const startSnap = snapTime(newStart, item.id);
+        const endSnap = snapTime(newEnd, item.id);
+        if (startSnap.snapped && (!endSnap.snapped || startSnap.distance <= endSnap.distance)) {
+          newStart = startSnap.time;
+          newEnd = newStart + length;
+          dragState.snap = startSnap;
+        } else if (endSnap.snapped) {
+          newEnd = endSnap.time;
+          newStart = Math.max(0, newEnd - length);
+          dragState.snap = endSnap;
+        } else {
+          dragState.snap = null;
+        }
+        item.startSec = newStart;
+        item.endSec = newEnd;
+        const laneId = laneIdFromTimelineY(event.clientY);
+        if (laneId) item.trackId = laneId;
+      }
+      dragState.changed = Math.abs(item.startSec - dragState.startSec) > 0.0001
+        || Math.abs(item.endSec - dragState.endSec) > 0.0001
+        || item.trackId !== dragState.originalTrackId;
+      selectedTrackId = item.trackId;
+      recalculateDuration(false);
+      renderTimeline();
+      renderInspector();
+      drawSpaceView();
+      updateSnapGuide();
+    }
+
+    function onWindowPointerUp() {
+      if (dragState) {
+        if (dragState.mode === "create") {
+          finishCreateDrag();
+          return;
+        }
+
+        if (dragState.changed) {
+          pushHistorySnapshot(dragState.beforeSnapshot);
+          setStatus(dragState.snap ? `スナップ: ${formatTime(dragState.snap.time)}` : "イベントを移動しました。");
+        }
+        dragState = null;
+        hideSnapGuide();
+        updateOverlapStatus();
+      }
+    }
+
+    function timelineXToSeconds(clientX) {
+      const rect = els.timelineRows.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const width = Math.max(1, rect.width);
+      return clamp((x / width) * Math.max(project.durationSec, 1), 0, Math.max(project.durationSec, 0));
+    }
+
+    function laneIdFromTimelineY(clientY) {
+      const rect = els.timelineRows.getBoundingClientRect();
+      const rowIndex = Math.floor((clientY - rect.top) / 46);
+      const lanes = getTimelineLanes();
+      return lanes[rowIndex]?.id || null;
+    }
+
+    function snapTime(timeSec, excludeEventId) {
+      const duration = Math.max(project.durationSec, 1);
+      const widthPx = Math.max(1, els.timelineRows.getBoundingClientRect().width);
+      const threshold = Math.min(0.25, Math.max(0.06, (12 / widthPx) * duration));
+      let best = { time: Math.max(0, timeSec), snapped: false, distance: Infinity };
+
+      for (const point of getSnapPoints(excludeEventId)) {
+        const distance = Math.abs(point.time - timeSec);
+        if (distance <= threshold && distance < best.distance) {
+          best = { time: point.time, snapped: true, distance, label: point.label };
+        }
+      }
+      return best;
+    }
+
+    function getSnapPoints(excludeEventId) {
+      const points = [{ time: 0, label: "start" }];
+      if (project.durationSec > 0) points.push({ time: project.durationSec, label: "end" });
+      for (const section of project.sections) {
+        points.push({ time: section.startSec, label: section.name });
+        points.push({ time: section.endSec, label: section.name });
+      }
+      for (const event of project.events) {
+        if (event.id === excludeEventId) continue;
+        points.push({ time: event.startSec, label: event.label || event.presetId });
+        points.push({ time: event.endSec, label: event.label || event.presetId });
+      }
+      return points.filter((point) => Number.isFinite(point.time) && point.time >= 0);
+    }
+
+    function updateSnapGuide() {
+      if (!dragState?.snap?.snapped) {
+        hideSnapGuide();
+        return;
+      }
+      const duration = Math.max(project.durationSec, 1);
+      const left = (dragState.snap.time / duration) * Math.max(els.timelineRows.getBoundingClientRect().width, 1);
+      els.snapGuide.style.left = `${left}px`;
+      els.snapGuide.style.height = `${els.timelineRows.scrollHeight + 32}px`;
+      els.snapGuide.style.display = "block";
+    }
+
+    function hideSnapGuide() {
+      els.snapGuide.style.display = "none";
+    }
+
+    async function startPlayback() {
+      if (!project.tracks.some((track) => track.audioBuffer)) {
+        setStatus("再生する音声ファイルがありません。", "error");
+        return;
+      }
+      const ctx = ensureAudioContext();
+      await ctx.resume();
+
+      if (playback.state === "playing") return;
+      const startOffset = clamp(playback.offsetSec, 0, Math.max(project.durationSec - 0.001, 0));
+      cleanupPlaybackGraphs();
+
+      const masterBus = createMasterBus(ctx, ctx.destination);
+      const tracks = getAudibleTracks();
+      playback.graphs = tracks.map((track) => buildTrackGraph(ctx, masterBus, track, startOffset, Math.max(project.durationSec - startOffset, 0), false)).filter(Boolean);
+      playback.masterBus = masterBus;
+      playback.startedAt = ctx.currentTime - startOffset;
+      playback.state = "playing";
+      playback.updateTimer = window.setInterval(updateLiveAutomation, 25);
+      updateLiveAutomation();
+      animatePlayback();
+      setStatus(`再生中: ${tracks.length} track(s)`);
+    }
+
+    function pausePlayback() {
+      if (playback.state !== "playing") return;
+      playback.offsetSec = getCurrentTime();
+      cleanupPlaybackGraphs();
+      playback.state = "paused";
+      renderTransport();
+      setStatus("一時停止しました。");
+    }
+
+    function stopPlayback() {
+      cleanupPlaybackGraphs();
+      playback.offsetSec = 0;
+      playback.state = "stopped";
+      renderTransport();
+      drawSpaceView();
+      setStatus("停止しました。");
+    }
+
+    function cleanupPlaybackGraphs() {
+      if (playback.updateTimer) {
+        window.clearInterval(playback.updateTimer);
+        playback.updateTimer = null;
+      }
+      if (playback.animationFrame) {
+        cancelAnimationFrame(playback.animationFrame);
+        playback.animationFrame = null;
+      }
+      for (const graph of playback.graphs) {
+        try { graph.source.stop(); } catch {}
+        try { graph.source.disconnect(); } catch {}
+      }
+      playback.graphs = [];
+      playback.masterBus = null;
+    }
+
+    function seekTo(sec, restart) {
+      const wasPlaying = playback.state === "playing";
+      playback.offsetSec = clamp(sec, 0, Math.max(project.durationSec, 0));
+      if (wasPlaying && restart) {
+        cleanupPlaybackGraphs();
+        playback.state = "paused";
+        startPlayback();
+      } else {
+        renderTransport();
+        drawSpaceView();
+      }
+    }
+
+    function animatePlayback() {
+      const now = getCurrentTime();
+      if (now >= project.durationSec && playback.state === "playing") {
+        stopPlayback();
+        return;
+      }
+      renderTransport();
+      drawSpaceView();
+      playback.animationFrame = requestAnimationFrame(animatePlayback);
+    }
+
+    function updateLiveAutomation() {
+      if (playback.state !== "playing" || !audioContext) return;
+      const timeSec = getCurrentTime();
+      const now = audioContext.currentTime;
+      if (playback.masterBus) {
+        playback.masterBus.masterGain.gain.setTargetAtTime(dbToGain(getMasterGainDbAtTime(timeSec)), now, 0.03);
+      }
+      for (const graph of playback.graphs) {
+        const params = getTrackParams(graph.track, timeSec);
+        const roomId = getRoomIdAtTime(timeSec);
+        graph.trackGain.gain.setTargetAtTime(dbToGain(params.totalGainDb), now, 0.018);
+        graph.pan.pan.setTargetAtTime(clamp(params.pan, -1, 1), now, 0.018);
+        for (const [id, sendGain] of graph.sendGains) {
+          sendGain.gain.setTargetAtTime(id === roomId ? clamp(params.reverbSend, 0, 1) : 0, now, 0.03);
+        }
+        graph.highShelf.gain.setTargetAtTime(clamp(params.highShelfDb, -18, 18), now, 0.03);
+        graph.lowpass.frequency.setTargetAtTime(lowpassTarget(params, audioContext), now, 0.03);
+        graph.highpass.frequency.setTargetAtTime(clamp(graph.track.eq.lowCutHz || 20, 20, 1000), now, 0.03);
+        if (graph.width) setStereoWidth(graph.width, params.stereoWidth, now, true);
+      }
+    }
+
+    async function exportWav() {
+      const sourceTracks = getAudibleTracks();
+      if (!sourceTracks.length) {
+        setStatus("書き出す音声トラックがありません。", "error");
+        return;
+      }
+
+      stopPlayback();
+      recalculateDuration();
+      const sampleRate = project.sampleRate || sourceTracks[0].audioBuffer.sampleRate || 48000;
+      const duration = Math.max(project.durationSec, 0.1);
+      const frameCount = Math.ceil(duration * sampleRate);
+
+      setStatus(`OfflineAudioContextで書き出し中: ${formatTime(duration)} / ${sampleRate}Hz`);
+      els.exportBtn.disabled = true;
+
+      try {
+        const offline = new OfflineAudioContext(2, frameCount, sampleRate);
+        const masterBus = createMasterBus(offline, offline.destination);
+        for (const track of sourceTracks) {
+          const graph = buildTrackGraph(offline, masterBus, track, 0, duration, true);
+          if (graph) scheduleOfflineAutomation(offline, graph, duration);
+        }
+        scheduleMasterAutomation(masterBus, duration);
+        const rendered = await offline.startRendering();
+        lastRenderedPeak = calculatePeak(rendered);
+        const wav = encodeWav16(rendered);
+        downloadBlob(new Blob([wav], { type: "audio/wav" }), `${safeFileName(project.title || "spatial_mix")}.wav`);
+
+        if (lastRenderedPeak > 1) {
+          setStatus(`書き出し完了。ただしピーク ${lastRenderedPeak.toFixed(3)} でクリップ警告。Masterを下げてください。`, "warn");
+        } else if (lastRenderedPeak > 0.92) {
+          setStatus(`書き出し完了。ピーク ${lastRenderedPeak.toFixed(3)}、余裕は少なめです。`, "warn");
+        } else {
+          setStatus(`書き出し完了。ピーク ${lastRenderedPeak.toFixed(3)}。`);
+        }
+      } catch (error) {
+        console.error(error);
+        setStatus("書き出しに失敗しました。長尺または多ステムの場合はトラック数を減らしてください。", "error");
+      } finally {
+        els.exportBtn.disabled = false;
+        renderReadouts();
+      }
+    }
+
+    function createMasterBus(ctx, destination) {
+      const masterGain = ctx.createGain();
+      masterGain.gain.value = dbToGain(project.master.gainDb);
+      masterGain.connect(destination);
+
+      const roomBuses = new Map();
+      for (const room of project.rooms) {
+        if (!room || room.reverbType !== "convolver" || room.globalWet <= 0) continue;
+        const input = ctx.createGain();
+        const convolver = ctx.createConvolver();
+        convolver.buffer = createImpulseResponse(ctx, room);
+        const wetGain = ctx.createGain();
+        wetGain.gain.value = clamp(room.globalWet, 0, 1);
+        input.connect(convolver);
+        convolver.connect(wetGain);
+        wetGain.connect(masterGain);
+        roomBuses.set(room.id, { input, wetGain });
+      }
+
+      return { masterGain, roomBuses };
+    }
+
+    function buildTrackGraph(ctx, masterBus, track, offsetSec, durationSec, scheduleNow) {
+      if (!track.audioBuffer || offsetSec >= track.audioBuffer.duration) return null;
+
+      const source = ctx.createBufferSource();
+      source.buffer = getBufferForMonoMode(ctx, track);
+
+      const trackGain = ctx.createGain();
+      const highpass = ctx.createBiquadFilter();
+      const highShelf = ctx.createBiquadFilter();
+      const lowpass = ctx.createBiquadFilter();
+      const pan = ctx.createStereoPanner();
+      const dryGain = ctx.createGain();
+      const sendGains = new Map();
+
+      highpass.type = "highpass";
+      highpass.frequency.value = clamp(track.eq.lowCutHz || 20, 20, 1000);
+      highShelf.type = "highshelf";
+      highShelf.frequency.value = 4500;
+      highShelf.gain.value = track.eq.highShelfDb || 0;
+      lowpass.type = "lowpass";
+      lowpass.frequency.value = ctx.sampleRate * 0.45;
+      dryGain.gain.value = 1;
+
+      const width = source.buffer.numberOfChannels > 1 ? createStereoWidthNode(ctx, track.stereoWidth) : null;
+
+      source.connect(trackGain);
+      if (width) {
+        trackGain.connect(width.input);
+        width.output.connect(highpass);
+      } else {
+        trackGain.connect(highpass);
+      }
+      highpass.connect(highShelf);
+      highShelf.connect(lowpass);
+      lowpass.connect(pan);
+      pan.connect(dryGain);
+      dryGain.connect(masterBus.masterGain);
+      for (const [roomId, roomBus] of masterBus.roomBuses) {
+        const sendGain = ctx.createGain();
+        sendGain.gain.value = roomId === getRoomIdAtTime(offsetSec) ? track.reverbSend : 0;
+        pan.connect(sendGain);
+        sendGain.connect(roomBus.input);
+        sendGains.set(roomId, sendGain);
+      }
+
+      const initial = getTrackParams(track, offsetSec);
+      trackGain.gain.value = dbToGain(initial.totalGainDb);
+      pan.pan.value = clamp(initial.pan, -1, 1);
+      for (const [roomId, sendGain] of sendGains) {
+        sendGain.gain.value = roomId === getRoomIdAtTime(offsetSec) ? clamp(initial.reverbSend, 0, 1) : 0;
+      }
+      highShelf.gain.value = clamp(initial.highShelfDb, -18, 18);
+      lowpass.frequency.value = lowpassTarget(initial, ctx);
+      if (width) setStereoWidth(width, initial.stereoWidth, 0, false);
+
+      if (scheduleNow) {
+        source.start(0, offsetSec, Math.min(durationSec, source.buffer.duration - offsetSec));
+      } else {
+        source.start(0, offsetSec);
+      }
+
+      return { source, track, trackGain, highpass, highShelf, lowpass, pan, dryGain, sendGains, width };
+    }
+
+    function scheduleOfflineAutomation(ctx, graph, durationSec) {
+      const step = 0.025;
+      const values = [];
+      for (let t = 0; t <= durationSec + 0.0001; t += step) {
+        values.push({ localTime: t, params: getTrackParams(graph.track, t) });
+      }
+      if (!values.length || values[values.length - 1].localTime < durationSec) {
+        values.push({ localTime: durationSec, params: getTrackParams(graph.track, durationSec) });
+      }
+
+      scheduleAudioParam(graph.trackGain.gain, values, (item) => dbToGain(item.params.totalGainDb));
+      scheduleAudioParam(graph.pan.pan, values, (item) => clamp(item.params.pan, -1, 1));
+      for (const [roomId, sendGain] of graph.sendGains) {
+        scheduleAudioParam(sendGain.gain, values, (item) => getRoomIdAtTime(item.localTime) === roomId ? clamp(item.params.reverbSend, 0, 1) : 0);
+      }
+      scheduleAudioParam(graph.highShelf.gain, values, (item) => clamp(item.params.highShelfDb, -18, 18));
+      scheduleAudioParam(graph.lowpass.frequency, values, (item) => lowpassTarget(item.params, ctx));
+      scheduleAudioParam(graph.highpass.frequency, values, () => clamp(graph.track.eq.lowCutHz || 20, 20, 1000));
+
+      if (graph.width) {
+        scheduleAudioParam(graph.width.lToL.gain, values, (item) => stereoWidthGains(item.params.stereoWidth).direct);
+        scheduleAudioParam(graph.width.rToR.gain, values, (item) => stereoWidthGains(item.params.stereoWidth).direct);
+        scheduleAudioParam(graph.width.lToR.gain, values, (item) => stereoWidthGains(item.params.stereoWidth).cross);
+        scheduleAudioParam(graph.width.rToL.gain, values, (item) => stereoWidthGains(item.params.stereoWidth).cross);
+      }
+    }
+
+    function scheduleMasterAutomation(masterBus, durationSec) {
+      const step = 0.025;
+      const values = [];
+      for (let t = 0; t <= durationSec + 0.0001; t += step) {
+        values.push({ localTime: t });
+      }
+      if (!values.length || values[values.length - 1].localTime < durationSec) values.push({ localTime: durationSec });
+      scheduleAudioParam(masterBus.masterGain.gain, values, (item) => dbToGain(getMasterGainDbAtTime(item.localTime)));
+    }
+
+    function scheduleAudioParam(param, values, picker) {
+      param.cancelScheduledValues(0);
+      param.setValueAtTime(picker(values[0]), 0);
+      for (let i = 1; i < values.length; i += 1) {
+        param.linearRampToValueAtTime(picker(values[i]), values[i].localTime);
+      }
+    }
+
+    function getTrackParams(track, timeSec) {
+      const activeEvent = getWinningEvent(track.id, timeSec);
+      const base = {
+        totalGainDb: track.gainDb,
+        pan: track.basePan,
+        reverbSend: track.reverbSend,
+        stereoWidth: track.stereoWidth,
+        highShelfDb: track.eq.highShelfDb || 0,
+        lowpassHz: null,
+        position: { ...track.basePosition }
+      };
+      if (!activeEvent) return base;
+
+      const preset = PRESETS[activeEvent.presetId] || PRESETS.pass_left_to_right;
+      const eventLength = Math.max(0.001, activeEvent.endSec - activeEvent.startSec);
+      const rawT = clamp((timeSec - activeEvent.startSec) / eventLength, 0, 1);
+      const t = applyCurve(rawT, activeEvent.curve);
+      const output = preset.render({
+        t,
+        timeSec,
+        event: activeEvent,
+        track,
+        intensity: activeEvent.intensity
+      }) || {};
+
+      return {
+        totalGainDb: track.gainDb + Number(output.gainDb || 0),
+        pan: clamp(Number(output.pan ?? base.pan), -1, 1),
+        reverbSend: clamp(Number(output.reverbSend ?? base.reverbSend), 0, 1),
+        stereoWidth: clamp(Number(output.stereoWidth ?? base.stereoWidth), 0, 1.6),
+        highShelfDb: clamp(base.highShelfDb + Number(output.highShelfDb || 0), -18, 18),
+        lowpassHz: output.lowpassHz ? clamp(Number(output.lowpassHz), 1000, 22050) : null,
+        position: output.position || base.position
+      };
+    }
+
+    function lowpassTarget(params, ctx) {
+      const nyquistSafe = Math.max(1000, ctx.sampleRate * 0.45);
+      return clamp(params.lowpassHz || nyquistSafe, 1000, nyquistSafe);
+    }
+
+    function getDefaultBeatBaseForLane(laneId, trackFallback = null) {
+      const track = trackFallback || project.tracks.find((item) => item.id === laneId);
+      if (track) {
+        return {
+          x: Number(track.basePosition?.x ?? 0),
+          y: Number(track.basePosition?.y ?? 0),
+          z: Number(track.basePosition?.z ?? 0)
+        };
+      }
+      return { x: 0, y: 0, z: 0.2 };
+    }
+
+    function getBeatBasePosition(event, track) {
+      const params = event.params || {};
+      const fallback = getDefaultBeatBaseForLane(event.trackId, track);
+      return {
+        x: clamp(Number(params.beatBaseX ?? fallback.x), -1.2, 1.2),
+        y: clamp(Number(params.beatBaseY ?? fallback.y), -1.2, 1.2),
+        z: clamp(Number(params.beatBaseZ ?? fallback.z), -1.2, 1.2)
+      };
+    }
+
+    function getBeatPulse(timeSec, event, intensity, options = {}) {
+      const grid = getBeatGridAtTime(timeSec, event);
+      const params = event.params || {};
+      const division = Math.max(0.25, Number(params.beatDivision ?? 1));
+      const phaseBeats = Number(params.beatPhase ?? 0);
+      const depth = clamp(Number(params.beatDepth ?? 0.7), 0, 1);
+      const interval = grid.beatSec * division;
+      const shifted = timeSec - grid.offsetSec - phaseBeats * grid.beatSec;
+      const cycle = Math.floor(shifted / interval);
+      const cycleStart = grid.offsetSec + phaseBeats * grid.beatSec + cycle * interval;
+      const elapsed = Math.max(0, timeSec - cycleStart);
+      const decaySec = clamp(Number(params.beatDecayMs ?? 180) / 1000, 0.02, Math.max(0.02, interval));
+      let pulse = elapsed <= decaySec ? 1 - elapsed / decaySec : 0;
+      pulse = shapeBeatPulse(pulse, params.beatCurve || "smooth");
+
+      const beatIndex = Math.floor((timeSec - grid.offsetSec) / grid.beatSec + 0.0001);
+      const downbeat = mod(beatIndex, 4) === 0;
+      if (options.downbeatOnly && !downbeat) pulse = 0;
+      const alternate = params.beatAlternate || "lr";
+      if (alternate === "odd" && mod(beatIndex, 2) !== 1) pulse = 0;
+      if (alternate === "even" && mod(beatIndex, 2) !== 0) pulse = 0;
+
+      const amount = pulse * intensity * depth;
+      const sign = alternate === "none" ? 1 : (mod(cycle, 2) === 0 ? -1 : 1);
+      const barT = mod(shifted / (grid.beatSec * 4), 1);
+      return { amount, sign, depth, beatIndex, cycle, downbeat, barT, grid };
+    }
+
+    function getBeatGridAtTime(timeSec, event) {
+      const section = getSectionAtTime(timeSec) || project.sections.find((item) => item.id === event.trackId);
+      const bpm = clamp(Number(section?.bpm || project.bpm || 120), 40, 240);
+      const offsetSec = Number(section?.beatOffsetSec ?? project.beatOffsetSec ?? section?.startSec ?? 0) || 0;
+      return { bpm, beatSec: 60 / bpm, offsetSec };
+    }
+
+    function shapeBeatPulse(value, curve) {
+      const x = clamp(value, 0, 1);
+      if (curve === "sharp") return x * x;
+      if (curve === "bounce") return Math.sin(x * Math.PI * 0.5) * (0.82 + 0.18 * Math.sin(x * Math.PI * 3));
+      return 0.5 - 0.5 * Math.cos(x * Math.PI);
+    }
+
+    function mod(value, divisor) {
+      return ((value % divisor) + divisor) % divisor;
+    }
+
+    function getWinningEvent(trackId, timeSec) {
+      for (let i = project.events.length - 1; i >= 0; i -= 1) {
+        const event = project.events[i];
+        if (!event.enabled) continue;
+        if (event.trackId !== trackId) continue;
+        if (timeSec >= event.startSec && timeSec <= event.endSec) return event;
+      }
+      for (let i = project.events.length - 1; i >= 0; i -= 1) {
+        const event = project.events[i];
+        if (!event.enabled) continue;
+        const section = project.sections.find((item) => item.id === event.trackId);
+        if (!section?.enabled) continue;
+        if (timeSec >= event.startSec && timeSec <= event.endSec) return event;
+      }
+      return null;
+    }
+
+    function getAudibleTracks() {
+      const anySolo = project.tracks.some((track) => track.solo);
+      return project.tracks.filter((track) => track.audioBuffer && !track.muted && (!anySolo || track.solo));
+    }
+
+    function getBufferForMonoMode(ctx, track) {
+      const buffer = track.audioBuffer;
+      if (!buffer || track.monoMode === "preserve" || buffer.numberOfChannels === 1) return buffer;
+
+      const mono = ctx.createBuffer(1, buffer.length, buffer.sampleRate);
+      const out = mono.getChannelData(0);
+      const left = buffer.getChannelData(0);
+      const right = buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : left;
+
+      for (let i = 0; i < buffer.length; i += 1) {
+        if (track.monoMode === "left_only") out[i] = left[i];
+        else if (track.monoMode === "right_only") out[i] = right[i];
+        else out[i] = (left[i] + right[i]) * 0.5;
+      }
+      return mono;
+    }
+
+    function createStereoWidthNode(ctx, widthValue) {
+      const input = ctx.createGain();
+      const splitter = ctx.createChannelSplitter(2);
+      const merger = ctx.createChannelMerger(2);
+      const lToL = ctx.createGain();
+      const lToR = ctx.createGain();
+      const rToL = ctx.createGain();
+      const rToR = ctx.createGain();
+
+      input.connect(splitter);
+      splitter.connect(lToL, 0);
+      splitter.connect(lToR, 0);
+      splitter.connect(rToL, 1);
+      splitter.connect(rToR, 1);
+      lToL.connect(merger, 0, 0);
+      rToL.connect(merger, 0, 0);
+      lToR.connect(merger, 0, 1);
+      rToR.connect(merger, 0, 1);
+
+      const node = { input, output: merger, lToL, lToR, rToL, rToR };
+      setStereoWidth(node, widthValue, 0, false);
+      return node;
+    }
+
+    function setStereoWidth(node, widthValue, time, smooth) {
+      const gains = stereoWidthGains(widthValue);
+      const setter = (param, value) => {
+        if (smooth) param.setTargetAtTime(value, time, 0.03);
+        else param.setValueAtTime(value, time);
+      };
+      setter(node.lToL.gain, gains.direct);
+      setter(node.rToR.gain, gains.direct);
+      setter(node.lToR.gain, gains.cross);
+      setter(node.rToL.gain, gains.cross);
+    }
+
+    function stereoWidthGains(widthValue) {
+      const width = clamp(widthValue, 0, 1.6);
+      return {
+        direct: (1 + width) * 0.5,
+        cross: (1 - width) * 0.5
+      };
+    }
+
+    function createImpulseResponse(ctx, room) {
+      const length = Math.max(1, Math.floor(ctx.sampleRate * Math.max(0.05, room.decaySec || 0.6)));
+      const impulse = ctx.createBuffer(2, length, ctx.sampleRate);
+      const random = seededRandom(room.id);
+      for (let channel = 0; channel < 2; channel += 1) {
+        const data = impulse.getChannelData(channel);
+        for (let i = 0; i < length; i += 1) {
+          const progress = i / length;
+          const envelope = Math.pow(1 - progress, room.damping || 2);
+          const early = i < ctx.sampleRate * 0.018 ? 0.55 : 1;
+          data[i] = (random() * 2 - 1) * envelope * early;
+        }
+      }
+      return impulse;
+    }
+
+    function toggleSpaceCreateMode() {
+      spaceCreateMode = !spaceCreateMode;
+      els.spaceCreateEventBtn.classList.toggle("active", spaceCreateMode);
+      setStatus(spaceCreateMode ? "2D Space View: クリックまたはドラッグで空間イベントを作成します。" : "2D Space View: イベント作成を解除しました。");
+    }
+
+    function onSpaceCanvasPointerDown(event) {
+      event.preventDefault();
+      const position = canvasPointToSpacePosition(event.clientX, event.clientY);
+      spaceDragState = {
+        pointerId: event.pointerId,
+        createOnClick: spaceCreateMode,
+        startX: event.clientX,
+        startY: event.clientY,
+        startPosition: position,
+        endPosition: position,
+        moved: false
+      };
+      try { els.spaceCanvas.setPointerCapture(event.pointerId); } catch {}
+      drawSpaceView();
+    }
+
+    function onSpaceCanvasPointerMove(event) {
+      if (!spaceDragState) return;
+      const dx = event.clientX - spaceDragState.startX;
+      const dy = event.clientY - spaceDragState.startY;
+      spaceDragState.moved = Math.hypot(dx, dy) >= 4;
+      spaceDragState.endPosition = canvasPointToSpacePosition(event.clientX, event.clientY);
+      drawSpaceView();
+    }
+
+    function onSpaceCanvasPointerUp(event) {
+      if (!spaceDragState) return;
+      const endPosition = canvasPointToSpacePosition(event.clientX, event.clientY);
+      const startPosition = spaceDragState.moved ? spaceDragState.startPosition : endPosition;
+      const moved = spaceDragState.moved;
+      const shouldCreate = spaceDragState.createOnClick || moved;
+      try { els.spaceCanvas.releasePointerCapture(spaceDragState.pointerId); } catch {}
+      spaceDragState = null;
+      drawSpaceView();
+      if (!shouldCreate) {
+        setStatus("2D Space View: ドラッグで空間イベントを作成します。クリック作成はイベント作成ボタンをONにしてください。");
+        return;
+      }
+      createSpaceEvent(startPosition, endPosition, moved);
+    }
+
+    function createSpaceEvent(startPosition, endPosition, moved) {
+      let lane = getSelectedLane();
+      if (!lane) {
+        lane = getTimelineLanes()[0] || null;
+        if (lane) selectedTrackId = lane.id;
+      }
+      if (!lane) {
+        setStatus("空間イベントの対象レーンを選択してください。", "error");
+        return;
+      }
+      const range = getSpaceEventTimeRange();
+      const startSec = range.startSec;
+      const endSec = range.endSec;
+      rememberState();
+      const event = {
+        id: uid("event"),
+        trackId: lane.id,
+        presetId: "custom_space_path",
+        startSec: Math.max(0, startSec),
+        endSec: Math.max(startSec + 0.05, endSec),
+        intensity: clamp(Number(els.eventIntensityInput.value), 0, 1),
+        enabled: true,
+        label: moved ? "custom space path" : "custom space point",
+        curve: els.curveSelect.value || "ease_in_out",
+        params: {
+          spaceStart: startPosition,
+          spaceEnd: endPosition
+        },
+        color: PRESETS.custom_space_path.color
+      };
+      project.events.push(event);
+      selectedTrackId = lane.id;
+      selectedEventId = event.id;
+      selectInspectorTab("event");
+      if (playback.state !== "playing") playback.offsetSec = event.startSec;
+      recalculateDuration(false);
+      renderAll();
+      setStatus("2D Space Viewから空間イベントを追加しました。");
+    }
+
+    function getSpaceEventTimeRange() {
+      const formStart = Number(els.eventStartInput.value);
+      const formEnd = Number(els.eventEndInput.value);
+      if (Number.isFinite(formStart) && Number.isFinite(formEnd) && formEnd > formStart) {
+        const startSec = Math.max(0, formStart);
+        return { startSec, endSec: Math.max(startSec + 0.05, formEnd) };
+      }
+
+      const selectedEvent = getSelectedEvent();
+      if (selectedEvent && selectedEvent.endSec > selectedEvent.startSec) {
+        return { startSec: selectedEvent.startSec, endSec: selectedEvent.endSec };
+      }
+
+      const section = getSelectedSection();
+      if (section && section.endSec > section.startSec) {
+        return { startSec: section.startSec, endSec: section.endSec };
+      }
+
+      const startSec = clamp(getCurrentTime(), 0, Math.max(project.durationSec, 0));
+      const remaining = Math.max(0, project.durationSec - startSec);
+      const length = remaining > 0 ? clamp(remaining, 0.5, 4) : 4;
+      return { startSec, endSec: startSec + length };
+    }
+
+    function canvasPointToSpacePosition(clientX, clientY) {
+      const rect = els.spaceCanvas.getBoundingClientRect();
+      const room = getSpaceRoomRect(rect.width, rect.height);
+      const x = ((clientX - rect.left - room.x) / Math.max(1, room.w)) * 2.4 - 1.2;
+      const z = 1.2 - ((clientY - rect.top - room.y) / Math.max(1, room.h)) * 2.4;
+      return {
+        x: clamp(x, -1.2, 1.2),
+        y: 0,
+        z: clamp(z, -1.2, 1.2)
+      };
+    }
+
+    function getSpaceRoomRect(width, height) {
+      const pad = 38;
+      return { x: pad, y: 18, w: Math.max(1, width - pad * 2), h: Math.max(1, height - 42) };
+    }
+
+    function drawSpaceView() {
+      const canvas = els.spaceCanvas;
+      const ctx = canvas.getContext("2d");
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const width = Math.max(1, Math.floor(rect.width * dpr));
+      const height = Math.max(1, Math.floor(rect.height * dpr));
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const w = rect.width;
+      const h = rect.height;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.fillStyle = "#11171a";
+      ctx.fillRect(0, 0, w, h);
+      const room = getSpaceRoomRect(w, h);
+
+      ctx.strokeStyle = "#34404a";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(room.x, room.y, room.w, room.h);
+      ctx.globalAlpha = 0.5;
+      for (let i = 1; i < 4; i += 1) {
+        const x = room.x + (room.w * i) / 4;
+        const y = room.y + (room.h * i) / 4;
+        ctx.beginPath();
+        ctx.moveTo(x, room.y);
+        ctx.lineTo(x, room.y + room.h);
+        ctx.moveTo(room.x, y);
+        ctx.lineTo(room.x + room.w, y);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = "#a8b0bb";
+      ctx.font = "12px Segoe UI, sans-serif";
+      ctx.fillText("L", room.x - 22, room.y + room.h / 2);
+      ctx.fillText("R", room.x + room.w + 12, room.y + room.h / 2);
+      ctx.fillText("back", room.x + room.w / 2 - 12, room.y + 14);
+      ctx.fillText("front", room.x + room.w / 2 - 14, room.y + room.h - 8);
+
+      const listener = mapPosition({ x: 0, z: 0.85 }, room);
+      ctx.fillStyle = "#e9eef3";
+      ctx.beginPath();
+      ctx.arc(listener.x, listener.y, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#11171a";
+      ctx.beginPath();
+      ctx.arc(listener.x, listener.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#e9eef3";
+      ctx.fillText("listener", listener.x + 10, listener.y + 4);
+
+      const selectedEvent = getSelectedEvent();
+      if (selectedEvent) drawEventPath(ctx, selectedEvent, room);
+      if (spaceDragState) drawSpaceDraft(ctx, spaceDragState, room);
+
+      const timeSec = getCurrentTime();
+      for (const track of project.tracks) {
+        const params = getTrackParams(track, timeSec);
+        const position = params.position || { x: params.pan, z: 0.4 };
+        const mapped = mapPosition(position, room);
+        ctx.fillStyle = track.color;
+        ctx.strokeStyle = track.id === selectedTrackId ? "#ffffff" : "rgba(255,255,255,0.35)";
+        ctx.lineWidth = track.id === selectedTrackId ? 2 : 1;
+        ctx.beginPath();
+        ctx.arc(mapped.x, mapped.y, track.muted ? 5 : 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#e9eef3";
+        ctx.font = "12px Segoe UI, sans-serif";
+        ctx.fillText(track.name.slice(0, 22), mapped.x + 10, mapped.y + 4);
+      }
+    }
+
+    function drawEventPath(ctx, event, room) {
+      const track = project.tracks.find((item) => item.id === event.trackId)
+        || getSelectedTrack()
+        || project.tracks[0];
+      if (!track) return;
+      ctx.save();
+      ctx.strokeStyle = PRESETS[event.presetId]?.color || track.color;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      if (event.presetId === "custom_space_path" && event.params?.spaceStart && event.params?.spaceEnd) {
+        const start = mapPosition(event.params.spaceStart, room);
+        const end = mapPosition(event.params.spaceEnd, room);
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+      } else {
+        for (let i = 0; i <= 32; i += 1) {
+          const timeSec = lerp(event.startSec, event.endSec, i / 32);
+          const params = getTrackParams(track, timeSec);
+          const point = mapPosition(params.position || { x: params.pan, z: 0.4 }, room);
+          if (i === 0) ctx.moveTo(point.x, point.y);
+          else ctx.lineTo(point.x, point.y);
+        }
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawSpaceDraft(ctx, draft, room) {
+      const start = mapPosition(draft.startPosition, room);
+      const end = mapPosition(draft.endPosition, room);
+      ctx.save();
+      ctx.strokeStyle = "#d9fffb";
+      ctx.fillStyle = "#d9fffb";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 5]);
+      ctx.beginPath();
+      ctx.moveTo(start.x, start.y);
+      ctx.lineTo(end.x, end.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.arc(start.x, start.y, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(end.x, end.y, 7, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function mapPosition(position, room) {
+      const x = clamp(Number(position.x ?? 0), -1.2, 1.2);
+      const z = clamp(Number(position.z ?? 0), -1.2, 1.2);
+      return {
+        x: room.x + ((x + 1.2) / 2.4) * room.w,
+        y: room.y + ((1.2 - z) / 2.4) * room.h
+      };
+    }
+
+    function recalculateDuration(includeEvents = true) {
+      const audioDuration = project.tracks.reduce((max, track) => Math.max(max, track.audioBuffer?.duration || track.durationSec || 0), 0);
+      const sectionDuration = project.sections.reduce((max, section) => Math.max(max, section.endSec || 0), 0);
+      const eventDuration = includeEvents ? project.events.reduce((max, event) => Math.max(max, event.endSec || 0), 0) : project.events.reduce((max, event) => Math.max(max, event.endSec || 0), 0);
+      project.durationSec = Math.max(audioDuration, sectionDuration, eventDuration, 0);
+    }
+
+    function positionPlayhead() {
+      const duration = Math.max(project.durationSec, 1);
+      const left = (clamp(getCurrentTime(), 0, duration) / duration) * Math.max(els.timelineRows.scrollWidth, 1);
+      els.playhead.style.left = `${left}px`;
+      els.playhead.style.height = `${els.timelineRows.scrollHeight + 32}px`;
+    }
+
+    function updateOverlapStatus() {
+      const overlaps = findOverlappingEventIds();
+      if (overlaps.size) {
+        setStatus(`重複イベント ${overlaps.size} 件: 後から作成したイベントを優先します。`, "warn");
+      }
+    }
+
+    function findOverlappingEventIds() {
+      const ids = new Set();
+      for (const lane of getTimelineLanes()) {
+        const events = project.events
+          .filter((event) => event.trackId === lane.id && event.enabled)
+          .slice()
+          .sort((a, b) => a.startSec - b.startSec);
+        for (let i = 0; i < events.length; i += 1) {
+          for (let j = i + 1; j < events.length; j += 1) {
+            if (events[j].startSec < events[i].endSec && events[j].endSec > events[i].startSec) {
+              ids.add(events[i].id);
+              ids.add(events[j].id);
+            }
+          }
+        }
+      }
+      return ids;
+    }
+
+    function computePeaks(buffer, buckets) {
+      const peaks = new Array(buckets).fill(0);
+      const channels = buffer.numberOfChannels;
+      const block = Math.max(1, Math.floor(buffer.length / buckets));
+      for (let bucket = 0; bucket < buckets; bucket += 1) {
+        let peak = 0;
+        const start = bucket * block;
+        const end = Math.min(buffer.length, start + block);
+        for (let channel = 0; channel < channels; channel += 1) {
+          const data = buffer.getChannelData(channel);
+          for (let i = start; i < end; i += 1) {
+            peak = Math.max(peak, Math.abs(data[i]));
+          }
+        }
+        peaks[bucket] = peak;
+      }
+      return peaks;
+    }
+
+    function calculatePeak(buffer) {
+      let peak = 0;
+      for (let channel = 0; channel < buffer.numberOfChannels; channel += 1) {
+        const data = buffer.getChannelData(channel);
+        for (let i = 0; i < data.length; i += 1) {
+          const abs = Math.abs(data[i]);
+          if (abs > peak) peak = abs;
+        }
+      }
+      return peak;
+    }
+
+    function encodeWav16(buffer) {
+      const channels = buffer.numberOfChannels;
+      const sampleRate = buffer.sampleRate;
+      const frames = buffer.length;
+      const bytesPerSample = 2;
+      const blockAlign = channels * bytesPerSample;
+      const byteRate = sampleRate * blockAlign;
+      const dataSize = frames * blockAlign;
+      const arrayBuffer = new ArrayBuffer(44 + dataSize);
+      const view = new DataView(arrayBuffer);
+
+      writeString(view, 0, "RIFF");
+      view.setUint32(4, 36 + dataSize, true);
+      writeString(view, 8, "WAVE");
+      writeString(view, 12, "fmt ");
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, channels, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, byteRate, true);
+      view.setUint16(32, blockAlign, true);
+      view.setUint16(34, 16, true);
+      writeString(view, 36, "data");
+      view.setUint32(40, dataSize, true);
+
+      let offset = 44;
+      const channelData = Array.from({ length: channels }, (_, index) => buffer.getChannelData(index));
+      for (let i = 0; i < frames; i += 1) {
+        for (let channel = 0; channel < channels; channel += 1) {
+          const sample = clamp(channelData[channel][i], -1, 1);
+          view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
+          offset += 2;
+        }
+      }
+      return arrayBuffer;
+    }
+
+    function writeString(view, offset, value) {
+      for (let i = 0; i < value.length; i += 1) {
+        view.setUint8(offset + i, value.charCodeAt(i));
+      }
+    }
+
+    function ensureAudioContext() {
+      if (!audioContext) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) throw new Error("Web Audio API is not supported.");
+        audioContext = new AudioCtx({ latencyHint: "interactive" });
+      }
+      return audioContext;
+    }
+
+    function getCurrentTime() {
+      if (playback.state === "playing" && audioContext) {
+        return clamp(audioContext.currentTime - playback.startedAt, 0, Math.max(project.durationSec, 0));
+      }
+      return clamp(playback.offsetSec, 0, Math.max(project.durationSec, 0));
+    }
+
+    function getSelectedTrack() {
+      return project.tracks.find((track) => track.id === selectedTrackId) || null;
+    }
+
+    function getSelectedSection() {
+      return project.sections.find((section) => section.id === selectedTrackId) || null;
+    }
+
+    function getSelectedLane() {
+      return getLaneById(selectedTrackId);
+    }
+
+    function getLaneById(id) {
+      if (!id) return null;
+      const section = project.sections.find((item) => item.id === id);
+      if (section) return { ...section, type: "section" };
+      const track = project.tracks.find((item) => item.id === id);
+      if (track) return { ...track, type: "track" };
+      return null;
+    }
+
+    function hasLane(id) {
+      return Boolean(getLaneById(id));
+    }
+
+    function getTimelineLanes() {
+      return [
+        ...project.sections.map((section) => ({ ...section, type: "section" })),
+        ...project.tracks.map((track) => ({ ...track, type: "track" }))
+      ];
+    }
+
+    function getSelectedEvent() {
+      return project.events.find((event) => event.id === selectedEventId) || null;
+    }
+
+    function getActiveRoom() {
+      return project.rooms.find((room) => room.id === project.activeRoomId) || project.rooms[0];
+    }
+
+    function getSectionAtTime(timeSec) {
+      for (let i = project.sections.length - 1; i >= 0; i -= 1) {
+        const section = project.sections[i];
+        if (!section.enabled) continue;
+        if (timeSec >= section.startSec && timeSec <= section.endSec) return section;
+      }
+      return null;
+    }
+
+    function getRoomIdAtTime(timeSec) {
+      const section = getSectionAtTime(timeSec);
+      return section?.roomId || project.activeRoomId;
+    }
+
+    function getMasterGainDbAtTime(timeSec) {
+      const section = getSectionAtTime(timeSec);
+      return section?.masterGainDb ?? project.master.gainDb;
+    }
+
+    function inferTrackKind(fileName) {
+      const lower = fileName.toLowerCase();
+      if (lower.includes("adlib") || lower.includes("ad-lib")) return "vocal_adlib";
+      if (lower.includes("chorus") || lower.includes("backing") || lower.includes("harmony")) return "vocal_chorus";
+      if (lower.includes("vocal") || lower.includes("voice")) return "vocal_main";
+      if (lower.includes("drum")) return "drums";
+      if (lower.includes("bass")) return "bass";
+      if (lower.includes("guitar")) return "guitar";
+      if (lower.includes("piano")) return "piano";
+      if (lower.includes("string")) return "strings";
+      if (lower.includes("synth")) return "synth";
+      if (lower.includes("fx") || lower.includes("se")) return "fx";
+      return "other";
+    }
+
+    function pickTrackColor(index) {
+      const colors = ["#37b7a6", "#54c8ff", "#f2b84b", "#ef7f6f", "#b78bff", "#72cf7a", "#ff91c8", "#a9c76f"];
+      return colors[index % colors.length];
+    }
+
+    function applyCurve(t, curve) {
+      const x = clamp(t, 0, 1);
+      if (curve === "ease_in") return x * x;
+      if (curve === "ease_out") return 1 - (1 - x) * (1 - x);
+      if (curve === "ease_in_out") return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+      if (curve === "hold") return x < 1 ? 0 : 1;
+      if (curve === "sine") return 0.5 - 0.5 * Math.cos(Math.PI * x);
+      return x;
+    }
+
+    function chooseTickStep(duration) {
+      if (duration <= 20) return 1;
+      if (duration <= 60) return 5;
+      if (duration <= 180) return 10;
+      if (duration <= 420) return 30;
+      return 60;
+    }
+
+    function dbToGain(db) {
+      return Math.pow(10, db / 20);
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * clamp(t, 0, 1);
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, Number(value)));
+    }
+
+    function round2(value) {
+      return Math.round(Number(value) * 100) / 100;
+    }
+
+    function formatTime(sec) {
+      const value = Math.max(0, Number(sec) || 0);
+      if (value < 60) return `${value.toFixed(2)}s`;
+      const minutes = Math.floor(value / 60);
+      const seconds = value - minutes * 60;
+      return `${minutes}:${seconds.toFixed(2).padStart(5, "0")}`;
+    }
+
+    function uid(prefix) {
+      return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function seededRandom(seedText) {
+      let seed = 2166136261;
+      for (let i = 0; i < seedText.length; i += 1) {
+        seed ^= seedText.charCodeAt(i);
+        seed = Math.imul(seed, 16777619);
+      }
+      return () => {
+        seed += 0x6d2b79f5;
+        let value = seed;
+        value = Math.imul(value ^ (value >>> 15), value | 1);
+        value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+        return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function setStatus(message, level = "") {
+      els.statusText.textContent = message;
+      els.statusText.classList.toggle("warn", level === "warn");
+      els.statusText.classList.toggle("error", level === "error");
+    }
+
+    function downloadBlob(blob, fileName) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function safeFileName(value) {
+      return String(value).trim().replace(/[\\/:*?"<>|]+/g, "_").replace(/\s+/g, "_") || "spatial_mix";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+  </script>
+  <script data-goatcounter="https://donut-sheep.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>
+
