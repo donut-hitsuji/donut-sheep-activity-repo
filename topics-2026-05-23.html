@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>どーなつひつじ TOPICS / 2026.05.17 - 05.23</title>
+  <meta name="description" content="どーなつひつじの2026.05.17 - 05.23 TOPICS。AI編集後の記事と、編集前の生ログへのリンク。">
+  <style>
+    :root {
+      --ink: #17131f;
+      --muted: #6e6878;
+      --paper: #fffdf8;
+      --panel: #fff;
+      --line: #e8decf;
+      --pink: #ff4f91;
+      --cyan: #1fc7d4;
+      --yellow: #ffc83d;
+      --red: #cf2e3a;
+      --soft: #f7f1e8;
+      font-family: "Inter", "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(23, 19, 31, .04) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(23, 19, 31, .035) 1px, transparent 1px),
+        var(--paper);
+      background-size: 28px 28px;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+    p, h1, h2, h3, blockquote { overflow-wrap: anywhere; }
+    p { line-height: 1.95; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 14px clamp(18px, 4vw, 56px);
+      background: rgba(255, 253, 248, .94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    nav a,
+    .button-link {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .button-link.primary {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 340px);
+      gap: clamp(28px, 5vw, 70px);
+      align-items: end;
+      padding: clamp(52px, 8vw, 104px) clamp(18px, 5vw, 72px) 42px;
+      border-bottom: 4px solid var(--ink);
+      background:
+        linear-gradient(135deg, rgba(255, 79, 145, .13), rgba(31, 199, 212, .10) 42%, rgba(255, 200, 61, .18)),
+        #fffaf0;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: #51485a;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin: 0;
+      font-size: clamp(42px, 8vw, 96px);
+      line-height: .98;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: #3e3547;
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .hero-card {
+      padding: 14px;
+      border: 3px solid var(--ink);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 9px 9px 0 rgba(23, 19, 31, .14);
+    }
+
+    .hero-card img {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .hero-card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .notice {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 20px clamp(18px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .notice strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 18px;
+    }
+
+    .notice p {
+      margin: 0;
+      color: rgba(255, 255, 255, .78);
+      line-height: 1.75;
+    }
+
+    .notice .button-link {
+      border-color: rgba(255, 255, 255, .45);
+      background: #fff;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .honest-note {
+      display: grid;
+      grid-template-columns: 128px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: clamp(18px, 4vw, 28px) clamp(18px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .honest-note img {
+      display: block;
+      width: 128px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border: 3px solid var(--ink);
+      border-radius: 8px;
+      background: #02030b;
+      box-shadow: 7px 7px 0 rgba(23, 19, 31, .12);
+    }
+
+    .honest-note p {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(16px, 1.9vw, 21px);
+      line-height: 1.8;
+      font-weight: 850;
+    }
+
+    .honest-note small {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: clamp(24px, 4vw, 46px);
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: clamp(36px, 6vw, 72px) clamp(18px, 4vw, 42px);
+    }
+
+    article {
+      min-width: 0;
+    }
+
+    .toc {
+      position: sticky;
+      top: 76px;
+      align-self: start;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, .92);
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 8px 0;
+      border-top: 1px solid var(--line);
+      color: #3e3547;
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .section {
+      margin: 0 0 clamp(52px, 7vw, 86px);
+      padding: clamp(26px, 4vw, 42px);
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .94);
+      box-shadow: 8px 8px 0 rgba(23, 19, 31, .10);
+    }
+
+    .section.plain {
+      border-color: var(--line);
+      box-shadow: none;
+      background: rgba(255, 253, 248, .78);
+    }
+
+    .section h2 {
+      margin: 0 0 20px;
+      font-size: clamp(30px, 5vw, 56px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .section p {
+      max-width: 760px;
+      margin: 0 0 18px;
+      font-size: clamp(16px, 1.45vw, 18px);
+    }
+
+    .opening {
+      margin-bottom: clamp(40px, 6vw, 70px);
+    }
+
+    .opening p {
+      max-width: 820px;
+      font-size: clamp(18px, 2vw, 23px);
+      line-height: 1.9;
+    }
+
+    .hook {
+      font-size: clamp(21px, 2.5vw, 30px) !important;
+      line-height: 1.55 !important;
+      font-weight: 900;
+    }
+
+    blockquote {
+      margin: 22px 0;
+      padding: 18px 20px;
+      border-left: 6px solid var(--pink);
+      background: #fff5f8;
+      font-size: clamp(20px, 2.4vw, 30px);
+      line-height: 1.45;
+      font-weight: 900;
+    }
+
+    .dialogue {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      max-width: 760px;
+      margin: 14px 0;
+      padding: 12px;
+      border: 2px solid var(--cyan);
+      border-radius: 8px;
+      background: #fbffff;
+    }
+
+    .dialogue.black {
+      border-color: var(--red);
+      background: #fffafa;
+    }
+
+    .dialogue img {
+      display: block;
+      width: 82px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .dialogue p {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 850;
+      line-height: 1.65;
+    }
+
+    .dialogue strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    details.raw-note {
+      max-width: 760px;
+      margin: 24px 0 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+    }
+
+    details.raw-note summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 900;
+    }
+
+    .raw-note pre {
+      margin: 0;
+      padding: 0 14px 14px;
+      white-space: pre-wrap;
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.75;
+      color: #3e3547;
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 0;
+    }
+
+    .closing {
+      padding: clamp(32px, 6vw, 60px) clamp(18px, 5vw, 72px);
+      border-top: 4px solid var(--ink);
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .closing-inner {
+      max-width: 940px;
+      margin: 0 auto;
+    }
+
+    .closing p {
+      color: rgba(255, 255, 255, .78);
+      font-size: 17px;
+    }
+
+    footer {
+      padding: 24px clamp(18px, 5vw, 72px);
+      color: var(--muted);
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }
+
+    footer p { margin: 0; }
+
+    @media (max-width: 960px) {
+      .hero,
+      .notice,
+      .honest-note,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        max-width: 280px;
+      }
+
+      .toc {
+        position: static;
+        order: -1;
+      }
+
+      .notice .button-link {
+        justify-self: start;
+      }
+
+      .honest-note img {
+        width: 104px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .site-header {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      .section {
+        padding: 22px 18px;
+      }
+
+      .dialogue {
+        grid-template-columns: 64px minmax(0, 1fr);
+      }
+
+      .dialogue img {
+        width: 64px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">donut sheep weekly</a>
+    <nav aria-label="ページ内リンク">
+      <a href="#raw">生ログ</a>
+      <a href="#toc">TOPICS</a>
+      <a href="#read">読み方</a>
+      <a href="#gemini">AIと曲</a>
+      <a href="#tool">音響ツール</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">どーなつひつじ TOPICS / 2026.05.17 - 05.23</p>
+        <h1>AIに編集させた週報は、どこまで私の言葉になるのか。</h1>
+        <p class="lead">一週間ぶんの制作メモを、AIとやり取りしながら記事にしました。完成文だけを出すときれいすぎるので、編集前の生ログも読めるようにしています。</p>
+      </div>
+      <aside class="hero-card" aria-label="案内キャラクター">
+        <img src="assets/topics/electric-guide.png" alt="案内する白い羊のキャラクター">
+        <p>白い子は入口を作る係。黒い子は、甘くなった文章にブレーキをかける係です。</p>
+      </aside>
+    </section>
+
+    <section class="honest-note" aria-label="編集後コメント">
+      <img src="assets/topics/donut-sheep-crying-icon.png" alt="涙を流すどーなつひつじアイコン">
+      <div>
+        <p>正直、だいぶ「作られてる」感と、情報が歪んでるところがあります。</p>
+        <p>編集前生ログと見比べて笑って見るのが良い使い方かと思います。</p>
+        <small>現在地点の、装飾なしの確認としてどうぞ。 by 中の人</small>
+      </div>
+    </section>
+
+    <section id="raw" class="notice">
+      <div>
+        <strong>AI編集前の生ログを公開しています。</strong>
+        <p>このページはAI編集後の記事です。元の発言とCodexの応答は、生ログとして別ファイルに残しました。AI編集の現在地を見たい人は、本文と見比べてください。</p>
+      </div>
+      <a class="button-link" href="raw_log/topics-source-through-gemini-addition-2026-05-23.html">編集前の生ログを見る</a>
+    </section>
+
+    <div class="layout">
+      <article>
+        <section class="opening">
+          <p class="hook">全部読んでもらう前提で作ると、このページはたぶん負けます。</p>
+          <p>今週は、曲、AI、音響ツール、歌詞動画、配信ストア、雨の匂いまで話が飛びます。ひとつの筋にきれいに並べるより、新聞みたいに、気になる見出しだけ拾ってもらうほうが合っています。</p>
+          <p>なので、これは一週間ぶんの制作メモから、フォロワーさんに読んでもらえそうな話だけを抜き出したTOPICSです。全部追わなくて大丈夫です。好きそうなところだけ開いてください。</p>
+        </section>
+
+        <section id="read" class="section">
+          <h2>この週報は、新聞みたいに拾い読みしてください</h2>
+          <p class="hook">古い紙とインクの匂いを、まだ覚えています。</p>
+          <p>昔、新聞社の面接を受けに行ったことがあります。社内も見学させてもらいました。そこで、優しい目をしたおじさんに言われました。</p>
+          <blockquote>正直ね、やめといたほうがいいよ</blockquote>
+          <p>たぶん親切で言ってくれたんだと思います。当時の私は、その言葉をどう受け取ればいいのか分かりませんでした。今なら少し分かります。たくさんの情報を人に届けるのは、ただ並べればいいものではない。量があるほど、読む人の逃げ道を作らないといけない。</p>
+          <p>今作っている週報は、もちろん新聞ではありません。でも、読み方は少し似ていてほしいです。全部を真面目に追うものではなく、見出しを眺めて、好きそうな話題だけ持って帰るもの。</p>
+          <p>私は文章を書き始めると長くなりがちです。だからこそ、読む側には選べる余白を残したい。今週のTOPICSも、そういう前提で置いておきます。</p>
+          <div class="dialogue">
+            <img src="assets/topics/electric-guide.png" alt="白い子">
+            <p><strong>白い子</strong>全部読まなくていいよ。気になったところだけ読んでくれたら嬉しい。</p>
+          </div>
+          <div class="dialogue black">
+            <img src="assets/topics/crimson-point.png" alt="黒い子">
+            <p><strong>黒い子</strong>全部読ませる気なら、まず構成で負けてる。</p>
+          </div>
+          <details class="raw-note">
+            <summary>編集前の断片</summary>
+            <pre>好きそうなトピックだけ読んでくれると嬉しい。
+コンテンツが多すぎる。
+新聞みたいなもの。
+
+昔新聞社に面接を受けに行ったことがあって、
+社内も見学させてもらった。古い紙とインクの匂いがした
+「正直ね、やめといたほうがいいよ」</pre>
+          </details>
+        </section>
+
+        <section id="gemini" class="section">
+          <h2>AIに曲を聴いてもらうと、褒め言葉より「受け取られ方」が見えてくる</h2>
+          <p class="hook">褒められたいだけではないです。でも、何も返ってこないのも苦しい。</p>
+          <p>自分の曲を誰かに聴いてもらうのは、少し怖いです。相手が人間でも怖いし、AIでも別の怖さがあります。AIの感想は、こちらが欲しい言葉をそれらしく返しているだけかもしれない。だから、褒め言葉は割り引いて読みます。</p>
+          <p>それでも、自作曲「カラカラパレット」をGemini 3.5に聴いてもらったとき、歌詞の内容をかなりちゃんと受け取ってくれている感じがありました。どの言葉を拾ったのか。どんな曲として説明しようとしたのか。そこが見えるだけで、ただの褒め言葉とは少し違ってきます。</p>
+          <p>私は音楽を語る語彙を、まだ十分には持っていません。だからAIが返してくる言葉の中に、自分の感覚を外側から見るための語彙が混ざっていると助かります。自分の作ったものが、どんな形で届きうるのかを知れる。</p>
+          <p>そして、やっぱり少し救われるものがあります。</p>
+          <p>創作物を出すとき、本当に誰かに届いているのかは分かりません。再生数やいいねの数では測れない部分があります。AIの感想を人間の感想と同じものだとは思いません。でも、曲や歌詞を一度受け止めて、言葉にして返してくれる相手がいるだけで、自分の中の孤独が少し薄まることはあります。</p>
+          <div class="link-row">
+            <a class="button-link" href="https://gemini.google.com/share/9cda337d58e9" target="_blank" rel="noreferrer">Gemini共有メモ</a>
+          </div>
+          <div class="dialogue">
+            <img src="assets/topics/electric-sing.png" alt="白い子">
+            <p><strong>白い子</strong>褒められたから正しい、じゃなくて、どう受け取られたかを見る感じ。</p>
+          </div>
+          <div class="dialogue black">
+            <img src="assets/topics/crimson-mic.png" alt="黒い子">
+            <p><strong>黒い子</strong>褒めは割り引け。でも、どこを褒めたかは材料になる。</p>
+          </div>
+          <details class="raw-note">
+            <summary>編集前の断片</summary>
+            <pre>歌詞の内容をちゃんと理解してくれてる
+上げられすぎな気もするけど、改善点だと思って読むと得るものがある
+あんまり音楽系に詳しくなかった自分に語彙を足してくれる
+あとやっぱりなんだか救われるものがある</pre>
+          </details>
+        </section>
+
+        <section id="time" class="section">
+          <h2>AIは音楽を「時間」として聴いているんだろうか</h2>
+          <p class="hook">曲は、待たされるから曲なんじゃないかと思うことがあります。</p>
+          <p>イントロがあって、Aメロがあって、サビが来る。人間はその順番に付き合わされます。先を知っていても、もう一度そこまで待つ。気持ちが動くのは、音そのものだけではなく、その音が来るまでの時間にもあります。</p>
+          <p>AIに曲を聴いてもらっていると、そこから少し自由に見えます。曲全体を構造として眺めたり、歌詞全体をまとめて読んだり、人間とは違う距離から音楽を見ているように感じることがあります。そこは正直、少し羨ましいです。</p>
+          <p>ただ、その自由さが本当に音楽を聴くことと同じなのかは、まだ怪しいと思っています。曲の進行に合わせて、期待したり、少し裏切られたり、サビで気持ちが開いたりする。そういう感情の想起まで再現できているのか。</p>
+          <p>もしAIがもっと音楽を細かく扱えるようになったら、曲同士の似ているところもかなり測れるようになるのかもしれません。コードや音色だけではなく、「この曲はこの時間帯で気持ちがこう動く」という距離感まで比べられるようになったら、音楽の探し方も変わりそうです。</p>
+          <p>音楽をたくさん学んだAIに、雨の音や街の音をしばらく聴かせたらどうなるのかも気になります。自然音の中にある繰り返しや変化を、AIは音楽の言葉でどう説明するんでしょうね。</p>
+          <div class="dialogue black">
+            <img src="assets/topics/crimson-critic.png" alt="黒い子">
+            <p><strong>黒い子</strong>曲を一瞬で構造として見られるなら、それは強い。でも再生時間に縛られないことが、音楽を聴くことと同じかは別。</p>
+          </div>
+          <div class="dialogue">
+            <img src="assets/topics/electric-think.png" alt="白い子">
+            <p><strong>白い子</strong>人間は待ってる時間も含めて聴いてるもんね。</p>
+          </div>
+          <details class="raw-note">
+            <summary>編集前の断片</summary>
+            <pre>AIは時間の制約に縛られずに音楽を解釈できるのが羨ましい
+ただ、曲の進行に伴う感情の想起まで再現できるのかは当面怪しい気がする
+これで曲の類似性がそのうち定量化されるのかなあ
+音楽の学習進んだAIに自然音をしばらく聞かせて時間との相関を感じさせたら感想が楽しそう</pre>
+          </details>
+        </section>
+
+        <section id="reach" class="section">
+          <h2>Suno曲を、まだ届いていない人にも届けたい</h2>
+          <p class="hook">曲だけを差し出しても、届かない人には届かない。</p>
+          <p>Sunoで曲を作って、同じように作っている人たちと聴き合うのは楽しいです。ただ、そういう場所にいると、だんだん耳が慣れてくるのかもしれません。AI音楽を集中的に聴いている人同士だと、パターンが被って聴こえたり、似た手触りに気づきやすくなったりする。</p>
+          <p>作っている人同士だから分かることはあります。でも、曲を届けたい相手がそこだけになると、少し狭い。</p>
+          <p>AI音楽を普段あまり聴かない人にも、入口を作りたいです。生活の小ネタ、画像つきの短い投稿、Irodori-TTSで声をつけた一言。歌モノとして出したほうがいいのか、話し声のほうが入りやすいのかは、触りながら考えます。</p>
+          <p>目指したいのは、見た人が「フフッ」となって、少し元気が出るものです。大きな感動ではなくてもいい。通りすがりに少し気がゆるむくらいのもの。</p>
+          <p>そのためには、私の長くなりがちな文章も少し変えたほうがいい。説明しすぎる前に、ぱっと見て入れるものを増やす。曲を聴いてもらうために、曲以外の入口も作る。まずは画像つき投稿から始めます。</p>
+          <div class="dialogue">
+            <img src="assets/topics/electric-heart.png" alt="白い子">
+            <p><strong>白い子</strong>いきなり曲を聴いて、じゃなくて、まず少し笑ってもらえる入口を作りたい。</p>
+          </div>
+          <div class="dialogue black">
+            <img src="assets/topics/crimson-flat.png" alt="黒い子">
+            <p><strong>黒い子</strong>長文で入口を塞いでるときがある。そこは直す。</p>
+          </div>
+        </section>
+
+        <section id="tool" class="section">
+          <h2>DAWでよくない？ それでも自作音響ツールを作る理由</h2>
+          <p class="hook">「DAWでよくない？」は、かなり正しいです。</p>
+          <p>音響効果を試す自作HTMLツールを更新しました。BPMグリッドを足して、セクション区間をタイムライン上で動かせるようにして、IRリバーブの強弱も調整できるようにしました。全体設定とは別に、区間ごとの空間の広がりや全体音量を変える設定も持たせています。元のメモでいうRoom/Masterのところです。ブレークや音色が変わる区間だけ、空間や音量を変えたいからです。</p>
+          <p>でも、音だけを作るならDAWを触ったほうが早い場面は多いです。そこは認めます。音楽制作ソフトとして勝とうとしているわけではありません。</p>
+          <p>私がやりたいのは、MVの場面分けと音の動きをつなげることです。</p>
+          <p>曲の中で、ここは少しフックが足りないなと思う区間があります。そこに音の移動を入れたり、拍に合わせて音量を揺らす処理を置いたりすると、映像の変化と音の変化を同じ場所で考えられます。元のメモではBeat_gain_pulseと呼んでいたものです。</p>
+          <p>まだステム分離した素材では試していません。生トラックでも、同じ音を重ねて片側だけに効果をかけ、両方の音量を少し下げると、思ったよりマイルドに使えそうでした。</p>
+          <p>このツールは、完成された音楽制作環境を作りたいわけではありません。自作MV制作ツールのセクション情報と連動して、映像制作の流れから音の演出も半自動で置けるようにしたい。そのための実験です。</p>
+          <div class="dialogue black">
+            <img src="assets/topics/crimson-shock.png" alt="黒い子">
+            <p><strong>黒い子</strong>そこまでやるならDAWでよくない？</p>
+          </div>
+          <div class="dialogue">
+            <img src="assets/topics/electric-think.png" alt="白い子">
+            <p><strong>白い子</strong>それはそう。でもMVの区間と音の演出をつなげたいんだよね。</p>
+          </div>
+        </section>
+
+        <section id="lyrics-tool" class="section">
+          <h2>歌詞動画ツールは、興味を持ってもらえたからこそまだ出せない</h2>
+          <p class="hook">「使ってみたい」と言われるのは嬉しいです。嬉しいけれど、少し冷や汗も出ます。</p>
+          <p>YouTubeで、歌詞動画ツールに興味を持ってくれたコメントがありました。自分が使うために作っていたものでも、外から見て「それ使ってみたい」と思ってもらえるなら、需要はあるのかもしれません。</p>
+          <p>ただ、今すぐ出せるかというと、そこはかなり慎重です。</p>
+          <p>自分用だから、好き勝手作りすぎました。バグが出ても、自分ならAIに相談しながら直せます。どこが壊れているのか分からなくても、自分の制作の中で直していけばいい。</p>
+          <p>でも、人に渡すなら話は別です。使う人が細かい不具合で止まってしまう。説明不足で迷う。こちらが当然だと思っていた操作で詰まる。自分用なら「壊れたらAIに相談しながら直せばいい」で進められますが、人に渡した瞬間、その雑さは相手のバグ地獄になります。</p>
+          <p>だから、まずは自分で使いながら直します。自分の制作で実際に使って、壊れるところを潰して、迷うところを減らす。公開は、その後です。</p>
+          <div class="dialogue">
+            <img src="assets/topics/electric-guide.png" alt="白い子">
+            <p><strong>白い子</strong>興味を持ってもらえたのは嬉しい。</p>
+          </div>
+          <div class="dialogue black">
+            <img src="assets/topics/crimson-point.png" alt="黒い子">
+            <p><strong>黒い子</strong>人に渡す時点で、自分用の雑さは仕様じゃなくなる。</p>
+          </div>
+        </section>
+
+        <section id="lyrics-store" class="section plain">
+          <h2>配信ストアに歌詞が出ない件は、問い合わせ中です</h2>
+          <p class="hook">これはまだ、答えを出さない話です。</p>
+          <p>配信ストアに歌詞が登録されない件がありました。同じ問題を持っている人もいたので、TuneCoreに問い合わせています。</p>
+          <p>原因や対応が分かったら、改めてまとめます。今の段階で大きく語ると推測が増えるので、ここでは続報待ちにしておきます。</p>
+        </section>
+
+        <section id="workflow" class="section plain">
+          <h2>AIに頼むための説明書も、放っておくと散らかる</h2>
+          <p class="hook">AIに頼むための説明書は、放っておくとAIより先に人間を迷わせます。</p>
+          <p>曲作り、MV作り、画像作り、レビュー、公開前チェック。最初は小さな手順だったものが、便利だからと書き足していくうちに、だんだん大きくなる。大きくなりすぎると、今度は読みにくくなります。</p>
+          <p>AIに任せるための手順なのに、人間の自分が読み返して迷うようでは厳しい。</p>
+          <p>だから、作業ごとに小さく分けることを考えています。全体の流れを見る説明と、個別の作業をする説明を分ける。用途ごとに手順を分けて、必要なものだけ呼び出せる形にできれば、肥大化したひとつの説明書に全部を詰め込まなくていい。どこがどこにつながっているのかを図にして、必要なときだけ使える形にする。</p>
+          <p>これは少し地味な話です。でも、制作を続ける上ではかなり大事です。AIを使うほど、AIに渡す言葉そのものも制作物になります。そこが散らかると、出てくるものも散らかります。</p>
+          <div class="dialogue black">
+            <img src="assets/topics/crimson-flat.png" alt="黒い子">
+            <p><strong>黒い子</strong>AIに頼むための説明が読みにくいなら、もうそこで負けてる。</p>
+          </div>
+          <div class="dialogue">
+            <img src="assets/topics/electric-guide.png" alt="白い子">
+            <p><strong>白い子</strong>だから説明書も掃除する。</p>
+          </div>
+        </section>
+
+        <section id="rain" class="section">
+          <h2>雨の匂いが好き、という小さな話</h2>
+          <p class="hook">雨の匂いの話を、制作ログの端に置いておきたいです。</p>
+          <p>雨の匂いが好きです。そういう小さな好みを、ChatGPTに聞いてみることがあります。雨の匂いには名前があって、土や植物や記憶の話につながっていく。調べものとしても面白いし、自分の感覚に言葉がつく感じもあります。</p>
+          <div class="link-row">
+            <a class="button-link" href="https://chatgpt.com/share/6a101c06-8938-8321-ac9e-1179e4074358" target="_blank" rel="noreferrer">ChatGPT共有メモ</a>
+          </div>
+          <p>制作の話ばかりしていると、どうしても道具や数字や手順に寄っていきます。でも、曲を作るときも、絵を見るときも、結局はこういう小さな感覚が残っています。</p>
+          <p>雨の匂いが好き。古い紙とインクの匂いを覚えている。音楽を聴いている時間に気持ちが動く。</p>
+          <p>そういうものを、制作ログの外側に置かずに、一緒に持っておきたいです。</p>
+          <div class="dialogue">
+            <img src="assets/topics/electric-heart.png" alt="白い子">
+            <p><strong>白い子</strong>雨の匂い、いいよね。</p>
+          </div>
+          <div class="dialogue black">
+            <img src="assets/topics/crimson-flat.png" alt="黒い子">
+            <p><strong>黒い子</strong>そういう匂いが、曲の入口になることもある。</p>
+          </div>
+        </section>
+      </article>
+
+      <aside id="toc" class="toc" aria-label="目次">
+        <h2>TOPICS</h2>
+        <a href="#raw">AI編集前の生ログ</a>
+        <a href="#read">新聞みたいに拾い読み</a>
+        <a href="#gemini">AIに曲を聴いてもらう</a>
+        <a href="#time">AIは音楽を時間として聴くのか</a>
+        <a href="#reach">Suno曲をまだ届いていない人へ</a>
+        <a href="#tool">DAWでよくない？</a>
+        <a href="#lyrics-tool">歌詞動画ツールはまだ出せない</a>
+        <a href="#lyrics-store">歌詞登録は問い合わせ中</a>
+        <a href="#workflow">AIに頼む説明書の整理</a>
+        <a href="#rain">雨の匂いが好き</a>
+      </aside>
+    </div>
+
+    <section class="closing">
+      <div class="closing-inner">
+        <p class="eyebrow">AI EDITING NOTE</p>
+        <h2>きれいに整えるほど、本人の言葉は薄くなる。</h2>
+        <p>今回のHTMLは、編集後の記事と編集前の生ログを並べて読めるようにしました。AIが文章を整えると読みやすくなる一方で、原文のざらつきや勢いは落ちます。その差分も含めて、今週のTOPICSとして置いておきます。</p>
+        <div class="link-row">
+          <a class="button-link primary" href="raw_log/topics-source-through-gemini-addition-2026-05-23.html">編集前の生ログを見る</a>
+          <a class="button-link" href="index.html">週報トップへ戻る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>donut sheep topics / 2026.05.17 - 05.23</p>
+  </footer>
+</body>
+</html>
