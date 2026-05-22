@@ -268,7 +268,8 @@ h3 {
 }
 
 .section-actions a,
-.video-link {
+.video-link,
+.previous-report-link a {
   min-height: 38px;
   display: inline-flex;
   align-items: center;
@@ -283,12 +284,26 @@ h3 {
   box-shadow: 4px 4px 0 rgba(23,19,31,.13);
 }
 
+.previous-report-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.previous-report-link span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
 .panel,
 .repo-card,
 .music-stats article,
 .social-stats article,
 .tool-card,
-.song-feature {
+.song-feature,
+.catalog-panel {
   border: 2px solid var(--ink);
   border-radius: 8px;
   background: #fff;
@@ -427,7 +442,7 @@ h3 {
   margin: 24px 0;
 }
 .music-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.social-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.social-stats { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 
 .music-stats article,
 .social-stats article { padding: 18px; }
@@ -542,6 +557,41 @@ h3 {
   border-radius: 8px;
   background: var(--ink);
 }
+.song-character {
+  width: min(260px, 60vw);
+  justify-self: center;
+  border: 3px solid var(--ink);
+  box-shadow: 7px 7px 0 var(--violet);
+}
+.song-cover-link {
+  position: relative;
+  display: block;
+  width: min(360px, 100%);
+  justify-self: center;
+  color: #fff;
+  text-decoration: none;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 7px 7px 0 var(--violet);
+  background: var(--ink);
+}
+.song-cover-link img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+.song-cover-link span {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 8px 11px;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  background: rgba(23,19,31,.82);
+  font-weight: 900;
+}
 .tag-row {
   display: flex;
   flex-wrap: wrap;
@@ -557,6 +607,51 @@ h3 {
   font-weight: 800;
 }
 
+.catalog-panel {
+  margin-top: 18px;
+  padding: 0;
+  overflow: hidden;
+}
+.catalog-panel summary {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+  font-weight: 900;
+  list-style: none;
+}
+.catalog-panel summary::-webkit-details-marker { display: none; }
+.catalog-panel summary::after {
+  content: "+";
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--yellow);
+  flex: 0 0 auto;
+}
+.catalog-panel[open] summary::after { content: "-"; }
+.catalog-panel summary span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.catalog-panel summary small {
+  color: var(--muted);
+  margin-left: auto;
+  white-space: nowrap;
+}
+.catalog-panel .music-stats,
+.catalog-panel .release-list {
+  margin-left: 18px;
+  margin-right: 18px;
+}
+.catalog-panel .release-list { margin-bottom: 18px; }
+
 .release-list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -565,17 +660,43 @@ h3 {
 }
 
 .release-item {
-  min-height: 86px;
-  padding: 13px;
+  min-height: 210px;
+  padding: 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fff;
   text-decoration: none;
+  color: var(--ink);
 }
-.release-item span {
+.release-cover {
   display: block;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #f6f3ee;
+}
+.release-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.release-cover-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--muted);
+  font-size: 40px;
+  font-weight: 900;
+}
+.release-title {
+  display: block;
+  margin-top: 10px;
   font-weight: 900;
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 .release-item small {
   display: block;
@@ -651,7 +772,7 @@ h3 {
 
 .repo-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
 }
 
