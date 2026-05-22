@@ -176,7 +176,8 @@ h3 {
 
 .metric-card span,
 .repo-card span,
-.music-stats span {
+.music-stats span,
+.git-stats span {
   display: block;
   font-size: 13px;
   font-weight: 900;
@@ -192,7 +193,8 @@ h3 {
 
 .metric-card p,
 .repo-card p,
-.music-stats small {
+.music-stats small,
+.git-stats small {
   margin: 0;
   color: var(--muted);
 }
@@ -300,6 +302,7 @@ h3 {
 .panel,
 .repo-card,
 .music-stats article,
+.git-stats article,
 .social-stats article,
 .tool-card,
 .song-feature,
@@ -436,23 +439,28 @@ h3 {
 }
 
 .music-stats,
+.git-stats,
 .social-stats {
   display: grid;
   gap: 12px;
   margin: 24px 0;
 }
 .music-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.git-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .social-stats { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 
 .music-stats article,
+.git-stats article,
 .social-stats article { padding: 18px; }
 .music-stats strong,
+.git-stats strong,
 .social-stats strong {
   display: block;
   margin: 8px 0;
   font-size: clamp(32px, 5vw, 60px);
   line-height: 1;
 }
+.git-stats small,
 .social-stats small,
 .social-period {
   color: var(--muted);
@@ -803,6 +811,38 @@ h3 {
   background: #f4fbfb;
 }
 
+.topic-groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 1120px;
+  margin-top: 28px;
+}
+.topic-groups article {
+  padding: 18px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 5px 5px 0 rgba(23,19,31,.14);
+}
+.topic-groups span {
+  display: block;
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 13px;
+}
+.topic-groups strong {
+  display: block;
+  margin: 8px 0;
+  font-size: 34px;
+}
+.topic-groups p {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 800;
+  line-height: 1.6;
+}
+
 .topic-cloud {
   display: flex;
   flex-wrap: wrap;
@@ -845,7 +885,9 @@ footer p { margin: 0; color: #ddd7ea; }
   .metrics-grid,
   .comment-strip,
   .music-stats,
+  .git-stats,
   .social-stats,
+  .topic-groups,
   .featured-video,
   .song-feature,
   .release-list,
@@ -903,7 +945,9 @@ footer p { margin: 0; color: #ddd7ea; }
   .metrics-grid,
   .comment-strip,
   .music-stats,
+  .git-stats,
   .social-stats,
+  .topic-groups,
   .featured-video,
   .song-feature,
   .release-list,
