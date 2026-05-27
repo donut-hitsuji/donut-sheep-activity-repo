@@ -313,6 +313,12 @@ h3 {
   box-shadow: 4px 4px 0 var(--pink);
 }
 
+.previous-report-link .report-post-link {
+  color: #fff;
+  background: var(--ink);
+  box-shadow: 4px 4px 0 var(--cyan);
+}
+
 .topics-link svg {
   width: 18px;
   height: 18px;
@@ -327,6 +333,11 @@ h3 {
 .previous-report-link .topics-link:hover {
   transform: translate(-1px, -1px);
   box-shadow: 5px 5px 0 var(--pink);
+}
+
+.previous-report-link .report-post-link:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--cyan);
 }
 
 .panel,

@@ -21,7 +21,7 @@
       --danger: #f06b64;
       --ok: #72cf7a;
       --input: #12161a;
-      --track-row-h: 46px;
+      --track-row-h: 72px;
       font-family: "Segoe UI", "Yu Gothic UI", "Meiryo", sans-serif;
     }
 
@@ -476,20 +476,50 @@
     .event-block {
       position: absolute;
       top: 7px;
-      height: 31px;
+      height: 19px;
       border: 1px solid rgba(255,255,255,0.34);
       border-radius: 5px;
       color: #071012;
       display: flex;
       align-items: center;
       overflow: hidden;
-      padding: 0 8px;
-      font-size: 12px;
+      gap: 5px;
+      padding: 0 7px;
+      font-size: 11px;
       font-weight: 700;
       white-space: nowrap;
       cursor: grab;
       z-index: 3;
       min-width: 28px;
+    }
+
+    .event-block.layer-space {
+      top: 5px;
+    }
+
+    .event-block.layer-mix {
+      top: 27px;
+    }
+
+    .event-block.layer-voice {
+      top: 49px;
+    }
+
+    .event-layer-tag {
+      flex: 0 0 auto;
+      border-radius: 3px;
+      padding: 1px 4px;
+      background: rgba(0,0,0,0.22);
+      color: rgba(7,16,18,0.82);
+      font-size: 9px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .event-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .event-block.selected {
@@ -800,6 +830,29 @@
 
     .status.error {
       color: var(--danger);
+    }
+
+    .update-button {
+      position: relative;
+      min-width: 58px;
+      padding-inline: 10px;
+    }
+
+    .update-button.unseen {
+      border-color: var(--accent-2);
+      color: #ffd78a;
+    }
+
+    .update-button.unseen::after {
+      content: "";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      box-shadow: 0 0 8px rgba(255, 193, 89, 0.55);
     }
 
     .meter {
@@ -1256,6 +1309,7 @@
         <div id="peakMeterFill" class="meter-fill"></div>
       </div>
       <div id="statusText" class="status">音声ファイルを追加してください。</div>
+      <button id="updateNoticeBtn" class="update-button" type="button" title="最近の更新内容">更新情報</button>
       <button id="helpBtn" type="button">HELP</button>
     </div>
   </footer>
@@ -1301,11 +1355,132 @@
             <li><strong>custom_space_path</strong>: 2D Space Viewで作成した独自移動。</li>
           </ul>
         </section>
+        <section>
+          <h3>イベントカテゴリ</h3>
+          <ul>
+            <li><strong>Space</strong>: 位置、pan、接近/遠ざかりなどの空間移動。同じ時刻で複数ある場合は後から作成したものを優先します。</li>
+            <li><strong>Mix</strong>: 音量、幅、リバーブ送信など。内部的にGain / Room / Widthを分けるため、それぞれは同時に使えます。</li>
+            <li><strong>Voice FX</strong>: 声質加工。SpaceやMixと重ねられますが、Voice FX同士は後勝ちです。</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Voice FX プリセット</h3>
+          <ul>
+            <li><strong>voice_soft_saturation</strong>: 薄いサチュレーション。声の押し出しを少し強めます。</li>
+            <li><strong>voice_digital_bitcrush</strong>: AudioWorkletでbit depthとサンプル保持を下げる、粗いデジタル声。</li>
+            <li><strong>voice_fuzz_crush</strong>: 強めの歪み、AudioWorklet crush、帯域制限を重ねた荒い声。</li>
+            <li><strong>voice_lofi_phone</strong>: 電話・無線風の狭い帯域。</li>
+            <li><strong>voice_underwater_wobble</strong>: こもったLPFと揺れで水中感を作ります。</li>
+            <li><strong>voice_robot_ringmod</strong>: リングモジュレーター風の金属的なロボット声。</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="updateOverlay" class="help-overlay" aria-hidden="true">
+    <div class="help-dialog" role="dialog" aria-modal="true" aria-labelledby="updateTitle">
+      <div class="help-head">
+        <div class="panel-title" id="updateTitle">更新情報</div>
+        <button id="updateCloseBtn" type="button">閉じる</button>
+      </div>
+      <div class="help-body">
+        <section>
+          <h3>2026-05-26</h3>
+          <ul>
+            <li>AudioWorkletによるデジタルbitcrusher / sample-rate reductionをVoice FXに追加しました。</li>
+            <li>AudioWorkletが利用できない環境では、既存の歪み・フィルター系Voice FXに自動でフォールバックします。</li>
+          </ul>
+        </section>
+        <section>
+          <h3>2026-05-25</h3>
+          <ul>
+            <li>BPMグリッド表示と拍グリッドへのスナップを追加しました。</li>
+            <li>セクション区間をイベント同様にドラッグ移動・左右端リサイズできるようにしました。</li>
+            <li>Global / SectionのRoom Amountで環境効果の強さを調整できるようにしました。</li>
+            <li>Beat Sync Paramsに基準位置を追加し、orbit_on_barなどの中心位置を指定できるようにしました。</li>
+            <li>2D Space Viewのドラッグで開始位置から終了位置へ移動するカスタム空間イベントを作成できます。</li>
+            <li>同時刻の複数イベントをカテゴリ別に合成できるようにし、Voice FXプリセットを追加しました。</li>
+            <li>JSON読み込み後は、ブラウザ制約により音声ファイルの再インポートが必要です。</li>
+          </ul>
+        </section>
       </div>
     </div>
   </div>
 
   <script type="module">
+    const UPDATE_NOTICE_ID = "2026-05-26-audioworklet-voice-fx";
+    const UPDATE_NOTICE_KEY = `spatialAudioEffectsTool.updateSeen.${UPDATE_NOTICE_ID}`;
+    const DIGITAL_VOICE_WORKLET_CODE = `
+      class DigitalVoiceFxProcessor extends AudioWorkletProcessor {
+        static get parameterDescriptors() {
+          return [
+            { name: "bits", defaultValue: 8, minValue: 2, maxValue: 16, automationRate: "k-rate" },
+            { name: "reduction", defaultValue: 1, minValue: 1, maxValue: 64, automationRate: "k-rate" },
+            { name: "drive", defaultValue: 1, minValue: 1, maxValue: 14, automationRate: "k-rate" },
+            { name: "noise", defaultValue: 0, minValue: 0, maxValue: 0.25, automationRate: "k-rate" }
+          ];
+        }
+
+        constructor() {
+          super();
+          this.holdCounters = [];
+          this.heldSamples = [];
+          this.randomState = 22222;
+        }
+
+        nextRandom() {
+          this.randomState = (Math.imul(this.randomState, 1664525) + 1013904223) >>> 0;
+          return this.randomState / 4294967296;
+        }
+
+        process(inputs, outputs, parameters) {
+          const input = inputs[0] || [];
+          const output = outputs[0] || [];
+          for (let channel = 0; channel < output.length; channel += 1) {
+            const source = input[Math.min(channel, Math.max(0, input.length - 1))];
+            const target = output[channel];
+            if (!source) {
+              target.fill(0);
+              continue;
+            }
+
+            let counter = this.holdCounters[channel] || 0;
+            let held = this.heldSamples[channel] || 0;
+            for (let i = 0; i < target.length; i += 1) {
+              const bits = clamp(paramAt(parameters.bits, i), 2, 16);
+              const reduction = Math.max(1, Math.round(paramAt(parameters.reduction, i)));
+              const drive = clamp(paramAt(parameters.drive, i), 1, 14);
+              const noise = clamp(paramAt(parameters.noise, i), 0, 0.25);
+              if (counter <= 0) {
+                const driven = Math.tanh(source[i] * drive);
+                const noisy = clamp(driven + (this.nextRandom() * 2 - 1) * noise, -1, 1);
+                const levels = Math.max(2, Math.round(Math.pow(2, bits)));
+                const step = 2 / Math.max(1, levels - 1);
+                held = Math.round((noisy + 1) / step) * step - 1;
+                counter = reduction;
+              }
+              target[i] = held;
+              counter -= 1;
+            }
+            this.holdCounters[channel] = counter;
+            this.heldSamples[channel] = held;
+          }
+          return true;
+        }
+      }
+
+      function paramAt(param, index) {
+        return param.length === 1 ? param[0] : param[index];
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, Number(value) || 0));
+      }
+
+      registerProcessor("digital-voice-fx", DigitalVoiceFxProcessor);
+    `;
+
     const TRACK_KINDS = [
       "vocal_main",
       "vocal_adlib",
@@ -1678,7 +1853,140 @@
             reverbSend: lerp(track.reverbSend, track.reverbSend + 0.08, intensity * beat.depth)
           };
         }
+      },
+      voice_soft_saturation: {
+        label: "voice_soft_saturation",
+        category: "Voice FX",
+        color: "#ff9f6e",
+        render: ({ intensity }) => ({
+          gainDb: -0.35 * intensity,
+          highShelfDb: -0.4 * intensity,
+          voiceFx: {
+            driveWet: 0.28 * intensity,
+            driveGain: 1.8 + 2.0 * intensity
+          }
+        })
+      },
+      voice_digital_bitcrush: {
+        label: "voice_digital_bitcrush",
+        category: "Voice FX",
+        color: "#f4d35e",
+        render: ({ intensity }) => ({
+          gainDb: -0.9 * intensity,
+          highpassHz: lerp(80, 220, intensity),
+          lowpassHz: lerp(12000, 5200, intensity),
+          highShelfDb: -1.4 * intensity,
+          voiceFx: {
+            driveWet: 0.24 * intensity,
+            driveGain: 1.5 + 3.2 * intensity,
+            crushWet: 0.86 * intensity,
+            crushBits: lerp(14, 5, intensity),
+            crushReduction: lerp(1, 14, intensity),
+            crushDrive: 1.2 + 4.8 * intensity,
+            crushNoise: 0.035 * intensity
+          }
+        })
+      },
+      voice_fuzz_crush: {
+        label: "voice_fuzz_crush",
+        category: "Voice FX",
+        color: "#ff6b6b",
+        render: ({ intensity }) => ({
+          gainDb: -1.1 * intensity,
+          highpassHz: lerp(80, 160, intensity),
+          lowpassHz: lerp(12500, 6800, intensity),
+          highShelfDb: -1.8 * intensity,
+          voiceFx: {
+            driveWet: 0.72 * intensity,
+            driveGain: 3.0 + 9.0 * intensity,
+            crushWet: 0.48 * intensity,
+            crushBits: lerp(12, 6, intensity),
+            crushReduction: lerp(1, 8, intensity),
+            crushDrive: 1.5 + 5.0 * intensity,
+            crushNoise: 0.02 * intensity
+          }
+        })
+      },
+      voice_lofi_phone: {
+        label: "voice_lofi_phone",
+        category: "Voice FX",
+        color: "#ffd166",
+        render: ({ intensity }) => ({
+          gainDb: -0.7 * intensity,
+          highpassHz: lerp(180, 360, intensity),
+          lowpassHz: lerp(9000, 3300, intensity),
+          highShelfDb: -4.5 * intensity,
+          voiceFx: {
+            driveWet: 0.22 * intensity,
+            driveGain: 2.5 + 3.0 * intensity
+          }
+        })
+      },
+      voice_underwater_wobble: {
+        label: "voice_underwater_wobble",
+        category: "Voice FX",
+        color: "#5dd6ff",
+        render: ({ timeSec, track, intensity }) => {
+          const wobble = 0.5 + 0.5 * Math.sin(timeSec * Math.PI * 2 * 0.42);
+          return {
+            gainDb: -0.9 * intensity,
+            reverbSend: clamp(track.reverbSend + 0.22 * intensity, 0, 1),
+            highpassHz: 55,
+            lowpassHz: lerp(2400, 1150 + 620 * wobble, intensity),
+            highShelfDb: -5.2 * intensity,
+            voiceFx: {
+              flangerWet: 0.52 * intensity,
+              flangerDelaySec: 0.012,
+              flangerDepthSec: 0.0065 * intensity,
+              flangerRate: 0.36,
+              flangerFeedback: 0.18
+            }
+          };
+        }
+      },
+      voice_robot_ringmod: {
+        label: "voice_robot_ringmod",
+        category: "Voice FX",
+        color: "#b794f4",
+        render: ({ intensity }) => ({
+          gainDb: -1.4 * intensity,
+          highpassHz: 120,
+          lowpassHz: 7200,
+          highShelfDb: -1.2 * intensity,
+          voiceFx: {
+            ringWet: 0.68 * intensity,
+            ringDepth: 0.85 * intensity,
+            ringFreq: 72
+          }
+        })
       }
+    };
+
+    const TIMELINE_ROW_HEIGHT = 72;
+    const VOICE_PRESET_IDS = new Set([
+      "voice_soft_saturation",
+      "voice_digital_bitcrush",
+      "voice_fuzz_crush",
+      "voice_lofi_phone",
+      "voice_underwater_wobble",
+      "voice_robot_ringmod"
+    ]);
+    const GAIN_LAYER_PRESET_IDS = new Set(["beat_gain_pulse"]);
+    const ROOM_LAYER_PRESET_IDS = new Set(["beat_reverb_throw"]);
+    const WIDTH_LAYER_PRESET_IDS = new Set(["chorus_widen", "beat_width_pulse"]);
+    const EVENT_LAYER_LABELS = {
+      space: "Space",
+      gain: "Mix:Gain",
+      room: "Mix:Room",
+      width: "Mix:Width",
+      voice: "Voice FX"
+    };
+    const EVENT_LAYER_ORDER = {
+      space: 10,
+      gain: 20,
+      room: 21,
+      width: 22,
+      voice: 30
     };
 
     const $ = (selector) => document.querySelector(selector);
@@ -1784,6 +2092,9 @@
       globalBeatOffsetInput: $("#globalBeatOffsetInput"),
       analyzeGlobalBpmBtn: $("#analyzeGlobalBpmBtn"),
       globalBpmConfidence: $("#globalBpmConfidence"),
+      updateNoticeBtn: $("#updateNoticeBtn"),
+      updateOverlay: $("#updateOverlay"),
+      updateCloseBtn: $("#updateCloseBtn"),
       helpBtn: $("#helpBtn"),
       helpOverlay: $("#helpOverlay"),
       helpCloseBtn: $("#helpCloseBtn")
@@ -1811,6 +2122,9 @@
     };
 
     let audioContext = null;
+    let audioWorkletModuleUrl = null;
+    let audioWorkletUnavailableNotified = false;
+    const audioWorkletReadyContexts = new WeakSet();
     let selectedTrackId = null;
     let selectedEventId = null;
     let lastRenderedPeak = null;
@@ -1843,6 +2157,7 @@
     function init() {
       populateSelects();
       bindEvents();
+      refreshUpdateNoticeState();
       renderAll();
       drawSpaceView();
     }
@@ -1850,14 +2165,18 @@
     function populateSelects() {
       els.trackKindSelect.innerHTML = TRACK_KINDS.map((kind) => `<option value="${kind}">${kind}</option>`).join("");
       const normalOptions = Object.entries(PRESETS)
-        .filter(([id]) => !BEAT_PRESET_IDS.has(id))
+        .filter(([id]) => !BEAT_PRESET_IDS.has(id) && !VOICE_PRESET_IDS.has(id))
         .map(([id, preset]) => `<option value="${id}">${id} / ${preset.category}</option>`)
         .join("");
       const beatOptions = Object.entries(PRESETS)
         .filter(([id]) => BEAT_PRESET_IDS.has(id))
         .map(([id]) => `<option value="${id}">${id}</option>`)
         .join("");
-      els.presetSelect.innerHTML = `<optgroup label="Spatial / Mix">${normalOptions}</optgroup><optgroup label="Beat Sync">${beatOptions}</optgroup>`;
+      const voiceOptions = Object.entries(PRESETS)
+        .filter(([id]) => VOICE_PRESET_IDS.has(id))
+        .map(([id]) => `<option value="${id}">${id}</option>`)
+        .join("");
+      els.presetSelect.innerHTML = `<optgroup label="Spatial / Mix">${normalOptions}</optgroup><optgroup label="Beat Sync">${beatOptions}</optgroup><optgroup label="Voice FX">${voiceOptions}</optgroup>`;
       els.roomSelect.innerHTML = project.rooms.map((room) => `<option value="${room.id}">${room.name}</option>`).join("");
       els.sectionRoomSelect.innerHTML = `<option value="">Follow Global</option>${project.rooms.map((room) => `<option value="${room.id}">${room.name}</option>`).join("")}`;
     }
@@ -2045,6 +2364,11 @@
       els.globalBpmInput.addEventListener("change", finishControlHistory);
       els.globalBeatOffsetInput.addEventListener("change", finishControlHistory);
       els.analyzeGlobalBpmBtn.addEventListener("click", analyzeGlobalBpm);
+      els.updateNoticeBtn.addEventListener("click", openUpdateNotice);
+      els.updateCloseBtn.addEventListener("click", closeUpdateNotice);
+      els.updateOverlay.addEventListener("click", (event) => {
+        if (event.target === els.updateOverlay) closeUpdateNotice();
+      });
       els.helpBtn.addEventListener("click", openHelp);
       els.helpCloseBtn.addEventListener("click", closeHelp);
       els.helpOverlay.addEventListener("click", (event) => {
@@ -2076,6 +2400,36 @@
     function closeHelp() {
       els.helpOverlay.classList.remove("open");
       els.helpOverlay.setAttribute("aria-hidden", "true");
+    }
+
+    function refreshUpdateNoticeState() {
+      let seen = false;
+      try {
+        seen = localStorage.getItem(UPDATE_NOTICE_KEY) === "1";
+      } catch (error) {
+        seen = false;
+      }
+      els.updateNoticeBtn.classList.toggle("unseen", !seen);
+    }
+
+    function markUpdateNoticeSeen() {
+      try {
+        localStorage.setItem(UPDATE_NOTICE_KEY, "1");
+      } catch (error) {
+        // localStorage may be unavailable for local files or strict browser settings.
+      }
+      refreshUpdateNoticeState();
+    }
+
+    function openUpdateNotice() {
+      markUpdateNoticeSeen();
+      els.updateOverlay.classList.add("open");
+      els.updateOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function closeUpdateNotice() {
+      els.updateOverlay.classList.remove("open");
+      els.updateOverlay.setAttribute("aria-hidden", "true");
     }
 
     function addSection() {
@@ -2150,6 +2504,7 @@
         label: event.label || "",
         curve: event.curve || "ease_in_out",
         params: event.params && typeof event.params === "object" ? structuredClone(event.params) : {},
+        effectLayer: event.effectLayer || getPresetLayer(event.presetId),
         color: event.color
       };
     }
@@ -2535,6 +2890,7 @@
         label: event.label ? String(event.label) : "",
         curve: ["linear", "ease_in", "ease_out", "ease_in_out", "hold", "sine"].includes(event.curve) ? event.curve : "ease_in_out",
         params: event.params && typeof event.params === "object" ? event.params : {},
+        effectLayer: getPresetLayer(PRESETS[event.presetId] ? event.presetId : "pass_left_to_right"),
         color: event.color
       };
     }
@@ -2943,7 +3299,7 @@
       els.bpmGridToggle.checked = bpmGridEnabled;
       els.timeRuler.style.width = `${minWidth}px`;
       els.timelineRows.style.width = `${minWidth}px`;
-      els.timelineRows.style.height = `${Math.max(lanes.length * 46, 160)}px`;
+      els.timelineRows.style.height = `${Math.max(lanes.length * TIMELINE_ROW_HEIGHT, 160)}px`;
 
       const tickStep = chooseTickStep(duration);
       let ticks = "";
@@ -2974,11 +3330,14 @@
             const selected = event.id === selectedEventId ? "selected" : "";
             const disabled = event.enabled ? "" : "disabled";
             const overlap = overlapIds.has(event.id) ? "overlap" : "";
+            const layer = getEventLayer(event);
+            const visualLayer = getEventVisualLayer(layer);
             const color = event.color || preset.color || lane.color;
             return `
-              <div class="event-block ${selected} ${disabled} ${overlap}" data-event-id="${event.id}" style="left:${left};width:${width};background:${color}">
+              <div class="event-block layer-${visualLayer} ${selected} ${disabled} ${overlap}" data-event-id="${event.id}" title="${escapeHtml(EVENT_LAYER_LABELS[layer] || layer)}: ${escapeHtml(label)}" style="left:${left};width:${width};background:${color}">
                 <span class="event-handle left" data-handle="start"></span>
-                <span>${escapeHtml(label)}</span>
+                <span class="event-layer-tag">${escapeHtml(EVENT_LAYER_LABELS[layer] || layer)}</span>
+                <span class="event-label">${escapeHtml(label)}</span>
                 <span class="event-handle right" data-handle="end"></span>
               </div>
             `;
@@ -3167,9 +3526,10 @@
       const existing = getSelectedEvent();
       const params = existing?.params && typeof existing.params === "object" ? structuredClone(existing.params) : {};
       Object.assign(params, readBeatParamsFromForm());
+      const presetId = els.presetSelect.value;
       return {
         trackId,
-        presetId: els.presetSelect.value,
+        presetId,
         startSec: Math.max(0, startSec),
         endSec: Math.max(startSec + 0.05, endSec),
         intensity: clamp(Number(els.eventIntensityInput.value), 0, 1),
@@ -3177,6 +3537,7 @@
         label: els.eventLabelInput.value.trim(),
         curve: els.curveSelect.value,
         params,
+        effectLayer: getPresetLayer(presetId),
         color: PRESETS[els.presetSelect.value]?.color
       };
     }
@@ -3481,6 +3842,7 @@
         label: "",
         curve: els.curveSelect.value || "ease_in_out",
         params: {},
+        effectLayer: getPresetLayer(presetId),
         color: PRESETS[presetId]?.color
       };
     }
@@ -3618,7 +3980,7 @@
 
     function laneIdFromTimelineY(clientY) {
       const rect = els.timelineRows.getBoundingClientRect();
-      const rowIndex = Math.floor((clientY - rect.top) / 46);
+      const rowIndex = Math.floor((clientY - rect.top) / TIMELINE_ROW_HEIGHT);
       const lanes = getTimelineLanes();
       return lanes[rowIndex]?.id || null;
     }
@@ -3728,6 +4090,7 @@
       }
       const ctx = ensureAudioContext();
       await ctx.resume();
+      await ensureAudioWorklet(ctx);
 
       if (playback.state === "playing") return;
       const startOffset = clamp(playback.offsetSec, 0, Math.max(project.durationSec - 0.001, 0));
@@ -3775,6 +4138,10 @@
       for (const graph of playback.graphs) {
         try { graph.source.stop(); } catch {}
         try { graph.source.disconnect(); } catch {}
+        try { graph.voiceFx?.ringOsc.stop(); } catch {}
+        try { graph.voiceFx?.flangerLfo.stop(); } catch {}
+        try { graph.voiceFx?.input.disconnect(); } catch {}
+        try { graph.voiceFx?.output.disconnect(); } catch {}
       }
       playback.graphs = [];
       playback.masterBus = null;
@@ -3822,8 +4189,9 @@
         }
         graph.highShelf.gain.setTargetAtTime(clamp(params.highShelfDb, -18, 18), now, 0.03);
         graph.lowpass.frequency.setTargetAtTime(lowpassTarget(params, audioContext), now, 0.03);
-        graph.highpass.frequency.setTargetAtTime(clamp(graph.track.eq.lowCutHz || 20, 20, 1000), now, 0.03);
+        graph.highpass.frequency.setTargetAtTime(highpassTarget(params), now, 0.03);
         if (graph.width) setStereoWidth(graph.width, params.stereoWidth, now, true);
+        setVoiceFxParams(graph.voiceFx, params.voiceFx, now, true);
       }
     }
 
@@ -3845,6 +4213,7 @@
 
       try {
         const offline = new OfflineAudioContext(2, frameCount, sampleRate);
+        await ensureAudioWorklet(offline);
         const masterBus = createMasterBus(offline, offline.destination);
         for (const track of sourceTracks) {
           const graph = buildTrackGraph(offline, masterBus, track, 0, duration, true);
@@ -3907,6 +4276,7 @@
       const pan = ctx.createStereoPanner();
       const dryGain = ctx.createGain();
       const sendGains = new Map();
+      const voiceFx = createVoiceFxNode(ctx);
 
       highpass.type = "highpass";
       highpass.frequency.value = clamp(track.eq.lowCutHz || 20, 20, 1000);
@@ -3922,10 +4292,11 @@
       source.connect(trackGain);
       if (width) {
         trackGain.connect(width.input);
-        width.output.connect(highpass);
+        width.output.connect(voiceFx.input);
       } else {
-        trackGain.connect(highpass);
+        trackGain.connect(voiceFx.input);
       }
+      voiceFx.output.connect(highpass);
       highpass.connect(highShelf);
       highShelf.connect(lowpass);
       lowpass.connect(pan);
@@ -3948,8 +4319,10 @@
         sendGain.gain.value = roomId === initialRoomId ? clamp(initial.reverbSend * initialRoomAmount, 0, 2) : 0;
       }
       highShelf.gain.value = clamp(initial.highShelfDb, -18, 18);
+      highpass.frequency.value = highpassTarget(initial);
       lowpass.frequency.value = lowpassTarget(initial, ctx);
       if (width) setStereoWidth(width, initial.stereoWidth, 0, false);
+      setVoiceFxParams(voiceFx, initial.voiceFx, 0, false);
 
       if (scheduleNow) {
         source.start(0, offsetSec, Math.min(durationSec, source.buffer.duration - offsetSec));
@@ -3957,7 +4330,7 @@
         source.start(0, offsetSec);
       }
 
-      return { source, track, trackGain, highpass, highShelf, lowpass, pan, dryGain, sendGains, width };
+      return { source, track, trackGain, highpass, highShelf, lowpass, pan, dryGain, sendGains, width, voiceFx };
     }
 
     function scheduleOfflineAutomation(ctx, graph, durationSec) {
@@ -3977,7 +4350,8 @@
       }
       scheduleAudioParam(graph.highShelf.gain, values, (item) => clamp(item.params.highShelfDb, -18, 18));
       scheduleAudioParam(graph.lowpass.frequency, values, (item) => lowpassTarget(item.params, ctx));
-      scheduleAudioParam(graph.highpass.frequency, values, () => clamp(graph.track.eq.lowCutHz || 20, 20, 1000));
+      scheduleAudioParam(graph.highpass.frequency, values, (item) => highpassTarget(item.params));
+      scheduleVoiceFxAutomation(graph.voiceFx, values);
 
       if (graph.width) {
         scheduleAudioParam(graph.width.lToL.gain, values, (item) => stereoWidthGains(item.params.stereoWidth).direct);
@@ -4005,45 +4379,317 @@
       }
     }
 
+    function createVoiceFxNode(ctx) {
+      const input = ctx.createGain();
+      const output = ctx.createGain();
+      const dry = ctx.createGain();
+      const driveInput = ctx.createGain();
+      const driveShaper = ctx.createWaveShaper();
+      const driveWet = ctx.createGain();
+      const ringGain = ctx.createGain();
+      const ringWet = ctx.createGain();
+      const ringOsc = ctx.createOscillator();
+      const ringDepth = ctx.createGain();
+      const flangerDelay = ctx.createDelay(0.05);
+      const flangerWet = ctx.createGain();
+      const flangerFeedback = ctx.createGain();
+      const flangerLfo = ctx.createOscillator();
+      const flangerDepth = ctx.createGain();
+      let digital = null;
+      let crushWet = null;
+
+      if (isAudioWorkletReady(ctx) && window.AudioWorkletNode) {
+        try {
+          digital = new AudioWorkletNode(ctx, "digital-voice-fx", {
+            numberOfInputs: 1,
+            numberOfOutputs: 1,
+            channelCountMode: "max",
+            channelInterpretation: "speakers",
+            parameterData: {
+              bits: 8,
+              reduction: 1,
+              drive: 1,
+              noise: 0
+            }
+          });
+          crushWet = ctx.createGain();
+          crushWet.gain.value = 0;
+        } catch (error) {
+          console.warn("AudioWorkletNode creation failed; voice crush will use fallback only.", error);
+          digital = null;
+          crushWet = null;
+        }
+      }
+
+      dry.gain.value = 1;
+      driveInput.gain.value = 1;
+      driveShaper.curve = createDistortionCurve(900);
+      driveShaper.oversample = "2x";
+      driveWet.gain.value = 0;
+
+      ringGain.gain.value = 0;
+      ringWet.gain.value = 0;
+      ringOsc.type = "sine";
+      ringOsc.frequency.value = 72;
+      ringDepth.gain.value = 0;
+
+      flangerDelay.delayTime.value = 0.012;
+      flangerWet.gain.value = 0;
+      flangerFeedback.gain.value = 0.12;
+      flangerLfo.type = "sine";
+      flangerLfo.frequency.value = 0.36;
+      flangerDepth.gain.value = 0;
+
+      input.connect(dry);
+      dry.connect(output);
+
+      input.connect(driveInput);
+      driveInput.connect(driveShaper);
+      driveShaper.connect(driveWet);
+      driveWet.connect(output);
+
+      input.connect(ringGain);
+      ringGain.connect(ringWet);
+      ringWet.connect(output);
+      ringOsc.connect(ringDepth);
+      ringDepth.connect(ringGain.gain);
+
+      input.connect(flangerDelay);
+      flangerDelay.connect(flangerFeedback);
+      flangerFeedback.connect(flangerDelay);
+      flangerDelay.connect(flangerWet);
+      flangerWet.connect(output);
+      flangerLfo.connect(flangerDepth);
+      flangerDepth.connect(flangerDelay.delayTime);
+
+      if (digital && crushWet) {
+        input.connect(digital);
+        digital.connect(crushWet);
+        crushWet.connect(output);
+      }
+
+      ringOsc.start(0);
+      flangerLfo.start(0);
+
+      return {
+        input,
+        output,
+        dry,
+        driveInput,
+        driveWet,
+        ringWet,
+        ringDepth,
+        ringOsc,
+        flangerDelay,
+        flangerWet,
+        flangerFeedback,
+        flangerLfo,
+        flangerDepth,
+        digital,
+        crushWet
+      };
+    }
+
+    function createDistortionCurve(amount) {
+      const samples = 2048;
+      const curve = new Float32Array(samples);
+      const k = Number(amount) || 50;
+      for (let i = 0; i < samples; i += 1) {
+        const x = (i * 2) / samples - 1;
+        curve[i] = ((3 + k) * x * 20 * Math.PI / 180) / (Math.PI + k * Math.abs(x));
+      }
+      return curve;
+    }
+
+    function setVoiceFxParams(node, params, time, smooth) {
+      if (!node) return;
+      const fx = normalizeVoiceFxParams(params);
+      const crushDryCut = node.crushWet && node.digital ? fx.crushWet * 0.32 : 0;
+      const dryLevel = clamp(1 - fx.driveWet * 0.28 - fx.ringWet * 0.42 - fx.flangerWet * 0.18 - crushDryCut, 0.38, 1);
+      const setter = (param, value, min = -Infinity) => {
+        const next = Math.max(min, Number(value));
+        if (smooth) param.setTargetAtTime(next, time, 0.025);
+        else param.setValueAtTime(next, time);
+      };
+
+      setter(node.dry.gain, dryLevel, 0);
+      setter(node.driveInput.gain, fx.driveGain, 0.001);
+      setter(node.driveWet.gain, fx.driveWet * 0.85, 0);
+      setter(node.ringWet.gain, fx.ringWet * 0.82, 0);
+      setter(node.ringDepth.gain, fx.ringDepth, 0);
+      setter(node.ringOsc.frequency, fx.ringFreq, 0.001);
+      setter(node.flangerDelay.delayTime, Math.max(fx.flangerDelaySec, fx.flangerDepthSec + 0.001), 0.001);
+      setter(node.flangerDepth.gain, fx.flangerDepthSec, 0);
+      setter(node.flangerWet.gain, fx.flangerWet * 0.7, 0);
+      setter(node.flangerFeedback.gain, fx.flangerFeedback, 0);
+      setter(node.flangerLfo.frequency, fx.flangerRate, 0.001);
+      if (node.crushWet && node.digital) {
+        const workletParam = (name) => node.digital.parameters.get(name);
+        setter(node.crushWet.gain, fx.crushWet * 0.82, 0);
+        if (workletParam("bits")) setter(workletParam("bits"), fx.crushBits, 2);
+        if (workletParam("reduction")) setter(workletParam("reduction"), fx.crushReduction, 1);
+        if (workletParam("drive")) setter(workletParam("drive"), fx.crushDrive, 1);
+        if (workletParam("noise")) setter(workletParam("noise"), fx.crushNoise, 0);
+      }
+    }
+
+    function scheduleVoiceFxAutomation(node, values) {
+      if (!node || !values.length) return;
+      scheduleAudioParam(node.dry.gain, values, (item) => {
+        const fx = normalizeVoiceFxParams(item.params.voiceFx);
+        const crushDryCut = node.crushWet && node.digital ? fx.crushWet * 0.32 : 0;
+        return clamp(1 - fx.driveWet * 0.28 - fx.ringWet * 0.42 - fx.flangerWet * 0.18 - crushDryCut, 0.38, 1);
+      });
+      scheduleAudioParam(node.driveInput.gain, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).driveGain);
+      scheduleAudioParam(node.driveWet.gain, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).driveWet * 0.85);
+      scheduleAudioParam(node.ringWet.gain, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).ringWet * 0.82);
+      scheduleAudioParam(node.ringDepth.gain, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).ringDepth);
+      scheduleAudioParam(node.ringOsc.frequency, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).ringFreq);
+      scheduleAudioParam(node.flangerDelay.delayTime, values, (item) => {
+        const fx = normalizeVoiceFxParams(item.params.voiceFx);
+        return Math.max(fx.flangerDelaySec, fx.flangerDepthSec + 0.001);
+      });
+      scheduleAudioParam(node.flangerDepth.gain, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).flangerDepthSec);
+      scheduleAudioParam(node.flangerWet.gain, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).flangerWet * 0.7);
+      scheduleAudioParam(node.flangerFeedback.gain, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).flangerFeedback);
+      scheduleAudioParam(node.flangerLfo.frequency, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).flangerRate);
+      if (node.crushWet && node.digital) {
+        scheduleAudioParam(node.crushWet.gain, values, (item) => normalizeVoiceFxParams(item.params.voiceFx).crushWet * 0.82);
+        if (node.digital.parameters.get("bits")) scheduleAudioParam(node.digital.parameters.get("bits"), values, (item) => normalizeVoiceFxParams(item.params.voiceFx).crushBits);
+        if (node.digital.parameters.get("reduction")) scheduleAudioParam(node.digital.parameters.get("reduction"), values, (item) => normalizeVoiceFxParams(item.params.voiceFx).crushReduction);
+        if (node.digital.parameters.get("drive")) scheduleAudioParam(node.digital.parameters.get("drive"), values, (item) => normalizeVoiceFxParams(item.params.voiceFx).crushDrive);
+        if (node.digital.parameters.get("noise")) scheduleAudioParam(node.digital.parameters.get("noise"), values, (item) => normalizeVoiceFxParams(item.params.voiceFx).crushNoise);
+      }
+    }
+
     function getTrackParams(track, timeSec) {
-      const activeEvent = getWinningEvent(track.id, timeSec);
       const base = {
         totalGainDb: track.gainDb,
         pan: track.basePan,
         reverbSend: track.reverbSend,
         stereoWidth: track.stereoWidth,
         highShelfDb: track.eq.highShelfDb || 0,
+        highpassHz: track.eq.lowCutHz || 20,
         lowpassHz: null,
-        position: { ...track.basePosition }
+        position: { ...track.basePosition },
+        voiceFx: defaultVoiceFxParams()
       };
-      if (!activeEvent) return base;
+      const activeEvents = getActiveLayerEvents(track.id, timeSec);
+      if (!activeEvents.length) return base;
 
-      const preset = PRESETS[activeEvent.presetId] || PRESETS.pass_left_to_right;
-      const eventLength = Math.max(0.001, activeEvent.endSec - activeEvent.startSec);
-      const rawT = clamp((timeSec - activeEvent.startSec) / eventLength, 0, 1);
-      const t = applyCurve(rawT, activeEvent.curve);
-      const output = preset.render({
+      const state = {
+        ...base,
+        position: { ...base.position },
+        voiceFx: defaultVoiceFxParams()
+      };
+
+      for (const active of activeEvents) {
+        const output = renderEventOutput(active.event, track, timeSec);
+        applyEventOutput(state, base, output);
+      }
+
+      state.reverbSend = clamp(state.reverbSend, 0, 1);
+      state.stereoWidth = clamp(state.stereoWidth, 0, 1.6);
+      state.highShelfDb = clamp(state.highShelfDb, -18, 18);
+      state.highpassHz = clamp(state.highpassHz, 20, 12000);
+      if (state.lowpassHz !== null) state.lowpassHz = clamp(state.lowpassHz, 400, 22050);
+      state.voiceFx = normalizeVoiceFxParams(state.voiceFx);
+      return state;
+    }
+
+    function renderEventOutput(event, track, timeSec) {
+      const preset = PRESETS[event.presetId] || PRESETS.pass_left_to_right;
+      const eventLength = Math.max(0.001, event.endSec - event.startSec);
+      const rawT = clamp((timeSec - event.startSec) / eventLength, 0, 1);
+      const t = applyCurve(rawT, event.curve);
+      return preset.render({
         t,
         timeSec,
-        event: activeEvent,
+        event,
         track,
-        intensity: activeEvent.intensity
+        intensity: event.intensity
       }) || {};
+    }
 
-      return {
-        totalGainDb: track.gainDb + Number(output.gainDb || 0),
-        pan: clamp(Number(output.pan ?? base.pan), -1, 1),
-        reverbSend: clamp(Number(output.reverbSend ?? base.reverbSend), 0, 1),
-        stereoWidth: clamp(Number(output.stereoWidth ?? base.stereoWidth), 0, 1.6),
-        highShelfDb: clamp(base.highShelfDb + Number(output.highShelfDb || 0), -18, 18),
-        lowpassHz: output.lowpassHz ? clamp(Number(output.lowpassHz), 1000, 22050) : null,
-        position: output.position || base.position
+    function applyEventOutput(state, base, output) {
+      if (!output || typeof output !== "object") return;
+      state.totalGainDb += Number(output.gainDb || 0);
+      if (output.pan !== undefined) state.pan = clamp(Number(output.pan), -1, 1);
+      if (output.position) state.position = {
+        x: clamp(Number(output.position.x ?? state.position.x), -1.2, 1.2),
+        y: clamp(Number(output.position.y ?? state.position.y), -1.2, 1.2),
+        z: clamp(Number(output.position.z ?? state.position.z), -1.2, 1.2)
       };
+      if (output.reverbSend !== undefined) {
+        state.reverbSend += Number(output.reverbSend) - base.reverbSend;
+      }
+      if (output.stereoWidth !== undefined) {
+        state.stereoWidth += Number(output.stereoWidth) - base.stereoWidth;
+      }
+      if (output.highShelfDb !== undefined) {
+        state.highShelfDb += Number(output.highShelfDb || 0);
+      }
+      if (output.lowpassHz !== undefined && output.lowpassHz !== null) {
+        const next = Number(output.lowpassHz);
+        if (Number.isFinite(next)) state.lowpassHz = state.lowpassHz === null ? next : Math.min(state.lowpassHz, next);
+      }
+      if (output.highpassHz !== undefined && output.highpassHz !== null) {
+        const next = Number(output.highpassHz);
+        if (Number.isFinite(next)) state.highpassHz = Math.max(state.highpassHz, next);
+      }
+      if (output.voiceFx) {
+        state.voiceFx = normalizeVoiceFxParams({ ...state.voiceFx, ...output.voiceFx });
+      }
     }
 
     function lowpassTarget(params, ctx) {
       const nyquistSafe = Math.max(1000, ctx.sampleRate * 0.45);
       return clamp(params.lowpassHz || nyquistSafe, 1000, nyquistSafe);
+    }
+
+    function highpassTarget(params) {
+      return clamp(params.highpassHz || 20, 20, 12000);
+    }
+
+    function defaultVoiceFxParams() {
+      return {
+        driveWet: 0,
+        driveGain: 1,
+        ringWet: 0,
+        ringDepth: 0,
+        ringFreq: 72,
+        flangerWet: 0,
+        flangerDelaySec: 0.012,
+        flangerDepthSec: 0,
+        flangerRate: 0.36,
+        flangerFeedback: 0.12,
+        crushWet: 0,
+        crushBits: 10,
+        crushReduction: 1,
+        crushDrive: 1,
+        crushNoise: 0
+      };
+    }
+
+    function normalizeVoiceFxParams(params = {}) {
+      const defaults = defaultVoiceFxParams();
+      return {
+        driveWet: clamp(Number(params.driveWet ?? defaults.driveWet), 0, 1),
+        driveGain: clamp(Number(params.driveGain ?? defaults.driveGain), 1, 14),
+        ringWet: clamp(Number(params.ringWet ?? defaults.ringWet), 0, 1),
+        ringDepth: clamp(Number(params.ringDepth ?? defaults.ringDepth), 0, 1),
+        ringFreq: clamp(Number(params.ringFreq ?? defaults.ringFreq), 20, 1200),
+        flangerWet: clamp(Number(params.flangerWet ?? defaults.flangerWet), 0, 1),
+        flangerDelaySec: clamp(Number(params.flangerDelaySec ?? defaults.flangerDelaySec), 0.004, 0.032),
+        flangerDepthSec: clamp(Number(params.flangerDepthSec ?? defaults.flangerDepthSec), 0, 0.012),
+        flangerRate: clamp(Number(params.flangerRate ?? defaults.flangerRate), 0.05, 8),
+        flangerFeedback: clamp(Number(params.flangerFeedback ?? defaults.flangerFeedback), 0, 0.72),
+        crushWet: clamp(Number(params.crushWet ?? defaults.crushWet), 0, 1),
+        crushBits: clamp(Number(params.crushBits ?? defaults.crushBits), 2, 16),
+        crushReduction: clamp(Number(params.crushReduction ?? defaults.crushReduction), 1, 64),
+        crushDrive: clamp(Number(params.crushDrive ?? defaults.crushDrive), 1, 14),
+        crushNoise: clamp(Number(params.crushNoise ?? defaults.crushNoise), 0, 0.25)
+      };
     }
 
     function getDefaultBeatBaseForLane(laneId, trackFallback = null) {
@@ -4114,21 +4760,47 @@
       return ((value % divisor) + divisor) % divisor;
     }
 
-    function getWinningEvent(trackId, timeSec) {
-      for (let i = project.events.length - 1; i >= 0; i -= 1) {
+    function getActiveLayerEvents(trackId, timeSec) {
+      const byLayer = new Map();
+      for (let i = 0; i < project.events.length; i += 1) {
         const event = project.events[i];
-        if (!event.enabled) continue;
-        if (event.trackId !== trackId) continue;
-        if (timeSec >= event.startSec && timeSec <= event.endSec) return event;
-      }
-      for (let i = project.events.length - 1; i >= 0; i -= 1) {
-        const event = project.events[i];
-        if (!event.enabled) continue;
+        if (!isEventActiveAt(event, timeSec)) continue;
         const section = project.sections.find((item) => item.id === event.trackId);
         if (!section?.enabled) continue;
-        if (timeSec >= event.startSec && timeSec <= event.endSec) return event;
+        const layer = getEventLayer(event);
+        byLayer.set(layer, { event, layer, source: "section", order: i });
       }
-      return null;
+      for (let i = 0; i < project.events.length; i += 1) {
+        const event = project.events[i];
+        if (!isEventActiveAt(event, timeSec)) continue;
+        if (event.trackId !== trackId) continue;
+        const layer = getEventLayer(event);
+        byLayer.set(layer, { event, layer, source: "track", order: i });
+      }
+      return Array.from(byLayer.values()).sort((a, b) => {
+        const layerDiff = (EVENT_LAYER_ORDER[a.layer] || 99) - (EVENT_LAYER_ORDER[b.layer] || 99);
+        return layerDiff || a.order - b.order;
+      });
+    }
+
+    function isEventActiveAt(event, timeSec) {
+      return event?.enabled !== false && timeSec >= event.startSec && timeSec <= event.endSec;
+    }
+
+    function getEventLayer(event) {
+      return getPresetLayer(event?.presetId);
+    }
+
+    function getEventVisualLayer(layer) {
+      return ["gain", "room", "width"].includes(layer) ? "mix" : layer;
+    }
+
+    function getPresetLayer(presetId) {
+      if (VOICE_PRESET_IDS.has(presetId)) return "voice";
+      if (GAIN_LAYER_PRESET_IDS.has(presetId)) return "gain";
+      if (ROOM_LAYER_PRESET_IDS.has(presetId)) return "room";
+      if (WIDTH_LAYER_PRESET_IDS.has(presetId)) return "width";
+      return "space";
     }
 
     function getAudibleTracks() {
@@ -4288,6 +4960,7 @@
           spaceStart: startPosition,
           spaceEnd: endPosition
         },
+        effectLayer: getPresetLayer("custom_space_path"),
         color: PRESETS.custom_space_path.color
       };
       project.events.push(event);
@@ -4397,7 +5070,7 @@
       ctx.fillText("listener", listener.x + 10, listener.y + 4);
 
       const selectedEvent = getSelectedEvent();
-      if (selectedEvent) drawEventPath(ctx, selectedEvent, room);
+      if (selectedEvent && getEventLayer(selectedEvent) === "space") drawEventPath(ctx, selectedEvent, room);
       if (spaceDragState) drawSpaceDraft(ctx, spaceDragState, room);
 
       const timeSec = getCurrentTime();
@@ -4494,7 +5167,7 @@
     function updateOverlapStatus() {
       const overlaps = findOverlappingEventIds();
       if (overlaps.size) {
-        setStatus(`重複イベント ${overlaps.size} 件: 後から作成したイベントを優先します。`, "warn");
+        setStatus(`同カテゴリ重複 ${overlaps.size} 件: 同じ効果種別では後から作成したイベントを優先します。`, "warn");
       }
     }
 
@@ -4507,6 +5180,7 @@
           .sort((a, b) => a.startSec - b.startSec);
         for (let i = 0; i < events.length; i += 1) {
           for (let j = i + 1; j < events.length; j += 1) {
+            if (getEventLayer(events[i]) !== getEventLayer(events[j])) continue;
             if (events[j].startSec < events[i].endSec && events[j].endSec > events[i].startSec) {
               ids.add(events[i].id);
               ids.add(events[j].id);
@@ -4589,6 +5263,37 @@
       for (let i = 0; i < value.length; i += 1) {
         view.setUint8(offset + i, value.charCodeAt(i));
       }
+    }
+
+    async function ensureAudioWorklet(ctx) {
+      if (!ctx?.audioWorklet || !window.AudioWorkletNode) {
+        notifyAudioWorkletFallback("AudioWorkletが使えないため、デジタルcrushは近似処理のみになります。");
+        return false;
+      }
+      if (audioWorkletReadyContexts.has(ctx)) return true;
+
+      try {
+        if (!audioWorkletModuleUrl) {
+          audioWorkletModuleUrl = URL.createObjectURL(new Blob([DIGITAL_VOICE_WORKLET_CODE], { type: "application/javascript" }));
+        }
+        await ctx.audioWorklet.addModule(audioWorkletModuleUrl);
+        audioWorkletReadyContexts.add(ctx);
+        return true;
+      } catch (error) {
+        console.warn("AudioWorklet addModule failed; digital crush fallback remains active.", error);
+        notifyAudioWorkletFallback("AudioWorkletを読み込めませんでした。デジタルcrushは近似処理のみになります。");
+        return false;
+      }
+    }
+
+    function isAudioWorkletReady(ctx) {
+      return audioWorkletReadyContexts.has(ctx);
+    }
+
+    function notifyAudioWorkletFallback(message) {
+      if (audioWorkletUnavailableNotified) return;
+      audioWorkletUnavailableNotified = true;
+      setStatus(message, "warn");
     }
 
     function ensureAudioContext() {
