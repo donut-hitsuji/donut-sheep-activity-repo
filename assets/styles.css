@@ -9,6 +9,11 @@
   --green: #49c47b;
   --violet: #7556ff;
   --black: #17131f;
+  --hero-bg: linear-gradient(135deg, rgba(255,79,145,.14), rgba(31,199,212,.12) 42%, rgba(255,200,61,.16)), #fffaf0;
+  --hero-sticker-shadow-a: var(--cyan);
+  --hero-sticker-shadow-b: var(--pink);
+  --hero-badge-bg: var(--yellow);
+  --hero-badge-ink: var(--ink);
   font-family: "Inter", "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -63,6 +68,30 @@ nav a {
 }
 
 main { overflow: hidden; }
+.hero-theme-candy {
+  --hero-bg: linear-gradient(135deg, rgba(255,79,145,.14), rgba(31,199,212,.12) 42%, rgba(255,200,61,.16)), #fffaf0;
+  --hero-sticker-shadow-a: var(--cyan);
+  --hero-sticker-shadow-b: var(--pink);
+  --hero-badge-bg: var(--yellow);
+}
+.hero-theme-mint {
+  --hero-bg: linear-gradient(135deg, rgba(73,196,123,.18), rgba(31,199,212,.13) 44%, rgba(255,200,61,.18)), #f0fff8;
+  --hero-sticker-shadow-a: #49c47b;
+  --hero-sticker-shadow-b: #1fc7d4;
+  --hero-badge-bg: #ffe66d;
+}
+.hero-theme-sunrise {
+  --hero-bg: linear-gradient(135deg, rgba(255,126,86,.18), rgba(255,200,61,.16) 46%, rgba(50,167,255,.13)), #fff6ed;
+  --hero-sticker-shadow-a: #ff7e56;
+  --hero-sticker-shadow-b: #32a7ff;
+  --hero-badge-bg: #a8e85e;
+}
+.hero-theme-soda {
+  --hero-bg: linear-gradient(135deg, rgba(31,199,212,.17), rgba(255,79,145,.11) 45%, rgba(73,196,123,.16)), #effcff;
+  --hero-sticker-shadow-a: #20b8e8;
+  --hero-sticker-shadow-b: #49c47b;
+  --hero-badge-bg: #ff9ec5;
+}
 .hero-band {
   min-height: min(760px, calc(100vh - 62px));
   display: grid;
@@ -71,9 +100,7 @@ main { overflow: hidden; }
   align-items: center;
   padding: clamp(42px, 8vw, 96px) clamp(18px, 5vw, 72px) 34px;
   border-bottom: 4px solid var(--ink);
-  background:
-    linear-gradient(135deg, rgba(255,79,145,.14), rgba(31,199,212,.12) 42%, rgba(255,200,61,.16)),
-    #fffaf0;
+  background: var(--hero-bg);
   overflow: hidden;
 }
 
@@ -142,7 +169,7 @@ h3 {
 .hero-sticker {
   width: min(430px, 78vw);
   border: 4px solid var(--ink);
-  box-shadow: 14px 14px 0 var(--cyan), -10px -10px 0 var(--pink);
+  box-shadow: 14px 14px 0 var(--hero-sticker-shadow-a), -10px -10px 0 var(--hero-sticker-shadow-b);
   transform: rotate(-2deg);
 }
 
@@ -152,7 +179,8 @@ h3 {
   bottom: 26px;
   padding: 14px 16px;
   border: 3px solid var(--ink);
-  background: var(--yellow);
+  background: var(--hero-badge-bg);
+  color: var(--hero-badge-ink);
   border-radius: 8px;
   font-weight: 900;
   box-shadow: 8px 8px 0 var(--ink);
@@ -992,7 +1020,7 @@ footer p { margin: 0; color: #ddd7ea; }
   }
   .hero-sticker {
     width: min(282px, 72vw);
-    box-shadow: 8px 8px 0 var(--cyan), -7px -7px 0 var(--pink);
+    box-shadow: 8px 8px 0 var(--hero-sticker-shadow-a), -7px -7px 0 var(--hero-sticker-shadow-b);
   }
   .hero-badge {
     position: static;
