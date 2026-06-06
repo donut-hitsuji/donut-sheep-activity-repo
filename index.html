@@ -1,245 +1,2290 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>donut sheep activity report</title>
-  <meta name="description" content="どーなつひつじ / donut sheep の制作活動レポート">
-  <link rel="icon" href="favicon.ico">
-  <link rel="stylesheet" href="assets/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>donut sheep activity report</title>
+<style>
+:root {
+  --report-radius: 8px;
+  --report-max: 1120px;
+  --report-section-pad: 52px;
+  --block-accent: var(--report-accent);
+  --block-bg: var(--report-panel);
+  --block-line: var(--report-line);
+  --item-accent: var(--block-accent);
+  --item-bg: var(--block-bg);
+  --item-line: var(--block-line);
+}
+
+.report-page {
+  min-height: 100vh;
+  background: var(--report-bg);
+  color: var(--report-ink);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.report-density-compact {
+  --report-section-pad: 34px;
+  --report-max: 1040px;
+}
+
+.report-page * {
+  box-sizing: border-box;
+}
+
+.block-tone-pink {
+  --block-accent: var(--tone-pink-accent);
+  --block-bg: var(--tone-pink-tint);
+  --block-line: var(--tone-pink-border);
+}
+
+.block-tone-cyan {
+  --block-accent: var(--tone-cyan-accent);
+  --block-bg: var(--tone-cyan-tint);
+  --block-line: var(--tone-cyan-border);
+}
+
+.block-tone-yellow {
+  --block-accent: var(--tone-yellow-accent);
+  --block-bg: var(--tone-yellow-tint);
+  --block-line: var(--tone-yellow-border);
+}
+
+.block-tone-green {
+  --block-accent: var(--tone-green-accent);
+  --block-bg: var(--tone-green-tint);
+  --block-line: var(--tone-green-border);
+}
+
+.block-tone-blue {
+  --block-accent: var(--tone-blue-accent);
+  --block-bg: var(--tone-blue-tint);
+  --block-line: var(--tone-blue-border);
+}
+
+.block-tone-neutral {
+  --block-accent: var(--tone-neutral-accent);
+  --block-bg: var(--tone-neutral-tint);
+  --block-line: var(--tone-neutral-border);
+}
+
+.item-accent-same .accent-item {
+  --item-accent: var(--block-accent);
+  --item-bg: var(--block-bg);
+  --item-line: var(--block-line);
+}
+
+.item-accent-cycle .accent-item:nth-child(6n + 1) {
+  --item-accent: var(--tone-cyan-accent);
+  --item-bg: var(--tone-cyan-tint);
+  --item-line: var(--tone-cyan-border);
+}
+
+.item-accent-cycle .accent-item:nth-child(6n + 2) {
+  --item-accent: var(--tone-pink-accent);
+  --item-bg: var(--tone-pink-tint);
+  --item-line: var(--tone-pink-border);
+}
+
+.item-accent-cycle .accent-item:nth-child(6n + 3) {
+  --item-accent: var(--tone-yellow-accent);
+  --item-bg: var(--tone-yellow-tint);
+  --item-line: var(--tone-yellow-border);
+}
+
+.item-accent-cycle .accent-item:nth-child(6n + 4) {
+  --item-accent: var(--tone-green-accent);
+  --item-bg: var(--tone-green-tint);
+  --item-line: var(--tone-green-border);
+}
+
+.item-accent-cycle .accent-item:nth-child(6n + 5) {
+  --item-accent: var(--tone-blue-accent);
+  --item-bg: var(--tone-blue-tint);
+  --item-line: var(--tone-blue-border);
+}
+
+.item-accent-cycle .accent-item:nth-child(6n) {
+  --item-accent: var(--tone-neutral-accent);
+  --item-bg: var(--tone-neutral-tint);
+  --item-line: var(--tone-neutral-border);
+}
+
+.report-hero,
+.report-section,
+.report-footer {
+  width: min(var(--report-max), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.report-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: 28px;
+  align-items: end;
+  min-height: 420px;
+  padding: 80px 0 48px;
+}
+
+.report-hero-poster {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 560px;
+  align-content: end;
+}
+
+.report-hero-compact {
+  min-height: auto;
+  padding-top: 52px;
+}
+
+.report-hero h1 {
+  max-width: 860px;
+  margin: 0;
+  font-size: clamp(44px, 8vw, 104px);
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.report-hero p {
+  max-width: 720px;
+  color: var(--report-muted);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.hero-side {
+  display: grid;
+  gap: 16px;
+  justify-items: end;
+}
+
+.report-hero dl {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--report-line);
+  border-radius: var(--report-radius);
+  background: rgb(255 250 242 / 0.76);
+  padding: 16px;
+  width: 100%;
+}
+
+.report-hero dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.report-hero dt {
+  color: var(--report-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.report-hero dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.report-hero-public {
+  border-bottom: 3px solid var(--block-accent);
+  background:
+    linear-gradient(135deg, var(--block-bg), rgb(255 255 255 / 0.42) 42%, var(--tone-yellow-tint)),
+    var(--report-bg);
+}
+
+.report-hero-workbench {
+  border-bottom: 3px solid var(--block-accent);
+  background:
+    linear-gradient(135deg, var(--block-bg), rgb(255 255 255 / 0.38) 42%, var(--tone-cyan-tint)),
+    var(--report-bg);
+}
+
+.report-hero-quiet {
+  border-bottom: 3px solid var(--block-accent);
+}
+
+.hero-sticker {
+  width: min(220px, 48vw);
+  filter:
+    drop-shadow(10px 10px 0 rgb(31 199 212 / 0.5))
+    drop-shadow(-8px -8px 0 rgb(255 79 145 / 0.38));
+}
+
+.hero-badge {
+  justify-self: end;
+  margin: 0;
+  border: 2px solid var(--report-ink);
+  border-radius: 999px;
+  background: var(--report-yellow);
+  padding: 9px 14px;
+  color: var(--report-ink) !important;
+  font-size: 13px !important;
+  font-weight: 900;
+  line-height: 1.2 !important;
+}
+
+.report-eyebrow {
+  margin: 0 0 12px;
+  color: var(--block-accent);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.report-section {
+  padding: var(--report-section-pad) 0;
+  border-bottom: 1px solid var(--block-line);
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.section-heading h2::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 1em;
+  border-radius: 999px;
+  background: var(--block-accent);
+}
+
+.section-heading p {
+  margin: 0;
+  color: var(--report-muted);
+}
+
+.metric-strip,
+.highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.metric-strip-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid var(--report-line);
+  border-radius: var(--report-radius);
+  overflow: hidden;
+}
+
+.metric-card,
+.highlight-grid article,
+.editorial-note,
+.social-section,
+.next-steps {
+  border: 1px solid var(--block-line);
+  border-radius: var(--report-radius);
+  background: var(--block-bg);
+}
+
+.metric-card,
+.highlight-grid article {
+  padding: 18px;
+}
+
+.metric-card,
+.highlight-grid article,
+.tool-list a,
+.mini-metrics span,
+.topic-list span,
+.next-steps li {
+  --item-accent: var(--block-accent);
+  --item-bg: var(--block-bg);
+  --item-line: var(--block-line);
+}
+
+.metric-card,
+.highlight-grid article,
+.tool-list a {
+  border-color: var(--item-line);
+  background:
+    linear-gradient(180deg, var(--item-bg), var(--report-panel));
+  box-shadow: inset 0 4px 0 var(--item-accent);
+}
+
+.metric-strip-compact .metric-card {
+  border: 0;
+  border-radius: 0;
+  border-right: 1px solid var(--item-line);
+}
+
+.metric-strip-compact .metric-card:last-child {
+  border-right: 0;
+}
+
+.metric-card span,
+.highlight-grid span {
+  color: var(--item-accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--item-accent);
+  font-size: 38px;
+  line-height: 1;
+}
+
+.metric-card p,
+.highlight-grid p,
+.editorial-note p,
+.social-section p,
+.tool-list p {
+  color: var(--report-muted);
+  line-height: 1.6;
+}
+
+.editorial-note,
+.social-section,
+.next-steps {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  padding: 24px;
+}
+
+.editorial-note-band,
+.social-section-band {
+  background:
+    linear-gradient(135deg, var(--block-bg), rgb(255 255 255 / 0.5)),
+    var(--report-panel);
+}
+
+.editorial-note-quiet,
+.social-section-quiet {
+  border-color: transparent;
+  background: transparent;
+  padding-inline: 0;
+}
+
+.character-image {
+  width: 112px;
+  max-width: 28vw;
+  align-self: center;
+  filter: drop-shadow(0 8px 0 rgb(0 0 0 / 0.06));
+}
+
+.report-character-minimal .character-image:not(.hero-sticker),
+.report-character-none .character-image,
+.report-character-none .hero-badge {
+  display: none;
+}
+
+.report-character-minimal .editorial-note,
+.report-character-minimal .social-section,
+.report-character-minimal .next-steps {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.editorial-note ul {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.editorial-note li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--block-line);
+  padding-top: 10px;
+}
+
+.editorial-note li span {
+  color: var(--block-accent);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.highlight-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.highlight-layout > .character-image {
+  justify-self: end;
+}
+
+.highlight-layout-timeline .highlight-grid {
+  grid-template-columns: 1fr;
+}
+
+.highlight-layout-timeline .highlight-grid article {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.song-feature {
+  display: grid;
+  grid-template-columns: minmax(240px, 360px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+}
+
+.song-feature-poster {
+  grid-template-columns: 1fr;
+}
+
+.song-feature-poster img {
+  max-height: 480px;
+}
+
+.song-feature-compact {
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 16px;
+}
+
+.song-feature img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--report-radius);
+  border: 1px solid var(--block-line);
+}
+
+.song-feature-media-character img {
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.7), rgb(255 255 255 / 0.15));
+}
+
+.song-feature-media-none {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.song-feature h2 {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.05;
+}
+
+.song-artist {
+  margin: 8px 0 0;
+  color: var(--report-muted);
+  font-weight: 800;
+}
+
+.song-feature a,
+.tool-list a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.song-feature a {
+  display: inline-flex;
+  margin-top: 12px;
+  color: var(--block-accent);
+  font-weight: 800;
+}
+
+.mini-metrics,
+.topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mini-metrics span,
+.topic-list span {
+  border: 1px solid var(--item-line);
+  border-radius: 999px;
+  background: var(--item-bg);
+  padding: 8px 12px;
+}
+
+.mini-metrics strong {
+  color: var(--item-accent);
+  margin-right: 6px;
+}
+
+.tool-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.tool-list-list {
+  grid-template-columns: 1fr;
+}
+
+.tool-list a {
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--item-line);
+  border-radius: var(--report-radius);
+  padding: 18px;
+}
+
+.tool-list span {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.tool-list strong {
+  color: var(--item-accent);
+}
+
+.next-steps ol {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 24px;
+}
+
+.next-steps ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.next-steps-checklist li::before {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-right: 0.65em;
+  border: 2px solid var(--item-accent);
+  border-radius: 3px;
+}
+
+.next-steps li {
+  border-left: 4px solid var(--item-accent);
+  padding-left: 10px;
+  line-height: 1.55;
+}
+
+.report-footer {
+  padding: 32px 0 56px;
+  border-top: 1px solid var(--block-line);
+  color: var(--report-muted);
+}
+
+.topic-list-ribbon {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--block-line);
+  border-radius: 999px;
+  background: #fff;
+}
+
+.topic-list-ribbon span {
+  border: 0;
+  border-right: 1px solid var(--item-line);
+  border-radius: 0;
+}
+
+.topic-list-ribbon span:last-child {
+  border-right: 0;
+}
+
+@media (max-width: 760px) {
+  .report-hero,
+  .song-feature,
+  .editorial-note,
+  .social-section,
+  .next-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .report-hero {
+    min-height: auto;
+    padding-top: 48px;
+  }
+
+  .metric-strip,
+  .highlight-grid,
+  .tool-list {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-strip-compact .metric-card {
+    border-right: 0;
+    border-bottom: 1px solid var(--item-line);
+  }
+
+  .metric-strip-compact .metric-card:last-child {
+    border-bottom: 0;
+  }
+
+  .section-heading,
+  .editorial-note li {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* Legacy activity report visual system ported from public_repo/assets/styles.css. */
+.report-page {
+  overflow-x: hidden;
+  background:
+    linear-gradient(90deg, rgb(23 19 31 / 0.045) 1px, transparent 1px),
+    linear-gradient(0deg, rgb(23 19 31 / 0.035) 1px, transparent 1px),
+    var(--report-panel);
+  background-size: 28px 28px;
+  font-family:
+    Inter, "Noto Sans JP", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.report-page h1,
+.report-page h2,
+.report-page h3,
+.report-page p,
+.report-page a,
+.report-page li,
+.report-page span,
+.report-page strong {
+  overflow-wrap: anywhere;
+}
+
+.report-page a {
+  color: inherit;
+}
+
+.report-hero,
+.report-section,
+.report-footer {
+  width: 100%;
+  margin: 0;
+}
+
+.report-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(260px, 0.72fr);
+  gap: clamp(22px, 5vw, 72px);
+  align-items: center;
+  min-height: min(760px, calc(100vh - 62px));
+  padding: clamp(42px, 8vw, 96px) clamp(18px, 5vw, 72px) 34px;
+  border-bottom: 4px solid var(--block-accent);
+  background:
+    linear-gradient(135deg, var(--block-bg), rgb(255 255 255 / 0.52) 46%, var(--block-bg)),
+    var(--hero-bg);
+  overflow: hidden;
+}
+
+.report-hero-poster {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 620px;
+  align-content: end;
+}
+
+.report-hero-compact {
+  min-height: auto;
+  padding-top: 42px;
+}
+
+.report-hero h1 {
+  max-width: 900px;
+  margin: 0;
+  color: var(--report-ink);
+  font-size: clamp(42px, 7.8vw, 104px);
+  line-height: 0.96;
+  letter-spacing: 0;
+  line-break: anywhere;
+}
+
+.report-hero p {
+  max-width: 720px;
+  color: #3e3547;
+  font-size: clamp(17px, 2.2vw, 22px);
+  line-height: 1.8;
+}
+
+.report-eyebrow {
+  margin: 0 0 10px;
+  color: #51485a;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.hero-side {
+  position: relative;
+  display: grid;
+  min-height: 420px;
+  place-items: center;
+}
+
+.character-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--report-radius);
+  filter: none;
+}
+
+.hero-sticker {
+  width: min(430px, 78vw);
+  border: 4px solid var(--report-ink);
+  background: #fff;
+  box-shadow:
+    14px 14px 0 var(--hero-sticker-shadow-a),
+    -10px -10px 0 var(--hero-sticker-shadow-b);
+  transform: rotate(-2deg);
+}
+
+.hero-badge {
+  position: absolute;
+  right: 0;
+  bottom: 26px;
+  max-width: min(240px, 72vw);
+  margin: 0;
+  padding: 14px 16px;
+  border: 3px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: var(--hero-badge-bg);
+  box-shadow: 8px 8px 0 var(--report-ink);
+  color: var(--report-ink) !important;
+  font-size: 15px !important;
+  font-weight: 900;
+  line-height: 1.35 !important;
+}
+
+.report-hero dl {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: min(290px, 100%);
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 12px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: rgb(255 253 248 / 0.92);
+  box-shadow: 5px 5px 0 rgb(23 19 31 / 0.12);
+}
+
+.report-hero dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.report-hero dt {
+  color: var(--report-muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: none;
+}
+
+.report-hero dd {
+  margin: 0;
+  color: var(--report-ink);
+  font-weight: 900;
+  text-align: right;
+}
+
+.report-hero-public,
+.report-hero-workbench,
+.report-hero-quiet {
+  border-bottom: 4px solid var(--block-accent);
+}
+
+.report-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 14px clamp(18px, 5vw, 72px);
+  border-bottom: 4px solid var(--report-ink);
+  background: rgb(255 253 248 / 0.94);
+}
+
+.report-nav-heading {
+  margin: 0;
+  color: var(--report-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.report-nav-links {
+  display: flex;
+  flex: 1 1 560px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.report-nav-link {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  padding: 8px 12px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 4px 4px 0 rgb(23 19 31 / 0.13);
+  color: var(--report-ink);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.report-nav-link:hover {
+  transform: translate(-1px, -1px);
+}
+
+.report-nav-link span {
+  line-height: 1.25;
+}
+
+.report-nav-link small {
+  color: var(--report-muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.report-nav-link-yellow {
+  background: var(--report-yellow);
+  box-shadow: 4px 4px 0 var(--report-accent);
+}
+
+.report-nav-link-dark {
+  color: #fff;
+  background: var(--report-ink);
+  box-shadow: 4px 4px 0 var(--report-blue);
+}
+
+.report-nav-link-dark small {
+  color: #ddd7ea;
+}
+
+.report-nav-link-cyan {
+  background: var(--tone-cyan-tint);
+  box-shadow: 4px 4px 0 var(--tone-cyan-accent);
+}
+
+.report-nav-panel {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.22fr) minmax(0, 0.78fr);
+  align-items: start;
+  background: var(--block-bg);
+}
+
+.report-nav-panel .report-nav-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.report-nav-compact .report-nav-heading {
+  display: none;
+}
+
+.report-nav-compact .report-nav-link {
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.report-section {
+  padding: clamp(48px, 7vw, 88px) clamp(18px, 5vw, 72px);
+  border-bottom: 0;
+}
+
+.section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  display: block;
+  margin: 0;
+  color: var(--report-ink);
+  font-size: clamp(30px, 5vw, 62px);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.section-heading h2::before {
+  content: none;
+}
+
+.section-heading p {
+  margin: 0;
+  color: var(--report-muted);
+  line-height: 1.8;
+}
+
+.metric-band {
+  padding: 18px clamp(18px, 5vw, 72px);
+  background: var(--report-ink);
+}
+
+.metric-band .section-heading {
+  max-width: var(--report-max);
+  margin: 0 auto 12px;
+}
+
+.metric-band .section-heading h2 {
+  color: #fff;
+  font-size: 22px;
+}
+
+.metric-strip,
+.highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metric-strip-compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.metric-card {
+  min-height: 150px;
+  padding: 18px;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: inset 0 7px 0 var(--item-accent);
+}
+
+.metric-strip-compact .metric-card {
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: var(--report-radius);
+}
+
+.metric-card span,
+.highlight-grid span {
+  display: block;
+  color: var(--report-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.metric-card strong {
+  display: block;
+  margin: 8px 0;
+  color: var(--report-ink);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1;
+}
+
+.metric-card p,
+.highlight-grid p,
+.editorial-note p,
+.social-section p,
+.tool-list p,
+.song-feature p {
+  color: var(--report-muted);
+  line-height: 1.7;
+}
+
+.editorial-note.report-section {
+  width: min(var(--report-max), calc(100% - 36px));
+  min-height: 136px;
+  margin: clamp(20px, 4vw, 44px) auto;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border: 2px solid var(--block-accent);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 6px 6px 0 rgb(23 19 31 / 0.12);
+}
+
+.editorial-note .character-image {
+  width: 96px;
+  border: 1px solid var(--report-line);
+  background: #fff;
+}
+
+.editorial-note .section-heading {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.editorial-note .section-heading h2 {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.editorial-note .section-heading p,
+.editorial-note > div > p {
+  font-weight: 800;
+}
+
+.editorial-note ul {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.editorial-note li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--block-line);
+  padding-top: 10px;
+  font-weight: 800;
+}
+
+.editorial-note li span {
+  color: var(--block-accent);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: none;
+}
+
+.activity-section {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.32fr) minmax(0, 0.68fr);
+  gap: 24px;
+  align-items: center;
+  border-bottom: 4px solid var(--report-ink);
+}
+
+.activity-section .section-heading {
+  display: block;
+  margin: 0;
+}
+
+.highlight-layout {
+  min-width: 0;
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+}
+
+.highlight-layout > .character-image {
+  width: min(140px, 32vw);
+  justify-self: end;
+  border: 2px solid var(--report-ink);
+  box-shadow: 6px 6px 0 var(--block-accent);
+}
+
+.highlight-grid {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.highlight-grid article {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.highlight-grid article + article {
+  padding-top: 12px;
+  border-top: 1px solid var(--report-line);
+}
+
+.highlight-grid span {
+  color: var(--item-accent);
+  font-weight: 900;
+}
+
+.highlight-grid p {
+  margin: 0;
+  color: var(--report-ink);
+  font-weight: 800;
+}
+
+.song-band.report-section {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.45fr) minmax(320px, 0.55fr);
+  gap: 18px;
+  align-items: center;
+  background: var(--band-music);
+  border-top: 4px solid var(--report-ink);
+  border-bottom: 4px solid var(--report-ink);
+}
+
+.song-feature-poster {
+  grid-template-columns: 1fr;
+}
+
+.song-feature-compact {
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 16px;
+}
+
+.song-feature img {
+  width: min(360px, 100%);
+  justify-self: center;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 3px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: var(--report-ink);
+  box-shadow: 7px 7px 0 var(--report-violet);
+}
+
+.song-feature-media-cover.song-feature-image-wide img {
+  width: min(520px, 100%);
+  aspect-ratio: 16 / 9;
+}
+
+.song-feature-media-character img {
+  object-fit: contain;
+  background: #fff;
+}
+
+.song-feature-media-none {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.song-feature h2 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 62px);
+  line-height: 1.02;
+}
+
+.song-artist {
+  margin: 8px 0 0;
+  color: var(--report-muted);
+  font-weight: 900;
+}
+
+.song-feature a {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 4px 4px 0 rgb(23 19 31 / 0.13);
+  color: var(--report-ink);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.mini-metrics,
+.topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.topic-list {
+  max-width: 980px;
+}
+
+.topic-list span {
+  padding: 9px 12px;
+  border: 1px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 3px 3px 0 rgb(23 19 31 / 0.12);
+  color: var(--report-ink);
+  font-weight: 800;
+}
+
+.song-feature .topic-list span {
+  border: 1px solid var(--report-line);
+  border-radius: 999px;
+  box-shadow: none;
+  color: var(--report-muted);
+}
+
+.social-section.report-section {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  background: var(--band-social);
+  border: 0;
+  border-bottom: 4px solid var(--report-ink);
+  border-radius: 0;
+}
+
+.social-section .character-image,
+.next-steps .character-image {
+  width: min(150px, 30vw);
+  border: 3px solid var(--report-ink);
+  background: #fff;
+  box-shadow: 7px 7px 0 var(--block-accent);
+}
+
+.social-section .section-heading {
+  margin-bottom: 12px;
+}
+
+.mini-metrics {
+  margin-top: 18px;
+}
+
+.mini-metrics span {
+  min-width: 150px;
+  padding: 16px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 5px 5px 0 rgb(23 19 31 / 0.12);
+  color: var(--report-muted);
+  font-weight: 900;
+}
+
+.mini-metrics strong {
+  display: block;
+  margin: 0 0 6px;
+  color: var(--report-ink);
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1;
+}
+
+.tools-section {
+  background: var(--band-tools);
+  border-bottom: 4px solid var(--report-ink);
+}
+
+.tool-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.tool-list-list {
+  grid-template-columns: 1fr;
+}
+
+.tool-list a {
+  min-width: 0;
+  min-height: 150px;
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--item-accent);
+  color: var(--report-ink);
+  text-decoration: none;
+}
+
+.tool-list span {
+  color: var(--report-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.tool-list p {
+  margin: 0;
+}
+
+.tool-list strong {
+  width: fit-content;
+  margin-top: 4px;
+  padding: 6px 9px;
+  border: 1px solid var(--report-line);
+  border-radius: 999px;
+  background: var(--band-music);
+  color: var(--report-ink);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.next-section.next-steps {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  background: var(--band-music);
+  border: 0;
+  border-bottom: 4px solid var(--report-ink);
+  border-radius: 0;
+}
+
+.next-steps ol {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding-left: 24px;
+}
+
+.next-steps ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.next-steps li {
+  border-left: 4px solid var(--item-accent);
+  padding-left: 10px;
+  color: var(--report-ink);
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.next-steps-checklist li::before {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-right: 0.65em;
+  border: 2px solid var(--item-accent);
+  border-radius: 3px;
+}
+
+.topic-section {
+  position: relative;
+  background: var(--band-topics);
+  padding-bottom: clamp(76px, 10vw, 120px);
+}
+
+.topic-list-ribbon {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+}
+
+.topic-list-ribbon span {
+  border: 0;
+  border-right: 1px solid var(--item-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.topic-list-ribbon span:last-child {
+  border-right: 0;
+}
+
+.report-footer {
+  padding: 24px clamp(18px, 5vw, 72px);
+  border-top: 0;
+  background: var(--report-ink);
+  color: #ddd7ea;
+}
+
+.report-footer p {
+  margin: 0;
+  color: #ddd7ea;
+}
+
+.report-character-minimal .character-image:not(.hero-sticker),
+.report-character-none .character-image,
+.report-character-none .hero-badge {
+  display: none;
+}
+
+.report-character-minimal .editorial-note,
+.report-character-minimal .social-section,
+.report-character-minimal .next-steps {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.comment-strip-section {
+  border-bottom: 0;
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+
+.comment-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.character-speech {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 5px 5px 0 rgb(23 19 31 / 0.12);
+}
+
+.character-speech .character-image {
+  width: 72px;
+  max-width: 22vw;
+}
+
+.character-speech p {
+  margin: 0;
+  color: var(--report-ink);
+  font-weight: 900;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.character-speech-hot { box-shadow: 5px 5px 0 var(--tone-pink-accent); }
+.character-speech-flat { box-shadow: 5px 5px 0 var(--tone-neutral-accent); }
+.character-speech-cool { box-shadow: 5px 5px 0 var(--tone-cyan-accent); }
+.character-speech-music { box-shadow: 5px 5px 0 var(--report-violet); }
+.character-speech-warn { box-shadow: 5px 5px 0 var(--tone-yellow-accent); }
+
+.activity-breakdown-section {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.34fr) minmax(0, 0.66fr);
+  gap: 24px;
+  align-items: stretch;
+  border-bottom: 4px solid var(--report-ink);
+}
+
+.activity-breakdown-heading {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+}
+
+.activity-breakdown-heading h2 {
+  display: block;
+}
+
+.activity-breakdown-heading > p:not(.report-eyebrow) {
+  margin: 0;
+}
+
+.activity-breakdown-character {
+  width: min(178px, 72%);
+  margin-top: auto;
+  border: 3px solid var(--report-ink);
+  background: #fff;
+  box-shadow: 7px 7px 0 var(--block-accent);
+  transform: rotate(-2deg);
+}
+
+.activity-breakdown-panel {
+  min-width: 0;
+  padding: 20px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 7px 7px 0 rgb(23 19 31 / 0.08);
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.panel-head h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.panel-head span {
+  color: var(--report-muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.activity-breakdown-list {
+  display: grid;
+  gap: 12px;
+}
+
+.activity-breakdown-row {
+  display: grid;
+  grid-template-columns: minmax(128px, 0.8fr) minmax(150px, 1.15fr) minmax(112px, 0.58fr);
+  gap: 12px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--report-line);
+}
+
+.activity-breakdown-row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.activity-breakdown-title,
+.activity-breakdown-row strong {
+  min-width: 0;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.activity-breakdown-row strong {
+  text-align: right;
+  font-size: 13px;
+}
+
+.activity-breakdown-row p {
+  grid-column: 1 / -1;
+  margin: -4px 0 0;
+  color: var(--report-muted);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.activity-breakdown-bar {
+  height: 18px;
+  overflow: hidden;
+  border: 1px solid var(--report-line);
+  border-radius: 999px;
+  background: var(--report-bg);
+}
+
+.activity-breakdown-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--item-accent);
+}
+
+.text-volume-section {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.52fr) minmax(260px, 0.48fr);
+  gap: 18px;
+  align-items: center;
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  padding: clamp(20px, 3vw, 36px) max(18px, calc((100vw - var(--report-max)) / 2));
+  background: #101018;
+  color: #fff;
+}
+
+.text-volume-section-standard {
+  grid-template-columns: minmax(0, 0.58fr) minmax(260px, 0.42fr);
+  gap: 28px;
+  padding-top: clamp(46px, 7vw, 84px);
+  padding-bottom: clamp(46px, 7vw, 84px);
+}
+
+.text-volume-section h2 {
+  margin: 0;
+  font-size: clamp(24px, 2.5vw, 36px);
+  line-height: 1.05;
+}
+
+.text-volume-section-standard h2 {
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1.08;
+}
+
+.text-volume-section p {
+  margin: 6px 0 0;
+  color: #ddd7ea;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.text-volume-section .report-eyebrow {
+  margin: 0 0 4px;
+}
+
+.text-volume-section-standard p {
+  line-height: 1.8;
+}
+
+.text-volume-bars {
+  display: grid;
+  gap: 8px;
+}
+
+.text-volume-section-standard .text-volume-bars {
+  gap: 16px;
+}
+
+.text-volume-row {
+  display: grid;
+  grid-template-columns: 52px minmax(120px, 1fr) minmax(68px, auto);
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.text-volume-section-standard .text-volume-row {
+  grid-template-columns: 58px minmax(120px, 1fr) minmax(78px, auto);
+  gap: 12px;
+  font-size: 16px;
+}
+
+.text-volume-row span,
+.text-volume-row b {
+  font-weight: 900;
+}
+
+.text-volume-row div {
+  height: 16px;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.text-volume-section-standard .text-volume-row div {
+  height: 26px;
+}
+
+.text-volume-row i {
+  display: block;
+  height: 100%;
+}
+
+.text-volume-row-user i { background: var(--tone-cyan-accent); }
+.text-volume-row-ai i { background: var(--tone-pink-accent); }
+.text-volume-row-neutral i { background: var(--tone-yellow-accent); }
+
+.text-volume-character {
+  position: absolute;
+  right: clamp(10px, 3vw, 42px);
+  bottom: -10px;
+  width: min(116px, 24vw);
+  border: 2px solid #fff;
+  background: #fff;
+  transform: rotate(3deg);
+}
+
+.text-volume-section-standard .text-volume-character {
+  right: clamp(12px, 4vw, 54px);
+  bottom: -22px;
+  width: min(180px, 36vw);
+  border-width: 3px;
+}
+
+.music-catalog-section {
+  background: var(--band-music);
+  border-top: 4px solid var(--report-ink);
+  border-bottom: 4px solid var(--report-ink);
+}
+
+.music-catalog-heading {
+  align-items: start;
+}
+
+.music-catalog-heading > div {
+  max-width: 760px;
+}
+
+.music-catalog-heading a,
+.video-link {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 8px 12px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 4px 4px 0 rgb(23 19 31 / 0.13);
+  color: var(--report-ink);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.music-stats,
+.git-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.music-stats article,
+.git-stats article,
+.repo-card {
+  min-width: 0;
+  padding: 18px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 5px 5px 0 var(--item-accent);
+}
+
+.music-stats span,
+.git-stats span,
+.repo-card span {
+  display: block;
+  color: var(--report-muted);
+  font-size: 13px;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.music-stats strong,
+.git-stats strong,
+.repo-card strong {
+  display: block;
+  margin: 8px 0;
+  color: var(--report-ink);
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1;
+}
+
+.music-stats small,
+.git-stats small,
+.repo-card small {
+  display: block;
+  color: var(--report-muted);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.release-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.release-item {
+  min-width: 0;
+  min-height: 210px;
+  display: block;
+  padding: 10px;
+  border: 1px solid var(--report-line);
+  border-radius: var(--report-radius);
+  background: #fff;
+  color: var(--report-ink);
+  text-decoration: none;
+}
+
+.release-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #f6f3ee;
+}
+
+.release-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.release-cover-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--report-muted);
+  font-size: 40px;
+  font-weight: 900;
+}
+
+.release-title {
+  display: block;
+  margin-top: 10px;
+  font-weight: 900;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.release-item small {
+  display: block;
+  margin-top: 8px;
+  color: var(--report-muted);
+}
+
+.featured-video {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.38fr) minmax(320px, 0.62fr);
+  gap: 18px;
+  align-items: center;
+  margin: 22px 0 18px;
+  padding: 18px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+}
+
+.featured-video h3 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.featured-video p {
+  color: var(--report-muted);
+  line-height: 1.7;
+}
+
+.embed-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.featured-video iframe,
+.video-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: var(--report-radius);
+  background: var(--report-ink);
+}
+
+.video-thumb {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+}
+
+.video-thumb span {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 8px 11px;
+  border: 2px solid #fff;
+  border-radius: var(--report-radius);
+  background: rgb(23 19 31 / 0.82);
+  font-weight: 900;
+}
+
+.video-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.git-progress-section {
+  border-bottom: 4px solid var(--report-ink);
+}
+
+.git-progress-heading {
+  display: block;
+}
+
+.repo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.repo-card {
+  min-height: 170px;
+}
+
+.repo-card p {
+  margin: 0;
+  color: var(--report-muted);
+  line-height: 1.55;
+}
+
+.git-progress-section .character-speech,
+.music-catalog-section .character-speech {
+  margin-top: 18px;
+}
+
+@media (max-width: 980px) {
+  .report-hero,
+  .activity-section,
+  .activity-breakdown-section,
+  .text-volume-section,
+  .song-band.report-section,
+  .featured-video,
+  .social-section.report-section,
+  .next-section.next-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-strip,
+  .metric-strip-compact,
+  .comment-strip,
+  .tool-list,
+  .release-list,
+  .music-stats,
+  .git-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .report-hero {
+    min-height: auto;
+    padding: 42px 24px 34px;
+  }
+
+  .report-hero h1 {
+    font-size: 38px;
+    line-height: 1.06;
+  }
+
+  .hero-side {
+    min-height: auto;
+    justify-items: center;
+    overflow: visible;
+  }
+
+  .hero-sticker {
+    width: min(282px, 72vw);
+    box-shadow:
+      8px 8px 0 var(--hero-sticker-shadow-a),
+      -7px -7px 0 var(--hero-sticker-shadow-b);
+  }
+
+  .hero-badge,
+  .report-hero dl {
+    position: static;
+    margin-top: 12px;
+  }
+
+  .hero-badge {
+    box-shadow: 5px 5px 0 var(--report-ink);
+  }
+
+  .report-nav,
+  .report-nav-panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 14px 24px;
+  }
+
+  .report-nav-links,
+  .report-nav-panel .report-nav-links {
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-basis: auto;
+  }
+
+  .report-nav-link {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .metric-strip,
+  .metric-strip-compact,
+  .highlight-grid,
+  .comment-strip,
+  .tool-list,
+  .release-list,
+  .music-stats,
+  .git-stats,
+  .repo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-section,
+  .metric-band,
+  .activity-section,
+  .activity-breakdown-section,
+  .music-catalog-section,
+  .git-progress-section,
+  .song-band.report-section,
+  .social-section.report-section,
+  .tools-section,
+  .topic-section,
+  .next-section.next-steps {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .editorial-note.report-section {
+    grid-template-columns: 1fr;
+    width: calc(100% - 48px);
+  }
+
+  .editorial-note .character-image {
+    width: 72px;
+  }
+
+  .highlight-layout {
+    width: 100%;
+    max-width: calc(100vw - 48px);
+  }
+
+  .activity-breakdown-row {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-breakdown-character {
+    width: min(118px, 42vw);
+    align-self: flex-end;
+    margin-top: 8px;
+    border-width: 2px;
+  }
+
+  .activity-breakdown-row strong {
+    text-align: left;
+  }
+
+  .text-volume-section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .text-volume-section-compact {
+    gap: 12px;
+    padding-top: 22px;
+    padding-bottom: 18px;
+  }
+
+  .text-volume-section-compact h2 {
+    font-size: 26px;
+  }
+
+  .text-volume-section-compact p {
+    margin-top: 4px;
+  }
+
+  .text-volume-row {
+    grid-template-columns: 1fr;
+  }
+
+  .text-volume-section-compact .text-volume-row {
+    gap: 4px;
+  }
+
+  .text-volume-row b {
+    justify-self: start;
+  }
+
+  .text-volume-character {
+    position: static;
+    justify-self: end;
+  }
+
+  .text-volume-section-compact .text-volume-character {
+    width: min(88px, 26vw);
+    border-width: 2px;
+  }
+
+  .music-catalog-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .section-heading,
+  .editorial-note li {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.report-theme-weekly-candy {
+  --report-bg: #fffaf0;
+  --report-panel: #fffdf8;
+  --report-ink: #17131f;
+  --report-muted: #6e6878;
+  --report-line: #e9e1d6;
+  --report-accent: #ff4f91;
+  --report-green: #49c47b;
+  --report-blue: #1fc7d4;
+  --report-yellow: #ffc83d;
+  --hero-bg: linear-gradient(135deg, rgb(255 79 145 / 0.14), rgb(31 199 212 / 0.12) 42%, rgb(255 200 61 / 0.16)), #fffaf0;
+  --hero-sticker-shadow-a: #1fc7d4;
+  --hero-sticker-shadow-b: #ff4f91;
+  --hero-badge-bg: #ffc83d;
+  --report-violet: #7556ff;
+  --band-music: #fff7df;
+  --band-social: #eefafa;
+  --band-tools: #fff;
+  --band-topics: #f4fbfb;
+  --tone-pink-accent: #ff4f91;
+  --tone-pink-tint: #fff0f6;
+  --tone-pink-border: #ffd0e2;
+  --tone-cyan-accent: #1fc7d4;
+  --tone-cyan-tint: #effcff;
+  --tone-cyan-border: #bcecf2;
+  --tone-yellow-accent: #ffc83d;
+  --tone-yellow-tint: #fff8df;
+  --tone-yellow-border: #ffe59c;
+  --tone-green-accent: #49c47b;
+  --tone-green-tint: #effbf3;
+  --tone-green-border: #bce8cc;
+  --tone-blue-accent: #477dff;
+  --tone-blue-tint: #eff4ff;
+  --tone-blue-border: #c8d7ff;
+  --tone-neutral-accent: #6e6878;
+  --tone-neutral-tint: #f7f1e9;
+  --tone-neutral-border: #e4d9cc;
+}
+
+.report-theme-weekly-mint {
+  --report-bg: #f0fff8;
+  --report-panel: #fbfff9;
+  --report-ink: #13221c;
+  --report-muted: #5d6b62;
+  --report-line: #d9eadf;
+  --report-accent: #49c47b;
+  --report-green: #49c47b;
+  --report-blue: #1fc7d4;
+  --report-yellow: #ffe66d;
+  --hero-bg: linear-gradient(135deg, rgb(73 196 123 / 0.18), rgb(31 199 212 / 0.13) 44%, rgb(255 200 61 / 0.18)), #f0fff8;
+  --hero-sticker-shadow-a: #49c47b;
+  --hero-sticker-shadow-b: #1fc7d4;
+  --hero-badge-bg: #ffe66d;
+  --report-violet: #578bff;
+  --band-music: #fffbe6;
+  --band-social: #eafbf8;
+  --band-tools: #fbfff9;
+  --band-topics: #f1fbf6;
+  --tone-pink-accent: #ff6fa4;
+  --tone-pink-tint: #fff1f7;
+  --tone-pink-border: #ffd1e3;
+  --tone-cyan-accent: #1fc7d4;
+  --tone-cyan-tint: #effcff;
+  --tone-cyan-border: #bcecf2;
+  --tone-yellow-accent: #ffe66d;
+  --tone-yellow-tint: #fffbe6;
+  --tone-yellow-border: #fff0a6;
+  --tone-green-accent: #49c47b;
+  --tone-green-tint: #edfff5;
+  --tone-green-border: #bcebd0;
+  --tone-blue-accent: #3d8dff;
+  --tone-blue-tint: #eef6ff;
+  --tone-blue-border: #c7ddff;
+  --tone-neutral-accent: #5d6b62;
+  --tone-neutral-tint: #f4faf5;
+  --tone-neutral-border: #d7e6db;
+}
+
+.report-theme-weekly-sunrise {
+  --report-bg: #fff6ed;
+  --report-panel: #fffdf8;
+  --report-ink: #221916;
+  --report-muted: #75645c;
+  --report-line: #eddccd;
+  --report-accent: #ff7e56;
+  --report-green: #a8e85e;
+  --report-blue: #32a7ff;
+  --report-yellow: #ffc83d;
+  --hero-bg: linear-gradient(135deg, rgb(255 126 86 / 0.18), rgb(255 200 61 / 0.16) 46%, rgb(50 167 255 / 0.13)), #fff6ed;
+  --hero-sticker-shadow-a: #ff7e56;
+  --hero-sticker-shadow-b: #32a7ff;
+  --hero-badge-bg: #a8e85e;
+  --report-violet: #8b63ff;
+  --band-music: #fff2de;
+  --band-social: #eff8ff;
+  --band-tools: #fffdf8;
+  --band-topics: #fff6ed;
+  --tone-pink-accent: #ff6d9d;
+  --tone-pink-tint: #fff1f5;
+  --tone-pink-border: #ffd1df;
+  --tone-cyan-accent: #32a7ff;
+  --tone-cyan-tint: #eff8ff;
+  --tone-cyan-border: #c9e5ff;
+  --tone-yellow-accent: #ffc83d;
+  --tone-yellow-tint: #fff8df;
+  --tone-yellow-border: #ffe59c;
+  --tone-green-accent: #8ed946;
+  --tone-green-tint: #f4ffe9;
+  --tone-green-border: #d9f3b5;
+  --tone-blue-accent: #4f7cff;
+  --tone-blue-tint: #f1f4ff;
+  --tone-blue-border: #ccd8ff;
+  --tone-neutral-accent: #75645c;
+  --tone-neutral-tint: #fbf3ec;
+  --tone-neutral-border: #ead9ca;
+}
+
+.report-theme-weekly-soda {
+  --report-bg: #effcff;
+  --report-panel: #fbfeff;
+  --report-ink: #102027;
+  --report-muted: #607077;
+  --report-line: #d5ebef;
+  --report-accent: #20b8e8;
+  --report-green: #49c47b;
+  --report-blue: #20b8e8;
+  --report-yellow: #ff9ec5;
+  --hero-bg: linear-gradient(135deg, rgb(31 199 212 / 0.17), rgb(255 79 145 / 0.11) 45%, rgb(73 196 123 / 0.16)), #effcff;
+  --hero-sticker-shadow-a: #20b8e8;
+  --hero-sticker-shadow-b: #49c47b;
+  --hero-badge-bg: #ff9ec5;
+  --report-violet: #5c6cff;
+  --band-music: #fff7df;
+  --band-social: #eafaff;
+  --band-tools: #fbfeff;
+  --band-topics: #effcff;
+  --tone-pink-accent: #ff6fae;
+  --tone-pink-tint: #fff0f8;
+  --tone-pink-border: #ffd0e8;
+  --tone-cyan-accent: #20b8e8;
+  --tone-cyan-tint: #effcff;
+  --tone-cyan-border: #bdefff;
+  --tone-yellow-accent: #ffc83d;
+  --tone-yellow-tint: #fff8df;
+  --tone-yellow-border: #ffe59c;
+  --tone-green-accent: #49c47b;
+  --tone-green-tint: #effbf3;
+  --tone-green-border: #bce8cc;
+  --tone-blue-accent: #3b82f6;
+  --tone-blue-tint: #eef6ff;
+  --tone-blue-border: #c5ddff;
+  --tone-neutral-accent: #607077;
+  --tone-neutral-tint: #f2fafc;
+  --tone-neutral-border: #d5ebef;
+}
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <a href="#top" class="brand">donut sheep report</a>
-    <nav aria-label="sections">
-      <a href="#codex">制作</a>
-      <a href="#music">自曲紹介</a>
-      <a href="#x">X</a>
-      <a href="#tools">ツール</a>
-      <a href="#next">次の制作</a>
-      <a href="#git">制作更新</a>
-      <a href="#topics">制作メモ</a>
-    </nav>
-  </header>
-
-  <main id="top">
-    <section class="hero-band hero-theme-sunrise">
-      <div class="hero-copy">
-        <p class="eyebrow">活動ログ / 2026.06.01-06.07（06.06時点）</p>
-        <h1><span class="desktop-title">作って、話して<br>曲も聴ける。<br>どーなつひつじ週間活動ログ。</span><span class="mobile-title">作って、話して<br>曲も聴ける。<br>どーなつひつじ<br>週間活動ログ。</span></h1>
-        <p class="lead">今週の制作相談、<br class="mobile-only">公開中の曲、<br class="mobile-only">次に見せるものをまとめました。</p>
-        <div class="previous-report-link"><div class="previous-report-item"><a href="activity-logs/2026-05-25.html">前回の活動ログを読む</a><span>2026.05.25</span></div><a class="topics-link" href="topics-2026-05-23.html" aria-label="最近のTOPICSを読む"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V5a1 1 0 0 1 1-1Z"/><path d="M8 8h7"/><path d="M8 12h7"/><path d="M8 16h4"/></svg>最近のTOPICSを読む</a></div>
-      </div>
-      <div class="hero-stage" aria-hidden="true">
-        <img class="character hero-sticker" src="assets/characters/wave.png" alt="waving channel character" loading="lazy">
-        <div class="hero-badge">公開中の曲<br><strong>24</strong>曲</div>
-      </div>
-    </section>
-
-    <section class="metrics-grid" aria-label="summary metrics">
-      <article class="metric-card accent-cyan"><span>制作相談テーマ</span><strong>11件</strong><p>今週話した制作テーマ</p></article>
-<article class="metric-card accent-pink"><span>制作相談のやり取り</span><strong>55件</strong><p>アイデア出しや確認の発言数</p></article>
-<article class="metric-card accent-yellow"><span>今週の一曲</span><strong>1曲</strong><p>Electric Sheep Little Girl（和訳付き）</p></article>
-<article class="metric-card accent-green"><span>直近X投稿</span><strong>77件</strong><p>最近の投稿まとめ / 返信 27 / 画像付き 17</p></article>
-    </section>
-
-    <section class="comment-strip">
-      <div class="speech hot"><img class="character" src="assets/characters/overwhelmed.png" alt="overwhelmed character" loading="lazy"><p>ジャンルや楽器を、<br>見た目からも探せるようにした。</p></div>
-      <div class="speech flat"><img class="character" src="assets/characters/deadpan.png" alt="deadpan character" loading="lazy"><p>次に出す絵と音の<br>参考ページを整えた。</p></div>
-      <div class="speech cool"><img class="character" src="assets/characters/coding.png" alt="coding character" loading="lazy"><p>曲紹介は動画リンクへ。<br>聴ける形を先に出す。</p></div>
-    </section>
-
-    <section id="codex" class="section-grid">
-      <div class="section-title">
-        <p class="eyebrow">制作</p>
-        <h2>今週動いた制作相談テーマ</h2>
-        <p>今週話していた制作テーマをまとめています。</p>
-      </div>
-      <div class="panel wide">
-        <div class="panel-head">
-          <h3>集中していた制作</h3>
-          <span>今週よく話したテーマ</span>
-        </div>
-        <div class="project-list">
-          <div class="project-row"><div class="project-name">画像制作</div><div class="project-sub">既存イラストの雰囲気合わせ</div><div class="project-count">制作メモ 5件</div></div>
-<div class="project-row"><div class="project-name">作詞・曲づくり</div><div class="project-sub">BGMの方向性づくり</div><div class="project-count">制作メモ 3件</div></div>
-<div class="project-row"><div class="project-name">チャンネル整備</div><div class="project-sub">活動ページの作り方を比較</div><div class="project-count">制作メモ 2件</div></div>
-<div class="project-row"><div class="project-name">Shorts制作</div><div class="project-sub">フルプレビューの画像選択を追加</div><div class="project-count">制作メモ 1件</div></div>
-        </div>
-      </div>
-    </section>
-
-    
-    <section id="music" class="music-band">
-      <div class="section-title">
-        <p class="eyebrow">自曲紹介</p>
-        <h2>今週、まず聴いてほしい一曲。</h2>
-        <p>今週の制作といちばん近い一曲だけを前に出します。全曲一覧は必要なときだけ開ける形にしました。</p>
-        <div class="section-actions">
-          <a href="https://www.youtube.com/@donutsheep_music" target="_blank" rel="noreferrer">YouTubeチャンネル</a>
-        </div>
-      </div>
-      <div class="song-feature">
-        <div>
-          <p class="eyebrow">donut sheep</p>
-          <h3>Electric Sheep Little Girl（和訳付き）</h3>
-          <p>MVづくりは手順から見直し中。まずは曲の空気が伝わる動画を前に出します。</p>
-          <p>柔らかさと電気的な質感が同居する、どーなつひつじらしい一曲です。</p>
-          <div class="tag-row"><span>曲紹介</span><span>和訳付き動画</span></div>
-          <a class="video-link" href="https://youtu.be/VnF2XbWpwSQ?si=j9BqxFTAYxVJQWuj" target="_blank" rel="noreferrer">動画を開く</a>
-        </div>
-        <iframe src="https://www.youtube.com/embed/VnF2XbWpwSQ" title="Electric Sheep Little Girl（和訳付き）" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-      </div>
-      <details class="catalog-panel">
-        <summary><span>公開中の曲と動画を開く</span><small>24曲 / 動画17本</small></summary>
-        <div class="music-stats">
-          <article><span>チャンネル動画</span><strong>17</strong><small>総再生 604回</small></article>
-          <article><span>公開中の曲</span><strong>24</strong><small>リリース曲一覧</small></article>
-          <article><span>登録者</span><strong>14</strong><small>@donutsheep_music</small></article>
-        </div>
-        <div class="release-list">
-          <a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_lWdtjWQf_9QqAdm2uCYpryihuiCg68SpI" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_lWdtjWQf_9QqAdm2uCYpryihuiCg68SpI.jpg" alt="スクラッチ・レコード (20260528) のカバー画像" loading="lazy"></span><span class="release-title">スクラッチ・レコード (20260528)</span><small>3:30 / 0回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_kWJrCBSPcAr2QVXeGfcVRjnqsQ8PI8TIA" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_kWJrCBSPcAr2QVXeGfcVRjnqsQ8PI8TIA.jpg" alt="The Gilding Peels Away のカバー画像" loading="lazy"></span><span class="release-title">The Gilding Peels Away</span><small>3:11 / 1回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_kTVKhJsCprS7ms_VOBX4y2WKgT_7BkbfM" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_kTVKhJsCprS7ms_VOBX4y2WKgT_7BkbfM.jpg" alt="ダイソンスフィアの夜明け のカバー画像" loading="lazy"></span><span class="release-title">ダイソンスフィアの夜明け</span><small>5:01 / 1回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_kBPpmOHfzmEoNoJzDXlqTjNpdkgv6LuKc" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_kBPpmOHfzmEoNoJzDXlqTjNpdkgv6LuKc.jpg" alt="エラいね、はい呼吸 のカバー画像" loading="lazy"></span><span class="release-title">エラいね、はい呼吸</span><small>4:00 / 5回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_m_-9JWy3RU4yc1vginobOPbHAv6M-VYAo" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_m_-9JWy3RU4yc1vginobOPbHAv6M-VYAo.jpg" alt="ナムボルト-RUN-現世 のカバー画像" loading="lazy"></span><span class="release-title">ナムボルト-RUN-現世</span><small>3:17 / 3回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_kn3voGvGtp9pWEZFOy17sUsPiVKXadAR4" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_kn3voGvGtp9pWEZFOy17sUsPiVKXadAR4.jpg" alt="いぬしっぽ気象台 のカバー画像" loading="lazy"></span><span class="release-title">いぬしっぽ気象台</span><small>5:09 / 3回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_nekI0XTmxczbkdEbgU4oNLT6NVM3J8aXM" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_nekI0XTmxczbkdEbgU4oNLT6NVM3J8aXM.jpg" alt="ワシャテリア のカバー画像" loading="lazy"></span><span class="release-title">ワシャテリア</span><small>3:30 / 1回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_n8mAuZuAXtsTG_7XJvn-hE5A8Is2zqUgU" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_n8mAuZuAXtsTG_7XJvn-hE5A8Is2zqUgU.jpg" alt="Ring by Ring のカバー画像" loading="lazy"></span><span class="release-title">Ring by Ring</span><small>5:44 / 2回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_mzcY10bWWI4I0hBg43MnCsnDY_hgX7Zqs" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_mzcY10bWWI4I0hBg43MnCsnDY_hgX7Zqs.jpg" alt="かいものメモの歌 のカバー画像" loading="lazy"></span><span class="release-title">かいものメモの歌</span><small>4:10 / 0回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_lOCcNemfabO01J-56nIAF-ZqKxBvd_3hY" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_lOCcNemfabO01J-56nIAF-ZqKxBvd_3hY.jpg" alt="Blue Hooves のカバー画像" loading="lazy"></span><span class="release-title">Blue Hooves</span><small>2:55 / 0回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_n-nt9kfnPEeKcP_Vjh6lH6nqyrdxM9sPM" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_n-nt9kfnPEeKcP_Vjh6lH6nqyrdxM9sPM.jpg" alt="継ぎ接ぎ借り物サーカス団 のカバー画像" loading="lazy"></span><span class="release-title">継ぎ接ぎ借り物サーカス団</span><small>3:47 / 3回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_mZXuDgcbGVCF7yQ0gKboTuKXoEFI7oB88" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_mZXuDgcbGVCF7yQ0gKboTuKXoEFI7oB88.jpg" alt="皿洗いの本気ハンバーグ のカバー画像" loading="lazy"></span><span class="release-title">皿洗いの本気ハンバーグ</span><small>4:00 / 10回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_nCoR1bP54V3nXODXckHSYuBS_5neBSHD8" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_nCoR1bP54V3nXODXckHSYuBS_5neBSHD8.jpg" alt="DRAW THE STARS のカバー画像" loading="lazy"></span><span class="release-title">DRAW THE STARS</span><small>5:35 / 1回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_koQ1OM7gcb_ykiENe_vAlFvrr54zz3N28" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_koQ1OM7gcb_ykiENe_vAlFvrr54zz3N28.jpg" alt="RISE, RISE のカバー画像" loading="lazy"></span><span class="release-title">RISE, RISE</span><small>4:29 / 1回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_m0Y4_qihgo5r0YimzwF3hxAykBpdEL_Ds" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_m0Y4_qihgo5r0YimzwF3hxAykBpdEL_Ds.jpg" alt="Neon HUD Candy のカバー画像" loading="lazy"></span><span class="release-title">Neon HUD Candy</span><small>3:45 / 4回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_mo6-ecgW5FGHh7VlrSY8kWySjvDVWqp0U" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_mo6-ecgW5FGHh7VlrSY8kWySjvDVWqp0U.jpg" alt="Electric Sheep Little Girl のカバー画像" loading="lazy"></span><span class="release-title">Electric Sheep Little Girl</span><small>4:21 / 3回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_mtgGGHy652qQi6Bn3MNzd5pZ_LPXdwBpg" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_mtgGGHy652qQi6Bn3MNzd5pZ_LPXdwBpg.jpg" alt="CLUTCH//NOISE のカバー画像" loading="lazy"></span><span class="release-title">CLUTCH//NOISE</span><small>3:31 / 7回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_l2Uslpnsn3KMdZyZ11tjDmyWN63FytBbI" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_l2Uslpnsn3KMdZyZ11tjDmyWN63FytBbI.jpg" alt="Retry Heartbeat のカバー画像" loading="lazy"></span><span class="release-title">Retry Heartbeat</span><small>3:47 / 0回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_lNeyFo1OtGypVGDlQnnCrv4SELrynHqbA" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_lNeyFo1OtGypVGDlQnnCrv4SELrynHqbA.jpg" alt="ZOMByE-キミに火葬- のカバー画像" loading="lazy"></span><span class="release-title">ZOMByE-キミに火葬-</span><small>3:15 / 3回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_lgrVumqoSAPf03ZkZy9Vve4gCm-NOqR8g" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_lgrVumqoSAPf03ZkZy9Vve4gCm-NOqR8g.jpg" alt="カラカラパレット のカバー画像" loading="lazy"></span><span class="release-title">カラカラパレット</span><small>3:58 / 5回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_ln-KE7tJdGANH37F1EBZ_u0abL8JqzHhk" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_ln-KE7tJdGANH37F1EBZ_u0abL8JqzHhk.jpg" alt="花粉症のほうが辛いって のカバー画像" loading="lazy"></span><span class="release-title">花粉症のほうが辛いって</span><small>3:16 / 8回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_lHQD8-dNjEWEXRk9tJUxF_X1QBNe7oWpc" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_lHQD8-dNjEWEXRk9tJUxF_X1QBNe7oWpc.jpg" alt="Pyrite のカバー画像" loading="lazy"></span><span class="release-title">Pyrite</span><small>3:13 / 47回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_mchCJQa7R4whztb277d2rp7NMNBsd4teQ" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_mchCJQa7R4whztb277d2rp7NMNBsd4teQ.jpg" alt="め のカバー画像" loading="lazy"></span><span class="release-title">め</span><small>3:17 / 23回再生</small></a>
-<a class="release-item" href="https://www.youtube.com/playlist?list=OLAK5uy_lCHO0PLfTWtDsoqN1FDIGc4Nq_duRBdJs" target="_blank" rel="noreferrer"><span class="release-cover"><img src="assets/release-art/OLAK5uy_lCHO0PLfTWtDsoqN1FDIGc4Nq_duRBdJs.jpg" alt="ゆめみの迷子とドーナツハート のカバー画像" loading="lazy"></span><span class="release-title">ゆめみの迷子とドーナツハート</span><small>3:18 / 49回再生</small></a>
-        </div>
-      </details>
-    </section>
-
-
-    
-    <section id="x" class="social-band">
-      <div class="section-title">
-        <p class="eyebrow">X</p>
-        <h2>Xでの直近投稿メモ。</h2>
-        <p>@donut_sheep の最近の投稿まとめ（2026.05.17-2026.05.22）として、制作中の絵や動画を見せる投稿と返信をまとめています。</p>
-      </div>
-      <div class="social-stats">
-        <article><span>最近の投稿まとめ</span><strong>77</strong><small>2026.05.17-2026.05.22 の投稿・返信・引用など</small></article><article><span>うち返信</span><strong>27</strong><small>返信でのやり取り</small></article><article><span>画像付き</span><strong>17</strong><small>画像付き投稿</small></article><article><span>引用投稿</span><strong>6</strong><small>引用で触れた話題</small></article><article><span>動画付き</span><strong>5</strong><small>動画付き投稿</small></article>
-      </div>
-      <div class="speech cool"><img class="character" src="assets/characters/headphones.png" alt="headphones character" loading="lazy"><p>画像つきは17件、動画つきは5件。<br>絵や短い動画も混ざった直近分。</p></div>
-    </section>
-
-
-    
-    <section id="tools" class="tools-band">
-      <div class="section-title">
-        <p class="eyebrow">公開ツール</p>
-        <h2>制作に使える公開ページ。</h2>
-        <p>音と画像に分けて、制作の参考ページをまとめています。</p>
-      </div>
-      <div class="tools-showcase">
-        <img class="tool-usage-illustration" src="assets/illustrations/goatcounter-peek.png" alt="公開ページの利用を見守るどーなつひつじと小さなヤギ" width="1254" height="1254" loading="lazy">
-        <div class="tool-groups">
-          <div class="tool-group"><h3>音</h3><div class="tool-grid"><a class="tool-card" href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/music_instrument_prompt_atlas.html" target="_blank" rel="noreferrer"><span>音づくり</span><strong>ジャンルと楽器</strong><p>曲の雰囲気や楽器の特徴から、次の音を探せます。</p></a><a class="tool-card" href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/spatial_audio_effects_tool.html" target="_blank" rel="noreferrer"><span>音響効果</span><strong>空間と効果音</strong><p>効果音や空間表現を聴き比べる制作メモ。</p></a></div></div>
-<div class="tool-group"><h3>画像</h3><div class="tool-grid"><a class="tool-card" href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/mv-nonreal-style-vocabulary.html" target="_blank" rel="noreferrer"><span>画風</span><strong>現実外の質感</strong><p>絵の質感や方向性を選ぶための参考集。</p></a><a class="tool-card" href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/mv-visual-vocabulary.html" target="_blank" rel="noreferrer"><span>画面設計</span><strong>絵の見せ方</strong><p>構図、光、質感などの見せ方を選ぶ参考集。</p></a></div></div>
-        </div>
-      </div>
-      <div class="speech cool"><img class="character" src="assets/characters/coding.png" alt="coding character" loading="lazy"><p>音は音、絵は絵。<br>探す場所を分けた。</p></div>
-    </section>
-
-
-    <section id="next" class="section-grid git-section">
-      <div class="section-title">
-        <p class="eyebrow">MV制作の整理</p>
-        <h2>MV制作ワークフローを組み直す。</h2>
-        <p>今の素材は完成版ではなく、作り直し前提の下書きとして扱い、MV制作の手順を見直します。</p>
-      </div>
-      <div class="repo-grid">
-        <article class="repo-card"><span>MV制作</span><strong>整理中</strong><p>必要なワークフローを洗い直し</p><small>完成に寄せる前の検証フェーズ。</small></article>
-        <article class="repo-card"><span>スクラップ＆ビルド</span><strong>見直し</strong><p>今の素材は叩き台として扱う</p><small>残すものと作り直すものを分ける。</small></article>
-        <article class="repo-card"><span>公開ページ</span><strong>活用</strong><p>音と画像の参考を分けて整理</p><small>次の制作判断に戻しやすくする。</small></article>
-      </div>
-      <div class="speech warn"><img class="character" src="assets/characters/system-error.png" alt="system error character" loading="lazy"><p>今は前進より、<br>作り方を組み直す。</p></div>
-    </section>
-
-    
-    <section id="git" class="section-grid git-section">
-      <div class="section-title">
-        <p class="eyebrow">制作更新</p>
-        <h2>公開物とMV制作の更新。</h2>
-        <p>今週公開・更新したものをまとめます。主な制作関連の更新を抜粋しています。</p>
-      </div>
-      <div class="panel wide">
-        <div class="git-stats">
-          <article><span>今週の公開・更新</span><strong>8</strong><small>今週反映した更新</small></article>
-          <article><span>直近30日</span><strong>75</strong><small>制作更新の推移</small></article>
-          <article><span>公開まわりの更新</span><strong>8</strong><small>MV制作と公開ページ周り</small></article>
-        </div>
-        <div class="repo-grid">
-          <article class="repo-card"><span>MV・Shorts制作</span><strong>4</strong><p>今週4件、これまで109件の更新</p><small>ShortsプレビューとMV制作手順を更新</small></article>
-<article class="repo-card"><span>活動ログ整備</span><strong>3</strong><p>今週3件、これまで7件の更新</p><small>前回ログへ戻りやすい導線に整理</small></article>
-<article class="repo-card"><span>公開ページ</span><strong>1</strong><p>今週1件、これまで17件の更新</p><small>過去ログの表示崩れを直して読みやすく整理</small></article>
-        </div>
-      </div>
-    </section>
-
-
-    
-    <section id="text-mass" class="word-battle" aria-label="制作相談の文字量">
-      <div>
-        <p class="eyebrow">制作相談の文字量</p>
-        <h2>本人の発言 9,115字に対して、AIからの返答 75,173字。</h2>
-        <p>返答は約8.2倍。制作相談の圧が、そのまま文字量にも出ています。</p>
-      </div>
-      <div class="battle-bars" aria-label="文字量の比較">
-        <div class="battle-row user"><span>本人</span><div><i style="width: 12%"></i></div><b>9,115字</b></div>
-        <div class="battle-row ai"><span>AI返答</span><div><i style="width: 100%"></i></div><b>75,173字</b></div>
-      </div>
-      <img class="character battle-character" src="assets/characters/overwhelmed.png" alt="overwhelmed character" loading="lazy">
-    </section>
-
-
-    <section id="topics" class="topics-band">
-      <div class="section-title">
-        <p class="eyebrow">制作メモ</p>
-        <h2>今週の制作メモ</h2>
-        <p>細かい作業名を、MV・曲・公開ページ・SNS素材の流れで見直します。</p>
-      </div>
-      <div class="topic-groups">
-        <article><span>曲とカバー</span><strong>2件</strong><p>歌詞と曲調メモの整理 / 曲の生成メモづくり</p></article>
-<article><span>公開ページ</span><strong>2件</strong><p>活動ページの作り方を比較 / 公開ページの候補ツールを整理</p></article>
-<article><span>その他の制作</span><strong>7件</strong><p>既存イラストの雰囲気合わせ / 白く/白日の案を作成 ほか5件</p></article>
-      </div>
-      <div class="topic-cloud">
-        <span>既存イラストの雰囲気合わせ</span>
-<span>白く/白日の案を作成</span>
-<span>白く/白日の概念案作成</span>
-<span>採用した世界観でカット集を作成</span>
-<span>6月3日に画像20枚を作成</span>
-<span>BGMの方向性づくり</span>
-<span>歌詞と曲調メモの整理</span>
-<span>曲の生成メモづくり</span>
-<span>活動ページの作り方を比較</span>
-<span>公開ページの候補ツールを整理</span>
-<span>フルプレビューの画像選択を追加</span>
-      </div>
-      <img class="character walk-character" src="assets/characters/walk.png" alt="walking character" loading="lazy">
-    </section>
-  </main>
-
-  <footer>
-    <p>donut sheep activity report</p>
-  </footer>
+<link rel="preload" as="image" href="assets/illustrations/サムネ.png"/><div class="report-page report-theme-weekly-sunrise report-density-comfortable report-character-featured" data-title="donut sheep weekly report"><div><section id="hero" class="report-hero report-hero-public report-hero-compact block-tone-green"><div><p class="report-eyebrow">2026.05.25-06.05(11日間)</p><h1>定期活動ログ</h1><p>
+次回活動報告予定日：6.20</p></div><div class="hero-side"><img class="character-image hero-sticker" src="assets/characters/headphones.png" alt="headphones donut sheep character" loading="lazy"/></div></section><nav id="report-navigation" class="report-nav report-nav-bar block-tone-neutral item-accent-cycle" aria-label="各種リンク"><p class="report-nav-heading">各種リンク</p><div class="report-nav-links"><a class="report-nav-link report-nav-link-cyan accent-item" href="activity-logs/2026-05-18.html"><span>前回の活動ログ</span><small>2026.05.18-5.24</small></a><a class="report-nav-link report-nav-link-yellow accent-item" href="https://www.youtube.com/@donutsheep_music" target="_blank" rel="noreferrer"><span>Youtubeチャンネル</span></a><a class="report-nav-link report-nav-link-cyan accent-item" href="https://www.tunecore.co.jp/artists/donut_hitsuji" target="_blank" rel="noreferrer"><span>アーティストページ</span><small>各楽曲から配信ストアへのリンク</small></a></div></nav><section id="EditorialNote-468cf0c1-54d6-436c-9a37-2a217a06b112" class="report-section editorial-note editorial-note-panel block-tone-pink"><img class="character-image" src="assets/characters/jump.png" alt="jump donut sheep character" loading="lazy"/><div><div class="section-heading"><h2>この期間の主な成果/今後の課題</h2><p>成果：Xでの交流とアカウント成長</p></div><p>課題：Youtubeの動画再生平均時間/品質の向上</p><ul><li>Xでの交流に伴い、様々な曲が作れた<span>GOOD</span></li><li>AI音楽クラスタ外に発信が届き始めた<span>GOOD</span></li><li>「音」「動画」としての品質を高めることは必須<span>TODO</span></li></ul></div></section><section id="MetricStrip-c7dd69e4-0342-460e-8b40-c9def0d1550b" class="report-section metric-band block-tone-cyan item-accent-cycle"><div class="section-heading"><h2>今週の数量的進捗まとめ</h2></div><div class="metric-strip metric-strip-cards"><article class="metric-card accent-item"><span>X投稿</span><strong>177件</strong><p>返信 140 / 画像付き 32</p></article><article class="metric-card accent-item"><span>公開中の曲</span><strong>24曲</strong><p>YouTube Music/各種配信ストア
+リリース曲総数</p></article><article class="metric-card accent-item"><span>Codexスレッドテーマ</span><strong>38件</strong><p>歌詞と曲調メモの整理
+Codexスキルの整理と再構築　など
+</p></article><article class="metric-card accent-item"><span>Codex会話数</span><strong>238件</strong><p>アイデア出しや確認の発言数</p></article></div></section><section id="next" class="report-section next-section next-steps next-steps-numbered block-tone-yellow item-accent-cycle"><img class="character-image" src="assets/characters/coding.png" alt="coding donut sheep character" loading="lazy"/><div><div class="section-heading"><h2>次にやること</h2></div><ol><li class="accent-item">マスタリング前楽曲のマスタリング←4曲がSunoだけにある状態</li><li class="accent-item">Youtube横動画の新規追加←一般向けの曲が少ないため早めに</li><li class="accent-item">自作動画制作ツールの改良←満足度向上。上記「やること」と天秤に掛けながら</li><li class="accent-item">随時新曲制作</li><li class="accent-item">引き続きX運用。AIイラスト/動画+曲/制作日記、その他織り交ぜたい。Grok曰く「一日一投稿にしろ」なので文字ポストは少ないかも</li><li class="accent-item">宣伝はするがゴリ押しは避けたい。「この人の曲なら聴きたい」「次の曲まだかな」と思ってもらえるのが理想。頑張ります</li></ol></div></section><section id="song-feature" class="report-section song-band song-feature song-feature-split song-feature-media-cover block-tone-pink item-accent-cycle song-feature-image-wide"><img src="assets/illustrations/サムネ.png" alt="サムネ"/><div><p class="report-eyebrow">自曲紹介</p><h2>パイライト/Pyrite</h2><p class="song-artist">donut sheep</p><p>「偽物」の二人が本物を羨みながらも、自分たちを肯定する歌です。
+おだやかなテンポに柔らかい女性ボーカル。
+AI生成楽曲ならではのテーマです。
+</p><a href="https://www.youtube.com/watch?v=3l1HzoUb9ec">動画を開く</a><div class="topic-list"></div></div></section><section id="PublicTools-ce255db6-9578-49f6-8d8f-77397cc882a1" class="report-section tools-section block-tone-green item-accent-cycle"><div class="section-heading"><h2>制作に使える公開HTML</h2></div><div class="tool-list tool-list-cards"><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/music_instrument_prompt_atlas.html" class="accent-item"><span>音楽のジャンル/楽器総覧(Music Genre &amp; Instrument Prompt Atlas)</span><p>大分類から中分類・小分類へ、クリック少なめで見渡せるHTML。ジャンルは「地図」、楽器は「発音原理・編成・地域・役割・質感」の複数地図としてまとめました。
+※Codexのクセ強文章はそのままです</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/spatial_audio_effects_tool.html" class="accent-item"><span>Spatial Audio Effects Tool</span><p>手動マスタリング用のHTMLツール
+使いながら開発中
+※自由にHTMLごと持っていってローカルで利用してもらって大丈夫です</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/mv-nonreal-style-vocabulary.html" class="accent-item"><span>非写実画風・制作技法 語彙リファレンス(MV Nonreal Style Vocabulary Reference)</span><p>画風、媒体、制作技法、素材、漫画・アニメ文法、工芸、デジタル表現の一覧。
+・ChatGPTによる生成画像付き
+・Codexのクセ強文章はそのままです</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/mv-visual-vocabulary.html" class="accent-item"><span>MV美術の語彙と探索領域(MV Visual Vocabulary Reference)</span><p>映像美術で操作できる要素、表現領域
+・ChatGPTによる生成画像付き
+・Codexのクセ強文章はそのままです</p></a></div></section><section id="TextVolumeComparison-3bfd7300-0800-4b28-bb95-dc97cef38eec" class="report-section text-volume-section text-volume-section-compact"><div><p class="report-eyebrow">制作相談の文字量</p><h2>Codexでの会話総量</h2></div><div class="text-volume-bars" aria-label="文字量の比較"><div class="text-volume-row text-volume-row-user"><span>本人</span><div><i style="width:12%"></i></div><b>37K字</b></div><div class="text-volume-row text-volume-row-ai"><span>AI返答</span><div><i style="width:100%"></i></div><b>304K字</b></div></div></section><section id="ActivityBreakdown-e6ca5069-904f-469f-8f42-5a65ec58dc20" class="report-section activity-breakdown-section block-tone-cyan item-accent-cycle"><div class="section-heading activity-breakdown-heading"><div><p class="report-eyebrow">Codexログ</p><h2>制作相談件数</h2></div><p>この期間に動いた制作テーマを、名前と数字で振り返ります。</p><img class="character-image activity-breakdown-character" src="assets/characters/walk.png" alt="walk donut sheep character" loading="lazy"/></div><div class="activity-breakdown-panel"><div class="panel-head"><h3>プロジェクト名</h3><span>この期間の会話数</span></div><div class="activity-breakdown-list"><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">Suno向け制作相談</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:100%"></i></div><strong>142件</strong><p>曲スタイル/歌詞の制作補助</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">活動ログ</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:39%"></i></div><strong>55件</strong><p>追加 旧HTMLの全ブロック復元</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">MusicVideoCreator</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:18%"></i></div><strong>25件</strong><p>台本読み込み機能を追加</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">JustImageCreate</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:9%"></i></div><strong>13件</strong><p>カバー/歌詞イラストの作成
+</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">IrodoriTTS</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:1%"></i></div><strong>2件</strong><p>IrodoriTTS導入方法を調査</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">MusicVideoCreating</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:1%"></i></div><strong>1件</strong><p>カラカラパレットのカバー案作成</p></article></div></div></section><section id="TopicCloud-2393dff8-7cdc-4283-ae09-8816b2b9cf81" class="report-section topic-section block-tone-pink item-accent-cycle"><div class="section-heading"><h2>今期稼働した内部制作スレッド例</h2></div><div class="topic-list topic-list-ribbon"><span class="accent-item">HTMLビルダー候補を調査</span><span class="accent-item">HTMLビルダーを点検・報告</span><span class="accent-item">HTMLビルダー競合を調査</span><span class="accent-item">MV効果の不足を洗い出す</span><span class="accent-item">Irodori-TTS環境を調査</span><span class="accent-item">StableAudio3導入</span><span class="accent-item">歌詞と曲調メモの整理</span><span class="accent-item">曲の生成メモづくり</span><span class="accent-item">活動ページの作り方を比較</span><span class="accent-item">歌詞カードのラフ案を作成</span><span class="accent-item">フルプレビューの画像選択を追加</span><span class="accent-item">X投稿用ラフ画像提案</span></div></section><footer id="footer" class="report-footer block-tone-neutral"><p>donut sheep weekly report</p></footer></div></div>
 </body>
 </html>
