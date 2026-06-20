@@ -1071,6 +1071,213 @@
   text-transform: none;
 }
 
+.thought-note.report-section {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(150px, 0.28fr);
+  gap: clamp(18px, 5vw, 58px);
+  align-items: center;
+  padding-top: clamp(42px, 7vw, 86px);
+  padding-bottom: clamp(42px, 7vw, 86px);
+  border-top: 4px solid var(--block-accent);
+  border-bottom: 1px solid var(--block-line);
+  overflow: hidden;
+}
+
+.thought-note-stack,
+.thought-note-media-none {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.thought-note-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 820px;
+}
+
+.thought-note h2 {
+  margin: 0;
+  color: var(--report-ink);
+  font-size: clamp(30px, 5vw, 64px);
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+
+.thought-note-body,
+.thought-note-footnote {
+  white-space: pre-line;
+}
+
+.thought-note-body {
+  margin: 16px 0 0;
+  color: var(--report-muted);
+  font-weight: 800;
+  line-height: 1.8;
+}
+
+.thought-note-list {
+  display: grid;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.thought-note-list li {
+  padding-top: 12px;
+  border-top: 1px solid var(--block-line);
+  color: var(--report-ink);
+  font-weight: 900;
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+.thought-note-footnote {
+  margin: 20px 0 0;
+  color: var(--report-muted);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.65;
+}
+
+.thought-note-image {
+  width: min(220px, 30vw);
+  justify-self: end;
+  border: 3px solid var(--report-ink);
+  background: #fff;
+  box-shadow: 7px 7px 0 var(--block-accent);
+  transform: rotate(2deg);
+}
+
+.thought-note-stack .thought-note-image {
+  width: min(180px, 36vw);
+}
+
+.thought-note.block-surface-black {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+.thought-note.block-surface-black .report-eyebrow {
+  color: rgb(255 255 255 / 0.74);
+}
+
+.thought-note.block-surface-black .thought-note-image {
+  border-color: #fff;
+}
+
+.x-post-showcase.report-section {
+  padding-top: clamp(42px, 7vw, 82px);
+  padding-bottom: clamp(42px, 7vw, 82px);
+  border-top: 1px solid var(--block-line);
+  border-bottom: 1px solid var(--block-line);
+}
+
+.x-post-heading {
+  align-items: flex-end;
+}
+
+.x-post-heading > div {
+  min-width: min(100%, 420px);
+}
+
+.x-post-heading > p {
+  max-width: 420px;
+  font-weight: 800;
+}
+
+.x-post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.x-post-showcase-list .x-post-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.x-post-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(92px, 0.34fr) minmax(0, 0.66fr);
+  gap: 14px;
+  align-items: stretch;
+  min-height: 150px;
+  padding: 12px;
+  border: 2px solid var(--report-ink);
+  border-radius: var(--report-radius);
+  background: #fff;
+  box-shadow: 5px 5px 0 var(--item-accent);
+  color: var(--report-ink);
+  text-decoration: none;
+}
+
+.x-post-card:hover {
+  transform: translate(-1px, -1px);
+}
+
+.x-post-preview {
+  display: grid;
+  min-height: 126px;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid var(--item-line);
+  border-radius: calc(var(--report-radius) - 2px);
+  background: var(--item-bg);
+}
+
+.x-post-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.x-post-preview-fallback {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border: 2px solid var(--report-ink);
+  border-radius: 50%;
+  background: var(--report-ink);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.x-post-copy {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.x-post-comment,
+.x-post-copy strong {
+  color: var(--report-ink);
+  font-size: clamp(16px, 2.4vw, 22px);
+  font-weight: 900;
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+.x-post-copy small {
+  color: var(--report-muted);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.x-post-showcase.block-surface-black .x-post-card {
+  border-color: rgb(255 255 255 / 0.72);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.x-post-showcase.block-surface-black .x-post-preview-fallback {
+  border-color: #fff;
+  background: #fff;
+  color: #17131f;
+}
+
 .activity-section {
   display: grid;
   grid-template-columns: minmax(240px, 0.32fr) minmax(0, 0.68fr);
@@ -1927,11 +2134,126 @@
   margin-top: 18px;
 }
 
+.report-page .block-surface-tone {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.44), transparent 52%),
+    var(--block-bg);
+}
+
+.report-page .block-surface-plain {
+  background: var(--report-panel);
+}
+
+.report-page .block-surface-paper {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.82), rgb(255 255 255 / 0.42)),
+    var(--block-bg);
+}
+
+.report-page .block-surface-graph {
+  background:
+    linear-gradient(90deg, rgb(23 19 31 / 0.075) 1px, transparent 1px),
+    linear-gradient(0deg, rgb(23 19 31 / 0.06) 1px, transparent 1px),
+    linear-gradient(135deg, rgb(255 255 255 / 0.84), rgb(255 255 255 / 0.5)),
+    var(--block-bg);
+  background-size: 22px 22px, 22px 22px, auto, auto;
+}
+
+.report-page .block-surface-pink {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.56), transparent 54%),
+    var(--tone-pink-tint);
+}
+
+.report-page .block-surface-cyan {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.56), transparent 54%),
+    var(--tone-cyan-tint);
+}
+
+.report-page .block-surface-yellow {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.58), transparent 54%),
+    var(--tone-yellow-tint);
+}
+
+.report-page .block-surface-green {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.56), transparent 54%),
+    var(--tone-green-tint);
+}
+
+.report-page .block-surface-blue {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.56), transparent 54%),
+    var(--tone-blue-tint);
+}
+
+.report-page .block-surface-neutral {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.58), transparent 54%),
+    var(--tone-neutral-tint);
+}
+
+.report-page .block-surface-black {
+  --report-ink: #fff;
+  --report-muted: rgb(255 255 255 / 0.76);
+  --report-line: rgb(255 255 255 / 0.22);
+  --block-line: rgb(255 255 255 / 0.28);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.08), transparent 42%),
+    #17131f;
+  color: #fff;
+}
+
+.report-page .block-surface-black .report-eyebrow,
+.report-page .block-surface-black .section-heading p,
+.report-page .block-surface-black .report-nav-heading,
+.report-page .block-surface-black .thought-note-body,
+.report-page .block-surface-black .thought-note-footnote,
+.report-page .block-surface-black .x-post-heading > p {
+  color: rgb(255 255 255 / 0.76);
+}
+
+.report-page .block-surface-black .metric-card,
+.report-page .block-surface-black .highlight-layout,
+.report-page .block-surface-black .highlight-grid article,
+.report-page .block-surface-black .activity-breakdown-panel,
+.report-page .block-surface-black .character-speech,
+.report-page .block-surface-black .featured-video,
+.report-page .block-surface-black .repo-card,
+.report-page .block-surface-black .release-item,
+.report-page .block-surface-black .tool-list a,
+.report-page .block-surface-black .mini-metrics span,
+.report-page .block-surface-black .topic-list span,
+.report-page .block-surface-black .x-post-card,
+.report-page .block-surface-black .report-nav-link {
+  border-color: rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
+}
+
+.report-page .block-surface-black .metric-card strong,
+.report-page .block-surface-black .highlight-grid p,
+.report-page .block-surface-black .activity-breakdown-title,
+.report-page .block-surface-black .repo-card strong,
+.report-page .block-surface-black .tool-list span,
+.report-page .block-surface-black .x-post-comment,
+.report-page .block-surface-black .x-post-copy strong {
+  color: #fff;
+}
+
+.report-page .block-surface-black .character-image,
+.report-page .block-surface-black .thought-note-image {
+  border-color: #fff;
+}
+
 @media (max-width: 980px) {
   .report-hero,
   .activity-section,
   .activity-breakdown-section,
   .text-volume-section,
+  .thought-note.report-section,
   .song-band.report-section,
   .featured-video,
   .social-section.report-section,
@@ -2022,6 +2344,8 @@
   .music-catalog-section,
   .git-progress-section,
   .song-band.report-section,
+  .thought-note.report-section,
+  .x-post-showcase.report-section,
   .social-section.report-section,
   .tools-section,
   .topic-section,
@@ -2037,6 +2361,19 @@
 
   .editorial-note .character-image {
     width: 72px;
+  }
+
+  .thought-note-image {
+    width: min(132px, 38vw);
+    justify-self: start;
+  }
+
+  .x-post-card {
+    grid-template-columns: 1fr;
+  }
+
+  .x-post-preview {
+    min-height: 180px;
   }
 
   .highlight-layout {
@@ -2270,21 +2607,37 @@
 </style>
 </head>
 <body>
-<link rel="preload" as="image" href="assets/illustrations/サムネ.png"/><div class="report-page report-theme-weekly-sunrise report-density-comfortable report-character-featured" data-title="donut sheep weekly report"><div><section id="hero" class="report-hero report-hero-public report-hero-compact block-tone-green"><div><p class="report-eyebrow">2026.05.25-06.05(11日間)</p><h1>定期活動ログ</h1><p>
-次回活動報告予定日：6.20</p></div><div class="hero-side"><img class="character-image hero-sticker" src="assets/characters/headphones.png" alt="headphones donut sheep character" loading="lazy"/></div></section><nav id="report-navigation" class="report-nav report-nav-bar block-tone-neutral item-accent-cycle" aria-label="各種リンク"><p class="report-nav-heading">各種リンク</p><div class="report-nav-links"><a class="report-nav-link report-nav-link-cyan accent-item" href="activity-logs/2026-05-18.html"><span>前回の活動ログ</span><small>2026.05.18-5.24</small></a><a class="report-nav-link report-nav-link-yellow accent-item" href="https://www.youtube.com/@donutsheep_music" target="_blank" rel="noreferrer"><span>Youtubeチャンネル</span></a><a class="report-nav-link report-nav-link-cyan accent-item" href="https://www.tunecore.co.jp/artists/donut_hitsuji" target="_blank" rel="noreferrer"><span>アーティストページ</span><small>各楽曲から配信ストアへのリンク</small></a></div></nav><section id="EditorialNote-468cf0c1-54d6-436c-9a37-2a217a06b112" class="report-section editorial-note editorial-note-panel block-tone-pink"><img class="character-image" src="assets/characters/jump.png" alt="jump donut sheep character" loading="lazy"/><div><div class="section-heading"><h2>この期間の主な成果/今後の課題</h2><p>成果：Xでの交流とアカウント成長</p></div><p>課題：Youtubeの動画再生平均時間/品質の向上</p><ul><li>Xでの交流に伴い、様々な曲が作れた<span>GOOD</span></li><li>AI音楽クラスタ外に発信が届き始めた<span>GOOD</span></li><li>「音」「動画」としての品質を高めることは必須<span>TODO</span></li></ul></div></section><section id="MetricStrip-c7dd69e4-0342-460e-8b40-c9def0d1550b" class="report-section metric-band block-tone-cyan item-accent-cycle"><div class="section-heading"><h2>今期の数量的進捗まとめ</h2></div><div class="metric-strip metric-strip-cards"><article class="metric-card accent-item"><span>X投稿</span><strong>177件</strong><p>返信 140 / 画像付き 32</p></article><article class="metric-card accent-item"><span>配信中の曲</span><strong>22曲→24曲</strong><p>YouTube Music/各種配信ストア
-リリース曲総数</p></article><article class="metric-card accent-item"><span>Codexスレッドテーマ</span><strong>38件</strong><p>歌詞と曲調メモの整理
-Codexスキルの整理と再構築　など
-</p></article><article class="metric-card accent-item"><span>Codex会話数</span><strong>238件</strong><p>アイデア出しや確認の発言数</p></article></div></section><section id="next" class="report-section next-section next-steps next-steps-numbered block-tone-yellow item-accent-cycle"><img class="character-image" src="assets/characters/coding.png" alt="coding donut sheep character" loading="lazy"/><div><div class="section-heading"><h2>次にやること</h2></div><ol><li class="accent-item">マスタリング前楽曲のマスタリング←4曲がSunoだけにある状態</li><li class="accent-item">Youtube横動画の新規追加←一般向けの曲が少ないため早めに</li><li class="accent-item">自作動画制作ツールの改良←満足度向上。上記「やること」と天秤に掛けながら</li><li class="accent-item">随時新曲制作</li><li class="accent-item">引き続きX運用。AIイラスト/動画+曲/制作日記、その他織り交ぜたい。Grok曰く「一日一投稿にしろ」なので文字ポストは少ないかも</li><li class="accent-item">宣伝はするがゴリ押しは避けたい。「この人の曲なら聴きたい」「次の曲まだかな」と思ってもらえるのが理想。頑張ります</li></ol></div></section><section id="song-feature" class="report-section song-band song-feature song-feature-split song-feature-media-cover block-tone-pink item-accent-cycle song-feature-image-wide"><img src="assets/illustrations/サムネ.png" alt="サムネ"/><div><p class="report-eyebrow">自曲紹介</p><h2>パイライト/Pyrite</h2><p class="song-artist">donut sheep</p><p>「偽物」の二人が本物を羨みながらも、自分たちを肯定する歌です。
-おだやかなテンポに柔らかい女性ボーカル。
-AI生成楽曲ならではのテーマです。
-</p><a href="https://www.youtube.com/watch?v=3l1HzoUb9ec">動画を開く</a><div class="topic-list"></div></div></section><section id="PublicTools-ce255db6-9578-49f6-8d8f-77397cc882a1" class="report-section tools-section block-tone-green item-accent-cycle"><div class="section-heading"><h2>制作に使える公開HTML</h2></div><div class="tool-list tool-list-cards"><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/music_instrument_prompt_atlas.html" class="accent-item"><span>音楽のジャンル/楽器総覧(Music Genre &amp; Instrument Prompt Atlas)</span><p>大分類から中分類・小分類へ、クリック少なめで見渡せるHTML。ジャンルは「地図」、楽器は「発音原理・編成・地域・役割・質感」の複数地図としてまとめました。
-※Codexのクセ強文章はそのままです</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/spatial_audio_effects_tool.html" class="accent-item"><span>Spatial Audio Effects Tool</span><p>手動マスタリング用のHTMLツール
-使いながら開発中
-※自由にHTMLごと持っていってローカルで利用してもらって大丈夫です</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/mv-nonreal-style-vocabulary.html" class="accent-item"><span>非写実画風・制作技法 語彙リファレンス(MV Nonreal Style Vocabulary Reference)</span><p>画風、媒体、制作技法、素材、漫画・アニメ文法、工芸、デジタル表現の一覧。
+<link rel="preload" as="image" href="assets/illustrations/いぬしっぽ.png"/><div class="report-page report-theme-weekly-sunrise report-density-comfortable report-character-featured" data-title="donut sheep weekly report"><div><section id="hero" class="report-hero report-hero-public report-hero-compact block-tone-pink block-surface-default"><div><p class="report-eyebrow">2026.06.06-06.19(14日間)</p><h1>定期活動ログ</h1><p>
+次回活動報告予定日：7.4</p></div><div class="hero-side"><img class="character-image hero-sticker" src="assets/characters/jump.png" alt="jump donut sheep character" loading="lazy"/></div></section><nav id="report-navigation" class="report-nav report-nav-bar block-tone-neutral block-surface-default item-accent-cycle" aria-label="各種リンク"><p class="report-nav-heading">各種リンク</p><div class="report-nav-links"><a class="report-nav-link report-nav-link-cyan accent-item" href="activity-logs/2026-05-25.html"><span>前回の活動ログ</span><small>2026.05.25-06.05</small></a><a class="report-nav-link report-nav-link-yellow accent-item" href="https://www.youtube.com/@donutsheep_music" target="_blank" rel="noreferrer"><span>Youtubeチャンネル</span></a><a class="report-nav-link report-nav-link-cyan accent-item" href="https://www.tunecore.co.jp/artists/donut_hitsuji" target="_blank" rel="noreferrer"><span>アーティストページ</span><small>各楽曲から配信ストアへのリンク</small></a></div></nav><section id="EditorialNote-468cf0c1-54d6-436c-9a37-2a217a06b112" class="report-section editorial-note editorial-note-panel block-tone-pink block-surface-default"><img class="character-image" src="assets/characters/coding.png" alt="coding donut sheep character" loading="lazy"/><div><div class="section-heading"><h2>この期間の主な成果/今後の課題</h2><p>成果：満足いくMV/マスタリングが出来た</p></div><p>課題：MVの数を揃える/ショート動画の作成/定期的なコンテンツ供給</p><ul><li>Youtubeの視聴継続率は大幅に改善<span>成果</span></li><li>MVだけで回遊してもらえる数が欲しい<span>課題</span></li><li>各種導線としてショートは欲しい。まずはYoutube/Tiktok<span>課題</span></li><li>X楽しい。やりすぎには注意。でもX経由で見てくれる方がたくさんいるので、面白いものは出していきたい。楽しみながら<span>課題</span></li></ul></div></section><section id="MetricStrip-c7dd69e4-0342-460e-8b40-c9def0d1550b" class="report-section metric-band block-tone-cyan block-surface-default item-accent-cycle"><div class="section-heading"><h2>今期の数量的進捗まとめ</h2></div><div class="metric-strip metric-strip-cards"><article class="metric-card accent-item"><span>配信中の曲</span><strong>24→30曲</strong><p>YouTube Music/各種配信ストア リリース曲総数</p></article><article class="metric-card accent-item"><span>X投稿</span><strong>158件</strong><p>返信 112 / 画像付き 41
+※ちょっとやりすぎかもしれない</p></article><article class="metric-card accent-item"><span>Youtube横動画数</span><strong>15→17個</strong><p>MV2つ追加
+・カラカラパレット
+・いぬしっぽ気象台
+</p></article><article class="metric-card accent-item"><span>Codexへの要求総数</span><strong>262件</strong><p>MV用画像リール機能を作成 / 演出プレビュー画面を追加 / Grok動画生成テスト作成
+</p></article></div></section><section id="next" class="report-section next-section next-steps next-steps-numbered block-tone-yellow block-surface-green item-accent-cycle"><img class="character-image" src="assets/characters/walk.png" alt="walk donut sheep character" loading="lazy"/><div><div class="section-heading"><h2>次にやること</h2></div><ol><li class="accent-item">マスタリング前楽曲のマスタリング←4曲がSunoだけにある状態</li><li class="accent-item">Youtube横動画の新規追加。コラボこっそり動いてます</li><li class="accent-item">自作動画制作ツールの改良←楽曲やショートのニーズに合わせながら</li><li class="accent-item">随時新曲制作。もう夏なのでそのへんの曲とか
+</li><li class="accent-item">引き続きX運用。この方の投稿良いなってリポストしたときに反応来るようになったの結構嬉しい</li></ol></div></section><section id="song-feature" class="report-section song-band song-feature song-feature-split song-feature-media-cover block-tone-pink block-surface-default item-accent-cycle song-feature-image-wide"><img src="assets/illustrations/いぬしっぽ.png" alt="いぬしっぽ"/><div><p class="report-eyebrow">MV紹介</p><h2>いぬしっぽ気象台</h2><p class="song-artist">donut sheep</p><p>犬の気分で天気が変わる。そんな七浜市の優しい風景。
+可愛い安らぎ小気味良く歩くようなテンポでちょっと不思議な街の空を歌います。
+※ちょっとはしゃいでYoutubeにプロモーション申し込んでみました
+たまにプロモーションの中間報告とかしようカナー
+</p><a href="https://youtu.be/DcTbUKzBPII">動画を開く</a><div class="topic-list"></div></div></section><section id="PublicTools-ce255db6-9578-49f6-8d8f-77397cc882a1" class="report-section tools-section block-tone-green block-surface-default item-accent-cycle"><div class="section-heading"><h2>制作に使える公開HTML</h2></div><div class="tool-list tool-list-cards"><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/music_instrument_prompt_atlas.html" class="accent-item"><span>Music Genre &amp; Instrument Prompt Atlas</span><p>大分類から中分類・小分類へ、クリック少なめで見渡せるHTML版です。ジャンルは「地図」、楽器は「発音原理・編成・地域・役割・質感」の複数地図としてまとめました。</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/spatial_audio_effects_tool.html" class="accent-item"><span>Spatial Audio Effects Tool</span><p>手動マスタリング用のHTMLツール
+※自由にHTMLごと持っていってローカルで利用してもらって大丈夫です
+ちょっとあんまり使えてないのでメンテナンス頻度が微妙💦
+</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/mv-nonreal-style-vocabulary.html" class="accent-item"><span>MV Nonreal Style Vocabulary Reference</span><p>画風、媒体、制作技法、素材、漫画・アニメ文法、工芸、デジタル表現の一覧。
 ・ChatGPTによる生成画像付き
-・Codexのクセ強文章はそのままです</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/mv-visual-vocabulary.html" class="accent-item"><span>MV美術の語彙と探索領域(MV Visual Vocabulary Reference)</span><p>映像美術で操作できる要素、表現領域
+・Codexのクセ強文章はそのままです</p></a><a href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/public_tools/mv-visual-vocabulary.html" class="accent-item"><span>MV Visual Vocabulary Reference</span><p>映像美術で操作できる要素、表現領域
 ・ChatGPTによる生成画像付き
-・Codexのクセ強文章はそのままです</p></a></div></section><section id="TextVolumeComparison-3bfd7300-0800-4b28-bb95-dc97cef38eec" class="report-section text-volume-section text-volume-section-compact"><div><p class="report-eyebrow">制作相談の文字量</p><h2>Codexでの会話総量</h2></div><div class="text-volume-bars" aria-label="文字量の比較"><div class="text-volume-row text-volume-row-user"><span>本人</span><div><i style="width:12%"></i></div><b>37K字</b></div><div class="text-volume-row text-volume-row-ai"><span>AI返答</span><div><i style="width:100%"></i></div><b>304K字</b></div></div></section><section id="ActivityBreakdown-e6ca5069-904f-469f-8f42-5a65ec58dc20" class="report-section activity-breakdown-section block-tone-cyan item-accent-cycle"><div class="section-heading activity-breakdown-heading"><div><p class="report-eyebrow">Codexログ</p><h2>制作相談件数</h2></div><p>この期間に動いた制作テーマを、名前と数字で振り返ります。</p><img class="character-image activity-breakdown-character" src="assets/characters/walk.png" alt="walk donut sheep character" loading="lazy"/></div><div class="activity-breakdown-panel"><div class="panel-head"><h3>プロジェクト名</h3><span>この期間の会話数</span></div><div class="activity-breakdown-list"><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">Suno向け制作相談</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:100%"></i></div><strong>142件</strong><p>曲スタイル/歌詞の制作補助</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">活動ログ</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:39%"></i></div><strong>55件</strong><p>追加 旧HTMLの全ブロック復元</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">MusicVideoCreator</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:18%"></i></div><strong>25件</strong><p>台本読み込み機能を追加</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">JustImageCreate</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:9%"></i></div><strong>13件</strong><p>カバー/歌詞イラストの作成
-</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">IrodoriTTS</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:1%"></i></div><strong>2件</strong><p>IrodoriTTS導入方法を調査</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">MusicVideoCreating</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:1%"></i></div><strong>1件</strong><p>カラカラパレットのカバー案作成</p></article></div></div></section><section id="TopicCloud-2393dff8-7cdc-4283-ae09-8816b2b9cf81" class="report-section topic-section block-tone-pink item-accent-cycle"><div class="section-heading"><h2>今期稼働した内部制作スレッド例</h2></div><div class="topic-list topic-list-ribbon"><span class="accent-item">HTMLビルダー候補を調査</span><span class="accent-item">HTMLビルダーを点検・報告</span><span class="accent-item">HTMLビルダー競合を調査</span><span class="accent-item">MV効果の不足を洗い出す</span><span class="accent-item">Irodori-TTS環境を調査</span><span class="accent-item">StableAudio3導入</span><span class="accent-item">歌詞と曲調メモの整理</span><span class="accent-item">曲の生成メモづくり</span><span class="accent-item">活動ページの作り方を比較</span><span class="accent-item">歌詞カードのラフ案を作成</span><span class="accent-item">フルプレビューの画像選択を追加</span><span class="accent-item">X投稿用ラフ画像提案</span></div></section><footer id="footer" class="report-footer block-tone-neutral"><p>donut sheep weekly report</p></footer></div></div>
+・Codexのクセ強文章はそのままです</p></a></div></section><footer id="FooterNote-30d69f43-7e62-47ff-ac91-13d53a0a7a29" class="report-footer block-tone-neutral block-surface-default"><p>日記的なブロック</p></footer><section id="XPostShowcase-3f0b5e76-8d37-4137-ad99-c68aad9f2b02" class="report-section x-post-showcase x-post-showcase-grid block-tone-blue block-surface-yellow item-accent-cycle"><div class="section-heading x-post-heading"><div><p class="report-eyebrow">X post</p><h2>日常/交流</h2></div></div><div class="x-post-list"><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2067380671551815813" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">つゆとなり　くりくりめくる　わかみかな
+ゆめゆめめくる　なにわのことも
+
+良い句が読めた気が。秀吉→信長→家康でコンボ出来たのも嬉しい</span><small>https://x.com/donut_sheep/status/2067380671551815813</small></span></a><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2061941318230917220/photo/1" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">雨の日通勤応援ポスト
+確か台風接近してた頃</span><small>https://x.com/donut_sheep/status/2061941318230917220/photo/1</small></span></a><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2066355413961040042/photo/1" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">Mixの楽しさ教えてくれた相互さんとの邂逅イメージお昼ポスト兼他薦ムーブ。コラボ進行中</span><small>https://x.com/donut_sheep/status/2066355413961040042/photo/1</small></span></a></div></section><section id="XPostShowcase-43647fff-334a-4f7f-a2f9-f480dd6e6086" class="report-section x-post-showcase x-post-showcase-grid block-tone-blue block-surface-graph item-accent-cycle"><div class="section-heading x-post-heading"><div><p class="report-eyebrow">X post</p><h2>自分/うちのこ語り</h2></div></div><div class="x-post-list"><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2065995379951509836?s=20" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">やることが、やることが多い……！</span><small>https://x.com/donut_sheep/status/2065995379951509836?s=20</small></span></a><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2063975439052468654?s=20" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">うちのこ設定</span><small>https://x.com/donut_sheep/status/2063975439052468654?s=20</small></span></a><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2064670609569968585/photo/1" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">300フォロワーありがとうございます！
+お祝い曲とか作ったり</span><small>https://x.com/donut_sheep/status/2064670609569968585/photo/1</small></span></a></div></section><section id="XPostShowcase-7fd4ce85-7c5e-485d-a981-c7bf3c0ff5f2" class="report-section x-post-showcase x-post-showcase-grid block-tone-blue block-surface-neutral item-accent-cycle"><div class="section-heading x-post-heading"><div><p class="report-eyebrow">X post</p><h2>イラスト系</h2></div></div><div class="x-post-list"><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2067188051110252890?s=20" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">#むぎとAIタロットカード
+応募作
+かくありたし（正位置）</span><small>https://x.com/donut_sheep/status/2067188051110252890?s=20</small></span></a><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2066869829236384096?s=20" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">わかモン様にプロンプトお借りしてスタイリッシュに、と思ったら闇が漏れたやつ。
+Youtubeのサイト内インプが伸びなくてﾃﾞｽﾈ……</span><small>https://x.com/donut_sheep/status/2066869829236384096?s=20</small></span></a><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2067010193003856314?s=20" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">まあ一晩眠れば元気になるわけです。
+MVの視聴継続率はプロモで来てくれた方も高いので結構満足感あります。わりと希望あり</span><small>https://x.com/donut_sheep/status/2067010193003856314?s=20</small></span></a></div></section><section id="TextVolumeComparison-3bfd7300-0800-4b28-bb95-dc97cef38eec" class="report-section text-volume-section text-volume-section-compact block-surface-default"><div><p class="report-eyebrow">制作相談の文字量</p><h2>Codexでの会話総量</h2><p>前回比1.5倍！
+※これに引っ張られてX等で喋りすぎることもある(Ꮚ;ᵕᴗᵕ)Ꮚｱ&quot;ｧ&quot;ｰ</p></div><div class="text-volume-bars" aria-label="文字量の比較"><div class="text-volume-row text-volume-row-user"><span>本人</span><div><i style="width:11%"></i></div><b>53K字</b></div><div class="text-volume-row text-volume-row-ai"><span>AI返答</span><div><i style="width:100%"></i></div><b>464K字</b></div></div></section><section id="XPostShowcase-d82393d9-6b69-458c-b059-139b1d014fab" class="report-section x-post-showcase x-post-showcase-grid block-tone-blue block-surface-yellow item-accent-cycle"><div class="section-heading x-post-heading"><div><p class="report-eyebrow">ちょっと解説</p><h2>Codexでなにやってるの？</h2></div></div><div class="x-post-list"><a class="x-post-card accent-item" href="https://x.com/donut_sheep/status/2064994687480697212?s=20" target="_blank" rel="noreferrer"><span class="x-post-preview" aria-hidden="true"><span class="x-post-preview-fallback">X</span></span><span class="x-post-copy"><span class="x-post-comment">動画編集ソフトやら色々内部的に使うもの作ってます。
+あと画像生成もこっち経由多めです。
+この定期報告もHTMLビルダー作ってやってます（あんまり賢いルートではない）
+本当はそのへんも公開してAI料金賄いたいなーと思ったりもしてたんですが、人に使ってもらうレベルに達するほど整理できるかはだいぶ怪しいことになってきました。運用とソフトがくっつきすぎている……</span><small>https://x.com/donut_sheep/status/2064994687480697212?s=20</small></span></a></div></section><section id="ActivityBreakdown-e6ca5069-904f-469f-8f42-5a65ec58dc20" class="report-section activity-breakdown-section block-tone-cyan block-surface-default item-accent-cycle"><div class="section-heading activity-breakdown-heading"><div><p class="report-eyebrow">Codex制作ログ</p><h2>制作相談記録</h2></div><p>この2週間に動いた制作テーマを、名前と数字で振り返ります。</p><img class="character-image activity-breakdown-character" src="assets/characters/overwork.png" alt="overwork donut sheep character" loading="lazy"/></div><div class="activity-breakdown-panel"><div class="panel-head"><h3>制作テーマ別の動き</h3><span>この2週間の制作ログ</span></div><div class="activity-breakdown-list"><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">MusicVideoCreator</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:100%"></i></div><strong>会話数 151件</strong><p>MV制作/関連機能追加</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">JustImageCreate</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:22%"></i></div><strong>会話数 33件</strong><p>イラスト生成</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">lyrics</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:48%"></i></div><strong>会話数 73件</strong><p>歌詞英訳/案出し/プロンプト洗練</p></article><article class="activity-breakdown-row accent-item"><div class="activity-breakdown-title">donut-sheep-activity-repo</div><div class="activity-breakdown-bar" aria-hidden="true"><i style="width:3%"></i></div><strong>会話数 5件</strong><p>定期活動報告ログ作成</p></article></div></div></section><section id="TopicCloud-2393dff8-7cdc-4283-ae09-8816b2b9cf81" class="report-section topic-section block-tone-pink block-surface-default item-accent-cycle"><div class="section-heading"><h2>今期稼働した内部制作スレッド例</h2></div><div class="topic-list topic-list-ribbon"><span class="accent-item">Suno向け歌詞の英訳チェック</span><span class="accent-item">演出プレビュー画面を追加</span><span class="accent-item">Grok動画生成テスト作成</span><span class="accent-item">ショート動画をFull Previewに統合</span><span class="accent-item">カバージャケット用イラスト作成</span><span class="accent-item">外枠演出を検討</span><span class="accent-item">MVコンセプト案とアート作成</span><span class="accent-item">カラカラパレットMVタスク整理</span><span class="accent-item">MV演出要件を整理</span><span class="accent-item">リリックモーションビデオ用機能</span><span class="accent-item">Lyrics Timing音声再生を修正</span><span class="accent-item">X向けイラスト生成</span></div></section><footer id="footer" class="report-footer block-tone-neutral block-surface-default"><p>donut sheep weekly report</p></footer></div></div>
 </body>
 </html>
