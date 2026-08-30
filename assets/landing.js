@@ -1,82 +1,49 @@
 (() => {
-  document.documentElement.classList.add("js");
-
-  const header = document.querySelector("[data-header]");
-  const nav = document.querySelector("[data-nav]");
-  const navToggle = document.querySelector("[data-nav-toggle]");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  const updateHeader = () => {
-    if (!header) return;
-    header.classList.toggle("is-scrolled", window.scrollY > 18);
+  const header = document.querySelector('[data-header]');
+  const toggle = document.querySelector('[data-nav-toggle]');
+  const nav = document.querySelector('[data-nav]');
+  const year = document.querySelector('[data-year]');
+  const isEnglish = document.documentElement.lang === 'en';
+  const menuLabel = {
+    open: isEnglish ? 'Open menu' : 'メニューを開く',
+    close: isEnglish ? 'Close menu' : 'メニューを閉じる',
   };
 
-  updateHeader();
-  window.addEventListener("scroll", updateHeader, { passive: true });
-
-  const closeNavigation = () => {
-    if (!nav || !navToggle) return;
-    nav.classList.remove("is-open");
-    navToggle.setAttribute("aria-expanded", "false");
-    navToggle.querySelector(".sr-only").textContent = "メニューを開く";
+  const syncHeader = () => {
+    if (header) header.classList.toggle('is-scrolled', window.scrollY > 24);
   };
 
-  if (nav && navToggle) {
-    navToggle.addEventListener("click", () => {
-      const willOpen = !nav.classList.contains("is-open");
-      nav.classList.toggle("is-open", willOpen);
-      navToggle.setAttribute("aria-expanded", String(willOpen));
-      navToggle.querySelector(".sr-only").textContent = willOpen ? "メニューを閉じる" : "メニューを開く";
+  const closeNav = () => {
+    if (!toggle || !nav) return;
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', menuLabel.open);
+    nav.classList.remove('is-open');
+    document.body.classList.remove('nav-open');
+  };
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const willOpen = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(willOpen));
+      toggle.setAttribute('aria-label', willOpen ? menuLabel.close : menuLabel.open);
+      nav.classList.toggle('is-open', willOpen);
+      document.body.classList.toggle('nav-open', willOpen);
     });
 
-    nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeNavigation));
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeNavigation();
-        navToggle.focus();
-      }
-    });
-
-    document.addEventListener("click", (event) => {
-      if (!nav.classList.contains("is-open")) return;
-      if (!nav.contains(event.target) && !navToggle.contains(event.target)) closeNavigation();
+    nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeNav));
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 860) closeNav();
     });
   }
 
-  const revealItems = document.querySelectorAll("[data-reveal]");
-  if ("IntersectionObserver" in window && !reducedMotion.matches) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      { rootMargin: "0px 0px -9%", threshold: 0.08 }
-    );
-    revealItems.forEach((item) => observer.observe(item));
-  } else {
-    revealItems.forEach((item) => item.classList.add("is-visible"));
-  }
+  window.addEventListener('scroll', syncHeader, { passive: true });
+  syncHeader();
 
-  const heroVisual = document.querySelector("[data-hero-visual]");
-  const widePointer = window.matchMedia("(min-width: 861px) and (pointer: fine)");
-  if (heroVisual && widePointer.matches && !reducedMotion.matches) {
-    window.addEventListener(
-      "pointermove",
-      (event) => {
-        const x = (event.clientX / window.innerWidth - 0.5) * 10;
-        const y = (event.clientY / window.innerHeight - 0.5) * 8;
-        heroVisual.style.setProperty("--parallax-x", `${x.toFixed(2)}px`);
-        heroVisual.style.setProperty("--parallax-y", `${y.toFixed(2)}px`);
-      },
-      { passive: true }
-    );
-  }
+  window.addEventListener('load', () => {
+    if (!window.location.hash) return;
+    const target = document.querySelector(window.location.hash);
+    if (target) window.setTimeout(() => target.scrollIntoView({ block: 'start' }), 80);
+  }, { once: true });
 
-  document.querySelectorAll("[data-year]").forEach((node) => {
-    node.textContent = String(new Date().getFullYear());
-  });
+  if (year) year.textContent = String(new Date().getFullYear());
 })();
