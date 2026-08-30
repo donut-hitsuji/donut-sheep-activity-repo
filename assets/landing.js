@@ -1,11 +1,5 @@
 (() => {
   const STORAGE_KEY = 'donut-sheep-language';
-  const GOOGLE_ADS_CONVERSION_ID = 'AW-18249571296';
-  const GOOGLE_ADS_CONVERSION_LABELS = {
-    youtube: '',
-    x: '',
-    streaming: '',
-  };
 
   const translations = {
     ja: {
@@ -237,11 +231,8 @@
       page_language: getLanguage(),
     });
 
-    const conversionLabel = GOOGLE_ADS_CONVERSION_LABELS[channel];
-    if (conversionLabel) {
-      window.gtag('event', 'conversion', {
-        send_to: `${GOOGLE_ADS_CONVERSION_ID}/${conversionLabel}`,
-      });
+    if (typeof window.gtag_report_conversion === 'function') {
+      window.gtag_report_conversion();
     }
   };
 
