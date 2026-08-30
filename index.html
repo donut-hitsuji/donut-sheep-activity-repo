@@ -84,6 +84,26 @@
         <span class="brand-mark" aria-hidden="true"><span></span></span>
         <span class="brand-copy"><strong>donut sheep</strong><small>MUSIC &amp; VISUAL WORLD</small></span>
       </a>
+      <div class="header-player" data-audio-player>
+        <audio src="assets/audio/make-me-more-preview.mp3" preload="metadata" loop data-audio></audio>
+        <button class="audio-toggle" type="button" aria-label="MAKE ME MOREを再生" aria-pressed="false" data-audio-toggle>
+          <span class="audio-note" aria-hidden="true">♪</span>
+          <span class="audio-pause" aria-hidden="true"><i></i><i></i></span>
+        </button>
+        <span class="audio-track" aria-hidden="true">
+          <small data-i18n="nowPlaying">NOW PLAYING</small>
+          <strong>MAKE ME MORE</strong>
+        </span>
+        <label class="audio-volume">
+          <span aria-hidden="true">VOL</span>
+          <span class="visually-hidden" data-i18n="musicVolumeLabel">MAKE ME MOREの音量</span>
+          <input type="range" min="0" max="1" step="0.05" value="0.7" aria-label="MAKE ME MOREの音量" data-i18n-aria-label="musicVolumeLabel" data-audio-volume>
+        </label>
+        <span class="audio-toast" role="status" aria-live="polite" data-audio-toast>
+          <small data-i18n="nowPlaying">NOW PLAYING</small>
+          <strong>MAKE ME MORE</strong>
+        </span>
+      </div>
       <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
         <span></span><span></span>
       </button>

@@ -65,6 +65,10 @@
       languageSwitchLabel: 'View the English version',
       menuOpen: 'メニューを開く',
       menuClose: 'メニューを閉じる',
+      musicPlayLabel: 'MAKE ME MOREを再生',
+      musicPauseLabel: 'MAKE ME MOREを一時停止',
+      musicVolumeLabel: 'MAKE ME MOREの音量',
+      nowPlaying: 'NOW PLAYING',
     },
     en: {
       pageTitle: 'donut sheep — A sketch today. A world tomorrow.',
@@ -129,6 +133,10 @@
       languageSwitchLabel: '日本語版を見る',
       menuOpen: 'Open menu',
       menuClose: 'Close menu',
+      musicPlayLabel: 'Play MAKE ME MORE',
+      musicPauseLabel: 'Pause MAKE ME MORE',
+      musicVolumeLabel: 'MAKE ME MORE volume',
+      nowPlaying: 'NOW PLAYING',
     },
   };
 
@@ -137,6 +145,11 @@
   const nav = document.querySelector('[data-nav]');
   const languageSwitch = document.querySelector('[data-language-switch]');
   const year = document.querySelector('[data-year]');
+  const audioPlayer = document.querySelector('[data-audio-player]');
+  const audio = document.querySelector('[data-audio]');
+  const audioToggle = document.querySelector('[data-audio-toggle]');
+  const audioVolume = document.querySelector('[data-audio-volume]');
+  let audioToastTimer = null;
 
   const getLanguage = () => document.documentElement.lang === 'en' ? 'en' : 'ja';
   const getCopy = () => translations[getLanguage()];
@@ -153,6 +166,26 @@
     nav.classList.remove('is-open');
     document.body.classList.remove('nav-open');
     updateMenuLabel();
+  };
+
+  const syncAudioControls = () => {
+    if (!audio || !audioToggle || !audioPlayer) return;
+    const isPlaying = !audio.paused;
+    audioPlayer.classList.toggle('is-playing', isPlaying);
+    audioToggle.setAttribute('aria-pressed', String(isPlaying));
+    audioToggle.setAttribute('aria-label', isPlaying ? getCopy().musicPauseLabel : getCopy().musicPlayLabel);
+    if (!isPlaying) {
+      window.clearTimeout(audioToastTimer);
+      audioPlayer.classList.remove('show-track-toast');
+    }
+  };
+
+  const showAudioToast = () => {
+    if (!audioPlayer) return;
+    window.clearTimeout(audioToastTimer);
+    audioPlayer.classList.remove('show-track-toast');
+    window.requestAnimationFrame(() => audioPlayer.classList.add('show-track-toast'));
+    audioToastTimer = window.setTimeout(() => audioPlayer.classList.remove('show-track-toast'), 3200);
   };
 
   const applyLanguage = (language, persist = false) => {
@@ -197,6 +230,7 @@
     }
 
     updateMenuLabel();
+    syncAudioControls();
 
     if (persist) {
       try { window.localStorage.setItem(STORAGE_KEY, nextLanguage); } catch (_) {}
@@ -235,6 +269,34 @@
       window.gtag_report_conversion();
     }
   };
+
+  if (audio && audioToggle && audioVolume) {
+    audio.volume = Number(audioVolume.value);
+    audio.pause();
+    syncAudioControls();
+
+    audioToggle.addEventListener('click', async () => {
+      if (!audio.paused) {
+        audio.pause();
+        return;
+      }
+
+      try {
+        await audio.play();
+        showAudioToast();
+      } catch (_) {
+        syncAudioControls();
+      }
+    });
+
+    audioVolume.addEventListener('input', () => {
+      audio.volume = Number(audioVolume.value);
+      audio.muted = false;
+    });
+
+    audio.addEventListener('play', syncAudioControls);
+    audio.addEventListener('pause', syncAudioControls);
+  }
 
   applyLanguage(document.documentElement.dataset.language || document.documentElement.lang);
 
