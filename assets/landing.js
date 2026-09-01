@@ -1,5 +1,10 @@
 (() => {
   const STORAGE_KEY = 'donut-sheep-language';
+  const GOOGLE_ADS_CONVERSION_SEND_TO = {
+    youtube: 'AW-18249571296/Hz7HCKe55uocEOC3if5D',
+    streaming: 'AW-18249571296/Hz7HCKe55uocEOC3if5D',
+    x: 'AW-18249571296/9BgfCL3-0-scEOC3if5D',
+  };
 
   const translations = {
     ja: {
@@ -265,9 +270,9 @@
       page_language: getLanguage(),
     });
 
-    if (typeof window.gtag_report_conversion === 'function') {
-      window.gtag_report_conversion();
-    }
+    window.gtag('event', 'conversion', {
+      send_to: GOOGLE_ADS_CONVERSION_SEND_TO[channel],
+    });
   };
 
   if (audio && audioToggle && audioVolume) {
