@@ -3,16 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://donut-hitsuji.github.io/donut-sheep-activity-repo/">
-  <script>
-    try { window.localStorage.setItem('donut-sheep-language', 'en'); } catch (_) {}
-    window.location.replace('../');
-  </script>
-  <noscript><meta http-equiv="refresh" content="0; url=../"></noscript>
-  <title>Moving to donut sheep</title>
+  <meta name="theme-color" content="#0b0a10">
+  <title>donut sheep — English access</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: #0b0a10;
+      color: #f8f7f2;
+      font-family: system-ui, sans-serif;
+    }
+    main { max-width: 560px; }
+    h1 { margin: 0 0 16px; font-size: clamp(2rem, 8vw, 4rem); }
+    p { color: #c9c6d0; line-height: 1.7; }
+    a {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: #d9ff57;
+      color: #0b0a10;
+      font-weight: 700;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-  <p><a href="../">Continue to the donut sheep home page</a></p>
+  <main>
+    <h1>donut sheep</h1>
+    <p>The English and Japanese versions now share one landing page. The page uses your browser language by default, and you can switch languages with the EN / JA button.</p>
+    <a href="../" lang="en">Open the current landing page</a>
+  </main>
 </body>
 </html>

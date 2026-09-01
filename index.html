@@ -43,17 +43,10 @@
   <script>
     gtag('event', 'conversion', {'send_to': 'AW-18249571296/Hz7HCKe55uocEOC3if5D'});
 
-    function gtag_report_conversion(url) {
-      var callback = function () {
-        if (typeof(url) != 'undefined') {
-          window.location = url;
-        }
-      };
+    function gtag_report_conversion() {
       gtag('event', 'conversion', {
-        'send_to': 'AW-18249571296/Hz7HCKe55uocEOC3if5D',
-        'event_callback': callback
+        'send_to': 'AW-18249571296/Hz7HCKe55uocEOC3if5D'
       });
-      return false;
     }
   </script>
   <link rel="stylesheet" href="assets/landing.css">
